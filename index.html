@@ -217,6 +217,11 @@ table.data{border-radius:20px;background:rgba(32,32,35,.5);-webkit-backdrop-filt
 select,input[type=text],input[type=time],input[type=date]{border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text)}
 select option,select optgroup{background:#1a1a1a;color:#f5f5f5}
 [data-theme="light"] select option,[data-theme="light"] select optgroup{background:#ffffff;color:#161616}
+.sync-status{font-size:.72rem;color:var(--muted);padding:.35rem .7rem;border:1px solid rgba(255,255,255,.14);border-radius:var(--r-pill);white-space:nowrap;max-width:220px;overflow:hidden;text-overflow:ellipsis;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.sync-status.ok{color:var(--accent2);border-color:var(--accent)}
+.sync-status.err{color:#ef4444;border-color:#ef4444}
+[data-theme="light"] .sync-status{border-color:rgba(0,0,0,.14)}
+@media(max-width:900px){.sync-status{display:none}}
 .log-item{border-radius:16px;background:rgba(32,32,35,.5);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08)}
 /* iOS26 floating rounded tab bar */
 .bottom-nav{left:12px;right:12px;bottom:calc(10px + var(--sb));border-radius:var(--r-pill);padding:.5rem .4rem;gap:.1rem;background:rgba(28,28,31,.55);-webkit-backdrop-filter:saturate(190%) blur(34px);backdrop-filter:saturate(190%) blur(34px);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 44px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.22)}
@@ -281,6 +286,7 @@ select option,select optgroup{background:#1a1a1a;color:#f5f5f5}
       <button class="nav-btn no-print" id="btnPrint">🖨️ Stampa</button>
     </nav>
   </div>
+  <div id="syncStatus" class="sync-status" title="Stato sincronizzazione">☁️ —</div>
 </header>
 
 <main>
@@ -357,6 +363,18 @@ select option,select optgroup{background:#1a1a1a;color:#f5f5f5}
     <h2>📋 Template settimanale</h2>
     <p style="color:var(--muted);font-size:.85rem;margin-bottom:.6rem">Slot ricorrenti per ogni giorno.</p>
     <div class="tpl-grid" id="tplGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2>☁️ Sincronizzazione online</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Incolla l'URL della Web App Google (Apps Script) per condividere il planning tra tutti i coach.</p>
+    <div class="field"><label>URL Web App</label><input type="text" id="syncUrlInput" placeholder="https://script.google.com/macros/s/.../exec"></div>
+    <div class="tg" style="gap:.5rem;flex-wrap:wrap">
+      <button class="btn btn-primary btn-sm" id="btnSaveSync">💾 Salva URL</button>
+      <button class="btn btn-sm" id="btnSyncNow">🔄 Sincronizza ora</button>
+      <label class="check-item"><input type="checkbox" id="autoSyncChk"> Auto-sync</label>
+    </div>
+    <div id="syncCardStatus" style="margin-top:.7rem;font-size:.82rem;color:var(--muted)"></div>
   </div>
 
   <div class="card">
@@ -447,13 +465,18 @@ function loadData(){
   let raw=null;
   if(STORAGE_OK){try{raw=localStorage.getItem('cfb_data')}catch(e){STORAGE_OK=false}}
   else raw=MEMORY_STORE;
-  if(raw){try{const d=JSON.parse(raw);if(d&&d.coaches&&d.template){if(!d.flags)d.flags={};if(!d.changeLog)d.changeLog=[];return d}}catch(e){}}
-  return{coaches:JSON.parse(JSON.stringify(DEFAULT_COACHES)),classes:[...DEFAULT_CLASSES],template:JSON.parse(JSON.stringify(DEFAULT_TEMPLATE)),assignments:{},extraSlots:{},deletedSlots:{},flags:{},changeLog:[]};
+  if(raw){try{const d=JSON.parse(raw);if(d&&d.coaches&&d.template){if(!d.flags)d.flags={};if(!d.changeLog)d.changeLog=[];if(typeof d.rev!=='number')d.rev=0;return d}}catch(e){}}
+  return{coaches:JSON.parse(JSON.stringify(DEFAULT_COACHES)),classes:[...DEFAULT_CLASSES],template:JSON.parse(JSON.stringify(DEFAULT_TEMPLATE)),assignments:{},extraSlots:{},deletedSlots:{},flags:{},changeLog:[],rev:0};
 }
-function saveData(){
+function saveLocal(){
   const p=JSON.stringify(DATA);
   if(STORAGE_OK){try{localStorage.setItem('cfb_data',p);return}catch(e){STORAGE_OK=false;showSandboxBanner()}}
   MEMORY_STORE=p;
+}
+function saveData(){
+  DATA.rev=Date.now();
+  saveLocal();
+  schedulePush();
 }
 function showSandboxBanner(){const b=$('sandboxBanner');if(b)b.style.display='block'}
 
@@ -879,6 +902,71 @@ function attachSwipe(el,onL,onR){
   el.addEventListener('touchend',e=>{const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy,dt=Date.now()-st;if(Math.abs(dx)>60&&Math.abs(dy)<80&&dt<600){if(dx<0)onL();else onR()}},{passive:true});
 }
 
+let SYNC_URL='';
+try{SYNC_URL=localStorage.getItem('cfb_sync_url')||''}catch(e){}
+let lastPushedRev=-1,autoSync=true,pushTimer=null,pullTimer=null;
+function setSync(msg,kind){
+  const t=new Date();const hh=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+  const full=msg+' \u00b7 '+hh;
+  const hd=$('syncStatus');if(hd){hd.textContent=full;hd.className='sync-status'+(kind==='err'?' err':(kind==='ok'?' ok':''))}
+  const cs=$('syncCardStatus');if(cs){cs.textContent=full;cs.style.color=(kind==='err'?'#ef4444':(kind==='ok'?'var(--accent2)':'var(--muted)'))}
+}
+function saveSyncUrl(u){SYNC_URL=(u||'').trim();try{localStorage.setItem('cfb_sync_url',SYNC_URL)}catch(e){}}
+function renderActive(){
+  const a=document.querySelector('.view.active');if(!a)return;
+  if(a.id==='view-dashboard')renderDashboard();
+  else if(a.id==='view-admin')renderAdmin();
+  else if(a.id==='view-log')renderLog();
+  else renderAll();
+}
+async function syncPull(silent){
+  if(!SYNC_URL)return;
+  if(!silent)setSync('\u23f3 Sincronizzo\u2026');
+  try{
+    const sep=SYNC_URL.indexOf('?')>=0?'&':'?';
+    const r=await fetch(SYNC_URL+sep+'t='+Date.now(),{method:'GET'});
+    const txt=await r.text();
+    const remote=JSON.parse(txt);
+    if(remote&&remote.coaches&&remote.template){
+      if((remote.rev||0)>(DATA.rev||0)){
+        DATA=remote;
+        if(!DATA.flags)DATA.flags={};if(!DATA.changeLog)DATA.changeLog=[];if(typeof DATA.rev!=='number')DATA.rev=0;
+        lastPushedRev=DATA.rev;
+        saveLocal();updateCoachFilter();renderActive();
+        setSync('\u2705 Aggiornato dal cloud','ok');
+      } else if(!silent) setSync('\u2705 Gi\u00e0 aggiornato','ok');
+    } else if(!silent) setSync('\u26a0\ufe0f Cloud vuoto: verr\u00e0 inizializzato');
+  }catch(e){ if(!silent) setSync('\u26a0\ufe0f Offline o URL errato','err') }
+}
+function schedulePush(){
+  if(!SYNC_URL||!autoSync)return;
+  clearTimeout(pushTimer);
+  pushTimer=setTimeout(syncPush,1500);
+}
+async function syncPush(){
+  if(!SYNC_URL)return;
+  if(DATA.rev===lastPushedRev)return;
+  setSync('\u23f3 Salvo sul cloud\u2026');
+  const rev=DATA.rev;
+  try{
+    await fetch(SYNC_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(DATA)});
+    lastPushedRev=rev;
+    setSync('\u2705 Salvato sul cloud','ok');
+  }catch(e){ setSync('\u26a0\ufe0f Salvataggio cloud fallito','err') }
+}
+async function syncNow(){ await syncPull(); if(DATA.rev>lastPushedRev) await syncPush(); }
+function initSync(){
+  const inp=$('syncUrlInput');if(inp)inp.value=SYNC_URL;
+  const chk=$('autoSyncChk');if(chk)chk.checked=autoSync;
+  const bS=$('btnSaveSync');if(bS)bS.addEventListener('click',()=>{saveSyncUrl($('syncUrlInput').value);setSync('\u2705 URL salvato','ok');syncNow()});
+  const bN=$('btnSyncNow');if(bN)bN.addEventListener('click',syncNow);
+  if(chk)chk.addEventListener('change',()=>{autoSync=chk.checked;if(autoSync)syncNow()});
+  if(SYNC_URL){ syncPull().then(()=>{ if(DATA.rev>lastPushedRev) syncPush() }); }
+  else setSync('\u2601\ufe0f Non configurato');
+  clearInterval(pullTimer);
+  pullTimer=setInterval(()=>{if(SYNC_URL&&autoSync)syncPull(true)},30000);
+  window.addEventListener('focus',()=>{if(SYNC_URL&&autoSync)syncPull(true)});
+}
 function init(){
   DATA=loadData();
   currentWeekStart=mondayOf(new Date());
@@ -940,6 +1028,8 @@ function init(){
   if(window.innerWidth<=900){setView('today')} else {setView('week')}
 
   updateCoachFilter();
+
+  initSync();
 
   let rt;
   window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(renderAll,150)});
