@@ -187,6 +187,45 @@ table.data tr.unc td{color:var(--warn);font-weight:700}
 .log-item{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:8px;padding:.6rem .8rem;margin-bottom:.4rem;display:flex;gap:.7rem;align-items:flex-start;font-size:.85rem}
 .log-time{color:var(--muted);font-weight:700;white-space:nowrap;font-size:.78rem}
 .log-msg{flex:1;word-break:break-word}
+/* ===== iOS 17 Glass Theme ===== */
+body{background:#070707;position:relative;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(circle at 15% 8%,rgba(242,101,34,.22),transparent 42%),radial-gradient(circle at 85% 18%,rgba(255,140,66,.15),transparent 46%),radial-gradient(circle at 50% 98%,rgba(80,120,255,.12),transparent 52%),#070707;pointer-events:none}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background-image:radial-gradient(rgba(255,255,255,.022) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+header{background:rgba(20,20,20,.55);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 8px 32px rgba(0,0,0,.45)}
+.nav-btn{background:rgba(255,255,255,.06);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);transition:background .2s,transform .15s,border-color .2s}
+.nav-btn:hover{transform:translateY(-1px)}
+.nav-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;box-shadow:0 6px 18px rgba(242,101,34,.4)}
+.toolbar,.card,.kpi{background:rgba(30,30,30,.5);-webkit-backdrop-filter:saturate(160%) blur(18px);backdrop-filter:saturate(160%) blur(18px);border:1px solid rgba(255,255,255,.09);box-shadow:0 8px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06)}
+.week-grid{background:rgba(26,26,26,.45);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08)}
+.day-h{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06)}
+.day-h.today{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent}
+.slot{background:rgba(255,255,255,.05);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08);transition:transform .18s,box-shadow .18s,background .18s}
+.slot:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 24px rgba(0,0,0,.5)}
+.slot-card,.acc-day,.day-nav-m{background:rgba(30,30,30,.55);-webkit-backdrop-filter:saturate(160%) blur(16px);backdrop-filter:saturate(160%) blur(16px);border:1px solid rgba(255,255,255,.09);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.slot-card{transition:transform .18s,box-shadow .18s}
+.slot-card:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.45)}
+.chip{background:rgba(255,255,255,.06);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1)}
+.chip.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;box-shadow:0 4px 14px rgba(242,101,34,.4)}
+select,input[type=text],input[type=time],input[type=date]{background:rgba(255,255,255,.06);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12)}
+.btn{background:rgba(255,255,255,.07);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);transition:transform .15s,background .2s}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;box-shadow:0 6px 18px rgba(242,101,34,.4)}
+.btn-danger{box-shadow:0 6px 18px rgba(239,68,68,.35)}
+table.data{background:rgba(30,30,30,.5);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.09)}
+table.data th{background:rgba(255,255,255,.05)}
+.modal-bg{background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.modal{background:rgba(30,30,30,.75);-webkit-backdrop-filter:saturate(180%) blur(30px);backdrop-filter:saturate(180%) blur(30px);border:1px solid rgba(255,255,255,.14);box-shadow:0 20px 60px rgba(0,0,0,.6);animation:modalPop .28s cubic-bezier(.22,.61,.36,1)}
+@keyframes modalPop{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
+.bottom-nav{background:rgba(20,20,20,.6);-webkit-backdrop-filter:saturate(180%) blur(24px);backdrop-filter:saturate(180%) blur(24px);border-top:1px solid rgba(255,255,255,.1)}
+.log-item{background:rgba(30,30,30,.5);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08)}
+.fab{box-shadow:0 8px 26px rgba(242,101,34,.55)}
+.chips::-webkit-scrollbar{display:none}
+/* ===== Fluid transitions ===== */
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes slideNext{from{opacity:.35;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes slidePrev{from{opacity:.35;transform:translateX(-26px)}to{opacity:1;transform:none}}
+.view.active{animation:viewIn .38s cubic-bezier(.22,.61,.36,1)}
+@media(prefers-reduced-motion:reduce){.view.active,.slot,.slot-card,.modal{animation:none!important}}
 </style>
 </head>
 <body>
@@ -424,7 +463,14 @@ function setView(name){
   else renderAll();
 }
 
-function navWeek(n){currentWeekStart=addDays(currentWeekStart,n*7);renderAll()}
+let _navDir=0;
+function animNav(){
+  if(!_navDir) return;
+  const nm=_navDir>0?'slideNext':'slidePrev';
+  ['weekGrid','mTodayList','mWeekAcc'].forEach(id=>{const el=$(id);if(el&&el.offsetParent!==null){el.style.animation='none';void el.offsetWidth;el.style.animation=nm+' .32s cubic-bezier(.22,.61,.36,1)'}});
+  _navDir=0;
+}
+function navWeek(n){_navDir=n>0?1:-1;currentWeekStart=addDays(currentWeekStart,n*7);renderAll();animNav()}
 function goToday(){currentWeekStart=mondayOf(new Date());currentDay=new Date();renderAll()}
 function jumpDate(v){if(v){currentWeekStart=mondayOf(parseDate(v));renderAll()}}
 
@@ -820,10 +866,10 @@ function init(){
   $('btnAddExtra').addEventListener('click',openAddModal);
   $('btnFab').addEventListener('click',openAddModal);
 
-  $('mDayPrev').addEventListener('click',()=>{currentDay=addDays(currentDay,-1);renderMobileToday()});
-  $('mDayNext').addEventListener('click',()=>{currentDay=addDays(currentDay,1);renderMobileToday()});
-  attachSwipe($('view-today'),()=>{currentDay=addDays(currentDay,1);renderMobileToday()},()=>{currentDay=addDays(currentDay,-1);renderMobileToday()});
-  attachSwipe($('view-week'),()=>{if(window.innerWidth<=900){currentWeekStart=addDays(currentWeekStart,7);renderAll()}},()=>{if(window.innerWidth<=900){currentWeekStart=addDays(currentWeekStart,-7);renderAll()}});
+  $('mDayPrev').addEventListener('click',()=>{_navDir=-1;currentDay=addDays(currentDay,-1);renderMobileToday();animNav()});
+  $('mDayNext').addEventListener('click',()=>{_navDir=1;currentDay=addDays(currentDay,1);renderMobileToday();animNav()});
+  attachSwipe($('view-today'),()=>{_navDir=1;currentDay=addDays(currentDay,1);renderMobileToday();animNav()},()=>{_navDir=-1;currentDay=addDays(currentDay,-1);renderMobileToday();animNav()});
+  attachSwipe($('view-week'),()=>{if(window.innerWidth<=900){_navDir=1;currentWeekStart=addDays(currentWeekStart,7);renderAll();animNav()}},()=>{if(window.innerWidth<=900){_navDir=-1;currentWeekStart=addDays(currentWeekStart,-7);renderAll();animNav()}});
 
   document.addEventListener('click',onClickSlot);
 
