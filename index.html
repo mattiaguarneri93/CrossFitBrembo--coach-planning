@@ -319,6 +319,10 @@ select,input[type=text],input[type=time],input[type=date]{border-radius:18px}
 .bnav.active::before{top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:var(--r-pill);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(10px) saturate(140%);backdrop-filter:blur(10px) saturate(140%);border:1px solid rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 4px 14px rgba(0,0,0,.18)}
 [data-theme="light"] .bnav.active::before{background:rgba(0,0,0,.035);border:1px solid rgba(0,0,0,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 4px 12px rgba(0,0,0,.08)}
 .fab{bottom:calc(100px + var(--sb));line-height:1;padding-bottom:4px}
+/* ===== v23: safe-area top (notch) ===== */
+:root{--st:env(safe-area-inset-top,0px)}
+header{padding-top:calc(1rem + var(--st))}
+@media(max-width:900px){header{padding-top:calc(.8rem + var(--st))}}
 </style>
 </head>
 <body>
