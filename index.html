@@ -325,9 +325,13 @@ header{padding-top:calc(1rem + var(--st))}
 @media(max-width:900px){header{padding-top:calc(.8rem + var(--st))}}
 /* ===== v24: liquid glass interactive bubble ===== */
 .bnav.active::before{display:none!important}
-.nav-bubble{position:absolute;top:50%;left:0;width:48px;height:50px;border-radius:var(--r-pill);transform:translate(0,-50%);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(12px) saturate(150%);backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(255,255,255,.06),0 4px 16px rgba(0,0,0,.2);z-index:0;pointer-events:none;opacity:0;will-change:transform}
+.nav-bubble{position:absolute;top:50%;left:0;width:58px;height:58px;border-radius:var(--r-pill);transform:translate(0,-50%);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(12px) saturate(150%);backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(255,255,255,.06),0 4px 16px rgba(0,0,0,.2);z-index:0;pointer-events:none;opacity:0;will-change:transform}
 [data-theme="light"] .nav-bubble{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 4px 12px rgba(0,0,0,.08)}
 .bnav{z-index:1}
+/* ===== v25: bubble bigger + no page scroll ===== */
+.nav-bubble{width:58px;height:58px}
+.bottom-nav{touch-action:none}
+.bnav{touch-action:none}
 </style>
 </head>
 <body>
@@ -1094,7 +1098,7 @@ function initSync(){
   window.addEventListener('focus',()=>{if(SYNC_URL&&autoSync)syncPull(true)});
 }
 /* v24: liquid glass interactive bubble engine (spring physics from iOS26 values) */
-let _nav=null,_bubble=null,_btns=[],_BW=48,_navReady=false;
+let _nav=null,_bubble=null,_btns=[],_BW=58,_navReady=false;
 let _bx=0,_bv=0,_bt=0,_raf=null,_K=0,_C=0,_suppressClick=false,_dragReleasing=false;
 function _setSpring(resp,damp){var w=2*Math.PI/resp;_K=w*w;_C=2*damp*w;}
 function _stopSpring(){if(_raf){cancelAnimationFrame(_raf);_raf=null;}}
@@ -1109,7 +1113,8 @@ function moveBubbleToName(name){if(!_navReady||_dragReleasing)return;if(getCompu
 function _layout(instant){if(!_nav||getComputedStyle(_nav).display==='none')return;_BW=_bubble.getBoundingClientRect().width||48;var i=_btns.findIndex(function(b){return b.classList.contains('active');});if(i<0)i=0;if(instant){_stopSpring();_bt=_cx(i)-_BW/2;_bv=0;_setBX(_bt);}else{_springTo(i,0.42,0.9,0);}_bubble.style.opacity='1';}
 function initNavBubble(){_nav=document.querySelector('.bottom-nav');_bubble=document.getElementById('navBubble');if(!_nav||!_bubble)return;_btns=[].slice.call(_nav.querySelectorAll('.bnav'));_navReady=true;_layout(true);
   var pid=null,startX=0,drag=false,lx=0,lt=0,vel=0;
-  _nav.addEventListener('pointerdown',function(e){if(getComputedStyle(_nav).display==='none')return;pid=e.pointerId;startX=e.clientX;drag=false;lx=e.clientX;lt=performance.now();vel=0;_stopSpring();});
+  _nav.addEventListener('pointerdown',function(e){if(getComputedStyle(_nav).display==='none')return;pid=e.pointerId;startX=e.clientX;drag=false;lx=e.clientX;lt=performance.now();vel=0;_stopSpring();try{_nav.setPointerCapture(e.pointerId);}catch(_){}});
+  _nav.addEventListener('touchmove',function(e){if(pid!==null&&e.cancelable)e.preventDefault();},{passive:false});
   window.addEventListener('pointermove',function(e){if(pid===null)return;var dx=e.clientX-startX;if(!drag&&Math.abs(dx)>6)drag=true;if(drag){var nr=_nav.getBoundingClientRect();var x=_clamp(e.clientX-nr.left-_nav.clientLeft-_BW/2);_setBX(x);_highlight(_nearest());var now=performance.now(),ddt=(now-lt)/1000;if(ddt>0){vel=(e.clientX-lx)/ddt;lx=e.clientX;lt=now;}if(e.cancelable)e.preventDefault();}},{passive:false});
   window.addEventListener('pointerup',function(e){if(pid===null)return;pid=null;if(drag){_suppressClick=true;var i=_nearest();_highlight(i);_springTo(i,0.38,0.6,vel);var nm=_btns[i].dataset.mview;_dragReleasing=true;setView(nm);_dragReleasing=false;setTimeout(function(){_suppressClick=false;},350);}drag=false;});
   _nav.addEventListener('click',function(e){if(_suppressClick){e.stopPropagation();e.preventDefault();}},true);
