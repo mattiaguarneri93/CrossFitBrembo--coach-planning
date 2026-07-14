@@ -323,6 +323,11 @@ select,input[type=text],input[type=time],input[type=date]{border-radius:18px}
 :root{--st:env(safe-area-inset-top,0px)}
 header{padding-top:calc(1rem + var(--st))}
 @media(max-width:900px){header{padding-top:calc(.8rem + var(--st))}}
+/* ===== v24: liquid glass interactive bubble ===== */
+.bnav.active::before{display:none!important}
+.nav-bubble{position:absolute;top:50%;left:0;width:48px;height:50px;border-radius:var(--r-pill);transform:translate(0,-50%);background:rgba(255,255,255,.08);-webkit-backdrop-filter:blur(12px) saturate(150%);backdrop-filter:blur(12px) saturate(150%);border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.32),inset 0 -1px 0 rgba(255,255,255,.06),0 4px 16px rgba(0,0,0,.2);z-index:0;pointer-events:none;opacity:0;will-change:transform}
+[data-theme="light"] .nav-bubble{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 4px 12px rgba(0,0,0,.08)}
+.bnav{z-index:1}
 </style>
 </head>
 <body>
@@ -457,6 +462,7 @@ header{padding-top:calc(1rem + var(--st))}
 <button class="fab" id="btnFab" title="Aggiungi">+</button>
 
 <nav class="bottom-nav">
+  <div class="nav-bubble" id="navBubble"></div>
   <button class="bnav active" data-mview="today" aria-label="Oggi"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4.5"/><path d="M3 9.5h18M8 2.5v3M16 2.5v3"/><circle cx="12" cy="14.5" r="1.7" fill="currentColor" stroke="none"/></svg></span></button>
   <button class="bnav" data-mview="week" aria-label="Settimana"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4.5"/><path d="M3 9.5h18M9 9.5v11M15 9.5v11"/></svg></span></button>
   <button class="bnav" data-mview="dashboard" aria-label="Dashboard"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6.5 20v-6M12 20V5.5M17.5 20v-9"/></svg></span></button>
@@ -571,6 +577,7 @@ let DATA,currentWeekStart,currentDay,editingSlot=null;
 function setView(name){
   document.querySelectorAll('.nav-btn[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===name));
   document.querySelectorAll('.bnav').forEach(x=>x.classList.toggle('active',x.dataset.mview===name));
+  if(typeof moveBubbleToName==='function') moveBubbleToName(name);
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   const el=$('view-'+name); if(el) el.classList.add('active');
   if(name==='dashboard') renderDashboard();
@@ -1086,6 +1093,30 @@ function initSync(){
   pullTimer=setInterval(()=>{if(SYNC_URL&&autoSync)syncPull(true)},30000);
   window.addEventListener('focus',()=>{if(SYNC_URL&&autoSync)syncPull(true)});
 }
+/* v24: liquid glass interactive bubble engine (spring physics from iOS26 values) */
+let _nav=null,_bubble=null,_btns=[],_BW=48,_navReady=false;
+let _bx=0,_bv=0,_bt=0,_raf=null,_K=0,_C=0,_suppressClick=false,_dragReleasing=false;
+function _setSpring(resp,damp){var w=2*Math.PI/resp;_K=w*w;_C=2*damp*w;}
+function _stopSpring(){if(_raf){cancelAnimationFrame(_raf);_raf=null;}}
+function _setBX(x){_bx=x;if(_bubble)_bubble.style.transform='translate('+x+'px,-50%)';}
+function _cx(i){var nr=_nav.getBoundingClientRect();var r=_btns[i].getBoundingClientRect();return (r.left-nr.left)+r.width/2-_nav.clientLeft;}
+function _clamp(x){var mn=_cx(0)-_BW/2,mx=_cx(_btns.length-1)-_BW/2;return Math.max(mn,Math.min(mx,x));}
+function _nearest(){var c=_bx+_BW/2,bi=0,bd=1e9;for(var i=0;i<_btns.length;i++){var d=Math.abs(_cx(i)-c);if(d<bd){bd=d;bi=i;}}return bi;}
+function _highlight(i){_btns.forEach(function(b,j){b.classList.toggle('active',j===i);});}
+function _animate(){var last=performance.now();_stopSpring();function tick(now){var dt=(now-last)/1000;last=now;if(dt>0.05)dt=0.05;var a=-_K*(_bx-_bt)-_C*_bv;_bv+=a*dt;_setBX(_bx+_bv*dt);if(Math.abs(_bx-_bt)<0.4&&Math.abs(_bv)<4){_setBX(_bt);_bv=0;_raf=null;return;}_raf=requestAnimationFrame(tick);}_raf=requestAnimationFrame(tick);}
+function _springTo(i,resp,damp,vel){_bt=_cx(i)-_BW/2;if(vel!=null)_bv=vel;_setSpring(resp,damp);_animate();}
+function moveBubbleToName(name){if(!_navReady||_dragReleasing)return;if(getComputedStyle(_nav).display==='none')return;var i=_btns.findIndex(function(b){return b.dataset.mview===name;});if(i<0)return;_highlight(i);_springTo(i,0.42,0.9,0);}
+function _layout(instant){if(!_nav||getComputedStyle(_nav).display==='none')return;_BW=_bubble.getBoundingClientRect().width||48;var i=_btns.findIndex(function(b){return b.classList.contains('active');});if(i<0)i=0;if(instant){_stopSpring();_bt=_cx(i)-_BW/2;_bv=0;_setBX(_bt);}else{_springTo(i,0.42,0.9,0);}_bubble.style.opacity='1';}
+function initNavBubble(){_nav=document.querySelector('.bottom-nav');_bubble=document.getElementById('navBubble');if(!_nav||!_bubble)return;_btns=[].slice.call(_nav.querySelectorAll('.bnav'));_navReady=true;_layout(true);
+  var pid=null,startX=0,drag=false,lx=0,lt=0,vel=0;
+  _nav.addEventListener('pointerdown',function(e){if(getComputedStyle(_nav).display==='none')return;pid=e.pointerId;startX=e.clientX;drag=false;lx=e.clientX;lt=performance.now();vel=0;_stopSpring();});
+  window.addEventListener('pointermove',function(e){if(pid===null)return;var dx=e.clientX-startX;if(!drag&&Math.abs(dx)>6)drag=true;if(drag){var nr=_nav.getBoundingClientRect();var x=_clamp(e.clientX-nr.left-_nav.clientLeft-_BW/2);_setBX(x);_highlight(_nearest());var now=performance.now(),ddt=(now-lt)/1000;if(ddt>0){vel=(e.clientX-lx)/ddt;lx=e.clientX;lt=now;}if(e.cancelable)e.preventDefault();}},{passive:false});
+  window.addEventListener('pointerup',function(e){if(pid===null)return;pid=null;if(drag){_suppressClick=true;var i=_nearest();_highlight(i);_springTo(i,0.38,0.6,vel);var nm=_btns[i].dataset.mview;_dragReleasing=true;setView(nm);_dragReleasing=false;setTimeout(function(){_suppressClick=false;},350);}drag=false;});
+  _nav.addEventListener('click',function(e){if(_suppressClick){e.stopPropagation();e.preventDefault();}},true);
+}
+window.addEventListener('resize',function(){try{_layout(true);}catch(e){}});
+window.addEventListener('load',function(){setTimeout(function(){try{initNavBubble();}catch(e){}},60);});
+
 function init(){
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('gesturechange',e=>e.preventDefault());
