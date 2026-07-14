@@ -332,6 +332,7 @@ header{padding-top:calc(1rem + var(--st))}
 .nav-bubble{width:58px;height:58px}
 .bottom-nav{touch-action:none}
 .bnav{touch-action:none}
+/* v26: swipe-guard + mobile today */
 </style>
 </head>
 <body>
@@ -367,6 +368,7 @@ header{padding-top:calc(1rem + var(--st))}
     <div class="cur" id="mDayCur"><div class="dname">—</div><div class="ddate">—</div></div>
     <button class="arr" id="mDayNext">›</button>
   </div>
+  <div style="display:flex;justify-content:center;margin:.5rem 0"><button class="btn btn-sm" id="mBtnToday">Oggi</button></div>
   <div class="chips" id="mChipsToday"></div>
   <div id="mTodayList"></div>
 </section>
@@ -986,6 +988,7 @@ function attachSwipe(el,onL,onR){
   let sx=0,sy=0,st=0,lock=null,multi=false,fits=false,view=null,lastX=0,lastT=0,vel=0;
   el.addEventListener('touchstart',e=>{
     if(e.touches.length>1){multi=true;return}
+    if(e.target&&e.target.closest&&e.target.closest('.bottom-nav,.fab')){multi=true;return}
     multi=false;lock=null;vel=0;fits=pageFits();view=activeMobileView();
     const t=e.touches[0];sx=lastX=t.clientX;sy=t.clientY;st=lastT=Date.now();
     if(view)view.style.transition='none';
@@ -1151,6 +1154,7 @@ function init(){
 
   $('mDayPrev').addEventListener('click',()=>{_navDir=-1;currentDay=addDays(currentDay,-1);renderMobileToday();animNav()});
   $('mDayNext').addEventListener('click',()=>{_navDir=1;currentDay=addDays(currentDay,1);renderMobileToday();animNav()});
+  var _mtb=$('mBtnToday'); if(_mtb) _mtb.addEventListener('click',()=>{currentDay=new Date();currentWeekStart=mondayOf(new Date());renderMobileToday()});
   const _swNext=()=>{if(document.querySelector('#view-today.active')){_navDir=1;currentDay=addDays(currentDay,1);renderMobileToday();animNav()}else if(document.querySelector('#view-week.active')){_navDir=1;currentWeekStart=addDays(currentWeekStart,7);renderAll();animNav()}};
   const _swPrev=()=>{if(document.querySelector('#view-today.active')){_navDir=-1;currentDay=addDays(currentDay,-1);renderMobileToday();animNav()}else if(document.querySelector('#view-week.active')){_navDir=-1;currentWeekStart=addDays(currentWeekStart,-7);renderAll();animNav()}};
   attachSwipe(document.body,_swNext,_swPrev);
