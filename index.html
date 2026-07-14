@@ -301,6 +301,13 @@ select,input[type=text],input[type=time],input[type=date]{border-radius:18px}
 [data-theme="light"] .empty-state{color:#6b6b70}
 [data-theme="light"] .st,[data-theme="light"] .sc{color:#161616}
 [data-theme="light"] .s-time,[data-theme="light"] .s-class{color:#161616}
+/* ===== v19: bottombar +20% + logo fix ===== */
+.bottom-nav{padding-top:.62rem;padding-bottom:.62rem}
+.bnav{padding-top:.72rem;padding-bottom:.72rem}
+.bnav.active::before{width:48px;height:50px}
+.logo-icon{width:auto;height:44px;max-width:150px}
+.logo-icon img{width:auto;height:100%;object-fit:contain}
+@media(max-width:900px){.logo-icon{width:auto;height:36px}}
 </style>
 </head>
 <body>
@@ -978,8 +985,22 @@ function attachSwipe(el,onL,onR){
     const t=e.changedTouches[0];const dx=t.clientX-sx,dt=Date.now()-st;
     const fast=Math.abs(vel)>0.5;
     const go=lock==='h'&&(Math.abs(dx)>H_MIN||fast)&&dt<900;
-    if(view){view.style.transition='transform .28s cubic-bezier(.22,.61,.36,1),opacity .28s';view.style.transform='translateX(0)';view.style.opacity='1';}
-    if(go){ if(dx<0)onL(); else onR(); }
+    if(go&&view){
+      const w=view.offsetWidth||window.innerWidth;
+      const outX=dx<0?-w:w;
+      view.style.transition='transform .2s ease-out,opacity .2s ease-out';
+      view.style.transform='translateX('+outX+'px)';
+      view.style.opacity='0';
+      const cb=dx<0?onL:onR;
+      setTimeout(()=>{
+        view.style.transition='none';
+        view.style.transform='';
+        view.style.opacity='';
+        cb();
+      },190);
+    } else {
+      if(view){view.style.transition='transform .3s cubic-bezier(.22,.61,.36,1),opacity .3s';view.style.transform='translateX(0)';view.style.opacity='1';}
+    }
     lock=null;
   },{passive:true});
 }
