@@ -545,6 +545,11 @@ header{padding-top:calc(1rem + var(--st))}
   </div>
 
   <div class="card">
+    <h2>📝 Log modifiche</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.6rem">Storico delle modifiche al planning degli ultimi 30 giorni.</p>
+    <button class="btn btn-primary btn-full" id="btnOpenLog">📝 Apri log modifiche</button>
+  </div>
+  <div class="card">
     <h2>⚠️ Zona pericolosa</h2>
     <button class="btn btn-danger btn-full" id="btnReset">🗑️ Reset totale</button>
   </div>
@@ -569,7 +574,6 @@ header{padding-top:calc(1rem + var(--st))}
   <button class="bnav" data-mview="monthly" aria-label="Mensile"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4.5"/><path d="M3 9.5h18M8 2.5v3M16 2.5v3"/><path d="M7 13h2M11 13h2M15 13h2M7 16.5h2M11 16.5h2"/></svg></span></button>
   <button class="bnav" data-mview="dashboard" aria-label="Dashboard"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6.5 20v-6M12 20V5.5M17.5 20v-9"/></svg></span></button>
   <button class="bnav" data-mview="admin" aria-label="Admin"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h8M17 7h3M4 17h3M12 17h8"/><circle cx="15" cy="7" r="2.4"/><circle cx="9" cy="17" r="2.4"/></svg></span></button>
-  <button class="bnav" data-mview="log" aria-label="Log"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5h6l4 4V18.5A2.5 2.5 0 0 1 15.5 21H8A2.5 2.5 0 0 1 5.5 18.5V6A2.5 2.5 0 0 1 8 3.5Z"/><path d="M13.5 3.5V8h4M9 12.5h6M9 16h4"/></svg></span></button>
 </nav>
 
 <div class="modal-bg" id="editModal">
@@ -695,8 +699,9 @@ let DATA,currentWeekStart,currentDay,editingSlot=null;
 
 function setView(name){
   document.querySelectorAll('.nav-btn[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===name));
-  document.querySelectorAll('.bnav').forEach(x=>x.classList.toggle('active',x.dataset.mview===name));
-  if(typeof moveBubbleToName==='function') moveBubbleToName(name);
+  const navName=(name==='log')?'admin':name;
+  document.querySelectorAll('.bnav').forEach(x=>x.classList.toggle('active',x.dataset.mview===navName));
+  if(typeof moveBubbleToName==='function') moveBubbleToName(navName);
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   const el=$('view-'+name); if(el) el.classList.add('active');
   if(name==='monthly') renderMonthly();
@@ -1415,6 +1420,7 @@ function init(){
 
   $('btnReset').addEventListener('click',()=>{if(confirm('Cancellare TUTTI i dati?')){try{localStorage.removeItem('cfb_data')}catch(e){}MEMORY_STORE=null;location.reload()}});
   $('btnClearLog').addEventListener('click',()=>{if(confirm('Svuotare il log delle modifiche?')){DATA.changeLog=[];saveData();renderLog();toast('Log svuotato')}});
+  { const bl=$('btnOpenLog'); if(bl) bl.addEventListener('click',()=>setView('log')); }
 
   if(window.innerWidth<=900){setView('today')} else {setView('week')}
 
