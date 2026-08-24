@@ -365,6 +365,40 @@ header{padding-top:calc(1rem + var(--st))}
 [data-theme="light"] .day-h.today .dn{color:#F26522 !important}
 [data-theme="light"] .acc-head.today{color:#F26522 !important}
 [data-theme="light"] .day-nav-m .cur.today .dname{color:#F26522 !important}
+/* ===== Monthly view + unavailability ===== */
+.fbadge.cf{background:var(--danger);color:#fff}
+.month-label{font-weight:700;color:var(--accent2);min-width:150px;text-align:center;text-transform:capitalize}
+[data-theme="light"] .month-label{color:#c2521a}
+.mc-card{background:rgba(32,32,35,.5);-webkit-backdrop-filter:saturate(170%) blur(22px);backdrop-filter:saturate(170%) blur(22px);border:1px solid rgba(255,255,255,.1);border-left:5px solid var(--border);border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);padding:1rem 1.1rem;margin-bottom:1rem}
+[data-theme="light"] .mc-card{background:rgba(255,255,255,.72);border:1px solid rgba(0,0,0,.08);border-left:5px solid var(--border);color:#161616}
+.mc-head{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.7rem}
+.mc-name{font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:.5rem}
+.mc-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.mc-stats{display:flex;gap:.4rem;flex-wrap:wrap}
+.mc-stat{font-size:.72rem;font-weight:700;padding:.28rem .65rem;border-radius:var(--r-pill);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+[data-theme="light"] .mc-stat{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.1)}
+.mc-stat.ap{color:var(--success)}
+.mc-stat.ch{color:var(--accent2)}
+.unav-list{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.7rem}
+.unav-pill{display:flex;align-items:center;gap:.5rem;background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.4);color:#fca5a5;border-radius:14px;padding:.42rem .7rem;font-size:.82rem;font-weight:600}
+[data-theme="light"] .unav-pill{color:#b91c1c;background:rgba(239,68,68,.08)}
+.unav-pill .x{margin-left:auto;cursor:pointer;font-weight:800;opacity:.75;padding:0 .2rem}
+.unav-pill .x:hover{opacity:1}
+.mc-days{display:flex;flex-direction:column;gap:.5rem}
+.mc-day{display:grid;grid-template-columns:70px 1fr;gap:.6rem;align-items:start}
+.mc-dlabel{font-weight:700;font-size:.8rem;color:var(--muted);padding-top:.35rem;text-transform:capitalize;white-space:nowrap}
+.mc-dlabel.today{color:var(--accent)}
+.mc-lessons{display:flex;flex-wrap:wrap;gap:.35rem}
+.mc-lesson{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:.32rem .6rem;font-size:.8rem;font-weight:600;display:flex;align-items:center;gap:.35rem;white-space:nowrap}
+[data-theme="light"] .mc-lesson{background:rgba(0,0,0,.035);border:1px solid rgba(0,0,0,.08)}
+.mc-lesson .lt{color:var(--accent2);font-weight:800}
+[data-theme="light"] .mc-lesson .lt{color:#c2521a}
+.mc-lesson.conflict{border-color:var(--danger);background:rgba(239,68,68,.14)}
+.mc-lesson .mini{font-size:.6rem;font-weight:800;padding:1px 4px;border-radius:5px}
+.mc-lesson .mini.ap{background:var(--success);color:#0d0d0d}
+.mc-lesson .mini.ch{background:var(--accent);color:#fff}
+.mc-empty{color:var(--muted);font-size:.82rem;padding:.3rem 0}
+@media(max-width:900px){.mc-day{grid-template-columns:58px 1fr}.month-label{min-width:120px;font-size:.9rem}}
 </style>
 </head>
 <body>
@@ -383,6 +417,7 @@ header{padding-top:calc(1rem + var(--st))}
     <button id="btnTheme" class="theme-toggle" title="Tema chiaro/scuro" aria-label="Tema"><svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A7.5 7.5 0 0 1 9.5 4a7.5 7.5 0 1 0 10.5 10.5Z"/></svg><svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg></button>
     <nav class="top-nav">
       <button class="nav-btn active" data-view="week">📅 Settimana</button>
+      <button class="nav-btn" data-view="monthly">🗓️ Mensile</button>
       <button class="nav-btn" data-view="dashboard">📊 Dashboard</button>
       <button class="nav-btn" data-view="admin">⚙️ Admin</button>
       <button class="nav-btn" data-view="log">📝 Log</button>
@@ -428,6 +463,28 @@ header{padding-top:calc(1rem + var(--st))}
   <div class="mobile-only" id="mWeekAcc"></div>
 </section>
 
+<section id="view-monthly" class="view">
+  <div class="toolbar">
+    <div class="tg">
+      <button class="btn" id="btnMPrev">◀</button>
+      <button class="btn" id="btnMToday">Oggi</button>
+      <button class="btn" id="btnMNext">▶</button>
+      <span class="month-label" id="monthLabel">—</span>
+    </div>
+    <div class="tg">
+      <select id="monthCoach"><option value="">Tutti i coach</option></select>
+      <button class="btn btn-sm" id="btnAddUnav">🚫 Indisponibilità</button>
+      <button class="btn btn-sm no-print" id="btnPrintMonth">🖨️ Stampa</button>
+    </div>
+  </div>
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-lbl">Lezioni mese</div><div class="kpi-val" id="mkTot">0</div></div>
+    <div class="kpi ok"><div class="kpi-lbl">Coperte</div><div class="kpi-val" id="mkCov">0</div></div>
+    <div class="kpi warn"><div class="kpi-lbl">Scoperte</div><div class="kpi-val" id="mkUnc">0</div></div>
+  </div>
+  <div id="monthlyBody"></div>
+</section>
+
 <section id="view-dashboard" class="view">
   <div class="toolbar">
     <div class="tg">
@@ -469,6 +526,13 @@ header{padding-top:calc(1rem + var(--st))}
   </div>
 
   <div class="card">
+    <h2>🚫 Indisponibilità coach</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.6rem">Periodi in cui un coach non è disponibile (ferie, infortuni, ecc.). Vengono mostrati nella vista Mensile e segnalano eventuali conflitti.</p>
+    <div id="unavList"></div>
+    <button class="btn btn-primary btn-sm" id="btnAddUnav2">+ Aggiungi periodo</button>
+  </div>
+
+  <div class="card">
     <h2>☁️ Sincronizzazione online</h2>
     <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Incolla l'URL della Web App Google (Apps Script) per condividere il planning tra tutti i coach.</p>
     <div class="field"><label>URL Web App</label><input type="text" id="syncUrlInput" placeholder="https://script.google.com/macros/s/.../exec"></div>
@@ -502,6 +566,7 @@ header{padding-top:calc(1rem + var(--st))}
   <div class="nav-bubble" id="navBubble"></div>
   <button class="bnav active" data-mview="today" aria-label="Oggi"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4.5"/><path d="M3 9.5h18M8 2.5v3M16 2.5v3"/><circle cx="12" cy="14.5" r="1.7" fill="currentColor" stroke="none"/></svg></span></button>
   <button class="bnav" data-mview="week" aria-label="Settimana"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4.5"/><path d="M3 9.5h18M9 9.5v11M15 9.5v11"/></svg></span></button>
+  <button class="bnav" data-mview="monthly" aria-label="Mensile"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="4.5"/><path d="M3 9.5h18M8 2.5v3M16 2.5v3"/><path d="M7 13h2M11 13h2M15 13h2M7 16.5h2M11 16.5h2"/></svg></span></button>
   <button class="bnav" data-mview="dashboard" aria-label="Dashboard"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6.5 20v-6M12 20V5.5M17.5 20v-9"/></svg></span></button>
   <button class="bnav" data-mview="admin" aria-label="Admin"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h8M17 7h3M4 17h3M12 17h8"/><circle cx="15" cy="7" r="2.4"/><circle cx="9" cy="17" r="2.4"/></svg></span></button>
   <button class="bnav" data-mview="log" aria-label="Log"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5h6l4 4V18.5A2.5 2.5 0 0 1 15.5 21H8A2.5 2.5 0 0 1 5.5 18.5V6A2.5 2.5 0 0 1 8 3.5Z"/><path d="M13.5 3.5V8h4M9 12.5h6M9 16h4"/></svg></span></button>
@@ -537,6 +602,19 @@ header{padding-top:calc(1rem + var(--st))}
   </div>
 </div>
 
+<div class="modal-bg" id="unavModal">
+  <div class="modal">
+    <h3>🚫 Indisponibilità coach</h3>
+    <div class="field"><label>Coach</label><select id="uCoach"></select></div>
+    <div class="field"><label>Dal giorno</label><input type="date" id="uFrom"></div>
+    <div class="field"><label>Al giorno</label><input type="date" id="uTo"></div>
+    <div class="field"><label>Nota (facoltativa)</label><input type="text" id="uNote" placeholder="Ferie, infortunio, corso..."></div>
+    <div class="m-acts">
+      <button class="btn" id="uCancel">Annulla</button>
+      <button class="btn btn-primary" id="uSave">+ Aggiungi</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -569,8 +647,8 @@ function loadData(){
   let raw=null;
   if(STORAGE_OK){try{raw=localStorage.getItem('cfb_data')}catch(e){STORAGE_OK=false}}
   else raw=MEMORY_STORE;
-  if(raw){try{const d=JSON.parse(raw);if(d&&d.coaches&&d.template){if(!d.flags)d.flags={};if(!d.changeLog)d.changeLog=[];if(typeof d.rev!=='number')d.rev=0;return d}}catch(e){}}
-  return{coaches:JSON.parse(JSON.stringify(DEFAULT_COACHES)),classes:[...DEFAULT_CLASSES],template:JSON.parse(JSON.stringify(DEFAULT_TEMPLATE)),assignments:{},extraSlots:{},deletedSlots:{},flags:{},changeLog:[],rev:0};
+  if(raw){try{const d=JSON.parse(raw);if(d&&d.coaches&&d.template){if(!d.flags)d.flags={};if(!d.changeLog)d.changeLog=[];if(!Array.isArray(d.unavailability))d.unavailability=[];if(typeof d.rev!=='number')d.rev=0;return d}}catch(e){}}
+  return{coaches:JSON.parse(JSON.stringify(DEFAULT_COACHES)),classes:[...DEFAULT_CLASSES],template:JSON.parse(JSON.stringify(DEFAULT_TEMPLATE)),assignments:{},extraSlots:{},deletedSlots:{},flags:{},unavailability:[],changeLog:[],rev:0};
 }
 function saveLocal(){
   const p=JSON.stringify(DATA);
@@ -597,6 +675,10 @@ function setFlag(k,ap,ch){if(ap||ch)DATA.flags[k]={apertura:ap,chiusura:ch};else
 function canApertura(t){return APERTURA_TIMES.includes(t)}
 function canChiusura(t){return CHIUSURA_TIMES.includes(t)}
 function logAction(msg){if(!DATA.changeLog)DATA.changeLog=[];DATA.changeLog.push({ts:Date.now(),msg});const cutoff=Date.now()-90*86400000;DATA.changeLog=DATA.changeLog.filter(e=>e.ts>=cutoff)}
+function ensureUnav(){if(!Array.isArray(DATA.unavailability))DATA.unavailability=[]}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function isCoachUnavail(coach,ds){ensureUnav();return DATA.unavailability.some(u=>u.coach===coach&&ds>=u.from&&ds<=u.to)}
+function unavInMonth(coach,year,month){ensureUnav();const s=fmtDate(new Date(year,month,1)),e=fmtDate(new Date(year,month+1,0));return DATA.unavailability.filter(u=>u.coach===coach&&u.from<=e&&u.to>=s).sort((a,b)=>a.from.localeCompare(b.from))}
 
 function getSlotsForDate(date){
   const ds=fmtDate(date);
@@ -617,7 +699,8 @@ function setView(name){
   if(typeof moveBubbleToName==='function') moveBubbleToName(name);
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   const el=$('view-'+name); if(el) el.classList.add('active');
-  if(name==='dashboard') renderDashboard();
+  if(name==='monthly') renderMonthly();
+  else if(name==='dashboard') renderDashboard();
   else if(name==='admin') renderAdmin();
   else if(name==='log') renderLog();
   else renderAll();
@@ -689,7 +772,7 @@ function renderChips(elId){
   });
 }
 
-function flagBadgesHTML(s){let h='';if(s.apertura)h+='<span class="fbadge ap">🔓 AP</span>';if(s.chiusura)h+='<span class="fbadge ch">🔒 CH</span>';return h?`<div class="flag-badges">${h}</div>`:''}
+function flagBadgesHTML(s){let h='';if(s.apertura)h+='<span class="fbadge ap">🔓 AP</span>';if(s.chiusura)h+='<span class="fbadge ch">🔒 CH</span>';if(s.coach&&s.dateStr&&isCoachUnavail(s.coach,s.dateStr))h+='<span class="fbadge cf">⛔ N/D</span>';return h?`<div class="flag-badges">${h}</div>`:''}
 function slotCardHTML(s,cObj){
   const badge=s.coach?`<div class="s-badge" style="background:${esc(cObj.color)}">${esc(s.coach)}</div>`:`<div class="s-badge u">⚠ Scoperto</div>`;
   return `<div class="s-info"><div class="s-time">${esc(s.time)}</div><div class="s-class">${esc(s.cls)}${''}</div>${flagBadgesHTML(s)}</div>${badge}`;
@@ -831,7 +914,9 @@ function saveEdit(){
   const _fl=(ap?' 🔓':'')+(ch?' 🔒':'');
   const _c=coach?('→ '+coach):'(scoperto)';
   logAction(`${mode==='new'?'➕ Nuova':'✏️ Modifica'} lezione ${fmtIT(parseDate(dateStr))} ${time} ${cls} ${_c}${_fl}`);
-  saveData(); closeEditModal(); renderAll(); toast('Salvato');
+  saveData(); closeEditModal(); renderAll();
+  if(coach&&isCoachUnavail(coach,dateStr)) toast('Salvato ⚠ coach non disponibile in quel periodo',true);
+  else toast('Salvato');
 }
 function delEdit(){
   if(!editingSlot) return;
@@ -917,12 +1002,102 @@ function renderLog(){
   });
   list.innerHTML=h;
 }
+let currentMonth;
+function navMonth(n){currentMonth=new Date(currentMonth.getFullYear(),currentMonth.getMonth()+n,1);renderMonthly()}
+function goMonthToday(){const t=new Date();currentMonth=new Date(t.getFullYear(),t.getMonth(),1);renderMonthly()}
+function renderMonthly(){
+  if(!currentMonth){const t=new Date();currentMonth=new Date(t.getFullYear(),t.getMonth(),1)}
+  const y=currentMonth.getFullYear(),m=currentMonth.getMonth();
+  const ml=$('monthLabel'); if(ml) ml.textContent=MONTHS_F[m]+' '+y;
+  const filter=$('monthCoach')?$('monthCoach').value:'';
+  const perCoach={}; DATA.coaches.forEach(c=>perCoach[c.name]={lessons:[],ap:0,ch:0});
+  const uncovered=[]; let tot=0,cov=0,unc=0;
+  const days=new Date(y,m+1,0).getDate();
+  for(let dd=1;dd<=days;dd++){
+    const date=new Date(y,m,dd),ds=fmtDate(date);
+    getSlotsForDate(date).forEach(s=>{
+      tot++;
+      if(s.coach&&perCoach[s.coach]){cov++;perCoach[s.coach].lessons.push({ds,date,time:s.time,cls:s.cls,ap:s.apertura,ch:s.chiusura});if(s.apertura)perCoach[s.coach].ap++;if(s.chiusura)perCoach[s.coach].ch++;}
+      else if(!s.coach){unc++;uncovered.push({ds,date,time:s.time,cls:s.cls});}
+    });
+  }
+  $('mkTot').textContent=tot;$('mkCov').textContent=cov;$('mkUnc').textContent=unc;
+  const body=$('monthlyBody'); body.innerHTML='';
+  const coaches=filter?DATA.coaches.filter(c=>c.name===filter):DATA.coaches;
+  function daysBlock(list,coachName){
+    const byDate={};list.forEach(l=>{(byDate[l.ds]=byDate[l.ds]||[]).push(l)});
+    let h='<div class="mc-days">';
+    Object.keys(byDate).sort().forEach(ds=>{
+      const date=parseDate(ds),lab=DAYS_S[(date.getDay()+6)%7]+' '+String(date.getDate()).padStart(2,'0');
+      const conflict=coachName&&isCoachUnavail(coachName,ds);
+      h+=`<div class="mc-day"><div class="mc-dlabel${isToday(date)?' today':''}">${esc(lab)}</div><div class="mc-lessons">`;
+      byDate[ds].forEach(l=>{h+=`<div class="mc-lesson${conflict?' conflict':''}"><span class="lt">${esc(l.time)}</span>${esc(l.cls)}${l.ap?'<span class="mini ap">AP</span>':''}${l.ch?'<span class="mini ch">CH</span>':''}${conflict?' ⛔':''}</div>`});
+      h+='</div></div>';
+    });
+    return h+'</div>';
+  }
+  coaches.forEach(c=>{
+    const info=perCoach[c.name],unav=unavInMonth(c.name,y,m);
+    if(info.lessons.length===0&&unav.length===0) return;
+    const card=document.createElement('div');card.className='mc-card';card.style.borderLeftColor=c.color;
+    let h=`<div class="mc-head"><div class="mc-name"><span class="mc-dot" style="background:${esc(c.color)}"></span>${esc(c.name)}</div><div class="mc-stats"><span class="mc-stat">${info.lessons.length} lezioni</span>${info.ap?`<span class="mc-stat ap">🔓 ${info.ap}</span>`:''}${info.ch?`<span class="mc-stat ch">🔒 ${info.ch}</span>`:''}</div></div>`;
+    if(unav.length){h+='<div class="unav-list">';unav.forEach(u=>{h+=`<div class="unav-pill">🚫 ${esc(fmtIT(parseDate(u.from)))} → ${esc(fmtIT(parseDate(u.to)))}${u.note?' · '+esc(u.note):''}<span class="x" data-unavdel="${esc(u.id)}">✕</span></div>`});h+='</div>'}
+    h+=info.lessons.length?daysBlock(info.lessons,c.name):'<div class="mc-empty">Nessuna lezione assegnata questo mese.</div>';
+    card.innerHTML=h;body.appendChild(card);
+  });
+  if(!filter&&uncovered.length){
+    const card=document.createElement('div');card.className='mc-card';card.style.borderLeftColor='var(--warn)';
+    card.innerHTML=`<div class="mc-head"><div class="mc-name">⚠️ Scoperte</div><div class="mc-stats"><span class="mc-stat">${uncovered.length} lezioni</span></div></div>`+daysBlock(uncovered,null);
+    body.appendChild(card);
+  }
+  if(!body.children.length) body.innerHTML='<div class="empty-state"><div class="em">🗓️</div>Nessuna lezione o indisponibilità in questo mese</div>';
+}
+function openUnavModal(){
+  const sel=$('uCoach');sel.innerHTML='';DATA.coaches.forEach(c=>{const o=document.createElement('option');o.value=c.name;o.textContent=c.name;sel.appendChild(o)});
+  const pre=$('monthCoach')?$('monthCoach').value:'';if(pre)sel.value=pre;
+  const base=currentMonth||new Date();const f=fmtDate(new Date(base.getFullYear(),base.getMonth(),1));
+  $('uFrom').value=f;$('uTo').value=f;$('uNote').value='';
+  $('unavModal').classList.add('show');
+}
+function closeUnavModal(){$('unavModal').classList.remove('show')}
+function saveUnav(){
+  ensureUnav();
+  const coach=$('uCoach').value,from=$('uFrom').value,to=$('uTo').value,note=$('uNote').value.trim();
+  if(!coach||!from||!to){toast('Compila coach e date',true);return}
+  const f=from<=to?from:to,t=from<=to?to:from;
+  DATA.unavailability.push({id:uid(),coach,from:f,to:t,note});
+  logAction(`🚫 Indisponibilità ${coach} ${fmtIT(parseDate(f))} → ${fmtIT(parseDate(t))}${note?' · '+note:''}`);
+  saveData();closeUnavModal();
+  if(document.querySelector('#view-admin.active'))renderAdmin();else renderMonthly();
+  toast('Indisponibilità aggiunta');
+}
+function deleteUnav(id){
+  ensureUnav();const u=DATA.unavailability.find(x=>x.id===id);if(!u)return;
+  if(!confirm('Rimuovere questo periodo di indisponibilità?'))return;
+  DATA.unavailability=DATA.unavailability.filter(x=>x.id!==id);
+  logAction(`🚫 Rimossa indisponibilità ${u.coach} ${fmtIT(parseDate(u.from))} → ${fmtIT(parseDate(u.to))}`);
+  saveData();
+  if(document.querySelector('#view-admin.active'))renderAdmin();else renderMonthly();
+  toast('Rimossa');
+}
+function renderUnavAdmin(){
+  const el=$('unavList');if(!el)return;ensureUnav();
+  if(!DATA.unavailability.length){el.innerHTML='<div style="color:var(--muted);font-size:.85rem;padding:.4rem 0">Nessun periodo registrato.</div>';return}
+  el.innerHTML='';
+  [...DATA.unavailability].sort((a,b)=>b.from.localeCompare(a.from)).forEach(u=>{
+    const c=DATA.coaches.find(x=>x.name===u.coach),col=c?c.color:'#999';
+    const r=document.createElement('div');r.className='row';
+    r.innerHTML=`<span style="flex:1;font-size:.85rem"><span style="color:${esc(col)};font-weight:700">● ${esc(u.coach)}</span> — ${esc(fmtIT(parseDate(u.from)))} → ${esc(fmtIT(parseDate(u.to)))}${u.note?' · '+esc(u.note):''}</span><button class="btn btn-danger btn-sm" data-unavdel="${esc(u.id)}">✕</button>`;
+    el.appendChild(r);
+  });
+}
 function renderAdmin(){
   const cl=$('coachList');cl.innerHTML='';
   DATA.coaches.forEach((c,i)=>{const r=document.createElement('div');r.className='row';r.innerHTML=`<input type="color" value="${esc(c.color)}" data-cc="${i}"><input type="text" value="${esc(c.name)}" data-cn="${i}"><button class="btn btn-danger btn-sm" data-cd="${i}">✕</button>`;cl.appendChild(r)});
   const ll=$('classList');ll.innerHTML='';
   DATA.classes.forEach((c,i)=>{const r=document.createElement('div');r.className='row';r.innerHTML=`<input type="text" value="${esc(c)}" data-ln="${i}"><button class="btn btn-danger btn-sm" data-ld="${i}">✕</button>`;ll.appendChild(r)});
   renderTpl();
+  renderUnavAdmin();
 }
 function renderTpl(){
   const tg=$('tplGrid');tg.innerHTML='';
@@ -953,6 +1128,8 @@ function updateCoachFilter(){
   const sel=$('coachFilter'),cur=sel.value;
   sel.innerHTML='<option value="">Tutti i coach</option>';
   DATA.coaches.forEach(c=>{const o=document.createElement('option');o.value=c.name;o.textContent=c.name;if(c.name===cur)o.selected=true;sel.appendChild(o)});
+  const ms=$('monthCoach');
+  if(ms){const mc=ms.value;ms.innerHTML='<option value="">Tutti i coach</option>';DATA.coaches.forEach(c=>{const o=document.createElement('option');o.value=c.name;o.textContent=c.name;if(c.name===mc)o.selected=true;ms.appendChild(o)})}
 }
 
 function exportJSON(){
@@ -993,6 +1170,11 @@ function exportExcel(){
   rows.push([]);rows.push(['CHIUSURE']);aoa(chCounts).forEach(r=>rows.push(r));
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'Conteggio');
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(det),'Dettaglio');
+  ensureUnav();
+  const yS=fmtDate(new Date(year,0,1)),yE=fmtDate(new Date(year,11,31));
+  const unavRows=[['Coach','Dal','Al','Nota']];
+  DATA.unavailability.filter(u=>u.from<=yE&&u.to>=yS).sort((a,b)=>a.from.localeCompare(b.from)).forEach(u=>unavRows.push([u.coach,fmtIT(parseDate(u.from)),fmtIT(parseDate(u.to)),u.note||'']));
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(unavRows),'Indisponibilità');
   XLSX.writeFile(wb,`CFB-${year}.xlsx`);
   toast('Excel esportato');
 }
@@ -1078,7 +1260,8 @@ function setSync(msg,kind){
 function saveSyncUrl(u){SYNC_URL=(u||'').trim();try{localStorage.setItem('cfb_sync_url',SYNC_URL)}catch(e){}}
 function renderActive(){
   const a=document.querySelector('.view.active');if(!a)return;
-  if(a.id==='view-dashboard')renderDashboard();
+  if(a.id==='view-monthly')renderMonthly();
+  else if(a.id==='view-dashboard')renderDashboard();
   else if(a.id==='view-admin')renderAdmin();
   else if(a.id==='view-log')renderLog();
   else renderAll();
@@ -1200,7 +1383,21 @@ function init(){
   $('aSave').addEventListener('click',saveAdd);
   $('aCancel').addEventListener('click',closeAddModal);
   $('addModal').addEventListener('click',e=>{if(e.target.id==='addModal') closeAddModal()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditModal();closeAddModal()}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditModal();closeAddModal();closeUnavModal()}});
+
+  currentMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+  $('btnMPrev').addEventListener('click',()=>navMonth(-1));
+  $('btnMNext').addEventListener('click',()=>navMonth(1));
+  $('btnMToday').addEventListener('click',goMonthToday);
+  $('monthCoach').addEventListener('change',renderMonthly);
+  $('btnPrintMonth').addEventListener('click',()=>window.print());
+  $('btnAddUnav').addEventListener('click',openUnavModal);
+  $('btnAddUnav2').addEventListener('click',openUnavModal);
+  $('uSave').addEventListener('click',saveUnav);
+  $('uCancel').addEventListener('click',closeUnavModal);
+  $('unavModal').addEventListener('click',e=>{if(e.target.id==='unavModal')closeUnavModal()});
+  $('monthlyBody').addEventListener('click',e=>{const t=e.target.closest('[data-unavdel]');if(t)deleteUnav(t.dataset.unavdel)});
+  $('unavList').addEventListener('click',e=>{const t=e.target.closest('[data-unavdel]');if(t)deleteUnav(t.dataset.unavdel)});
 
   $('dashYear').addEventListener('change',renderDashboard);
   $('btnExportXlsx').addEventListener('click',exportExcel);
