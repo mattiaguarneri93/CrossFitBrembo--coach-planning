@@ -143,7 +143,7 @@ table.data tr.unc td{color:var(--warn);font-weight:700}
 .acc-head.open .acc-arrow{transform:rotate(180deg)}
 .empty-state{text-align:center;padding:3rem 1rem;color:var(--muted)}
 .empty-state .em{font-size:3rem;margin-bottom:.5rem;opacity:.5}
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(26,26,26,.96);backdrop-filter:blur(10px);border-top:1px solid var(--border);grid-template-columns:repeat(6,1fr);padding:.4rem .3rem calc(.4rem + var(--sb));z-index:60}
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(26,26,26,.96);backdrop-filter:blur(10px);border-top:1px solid var(--border);grid-template-columns:repeat(5,1fr);padding:.4rem .3rem calc(.4rem + var(--sb));z-index:60}
 .bnav{background:none;border:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;padding:.4rem;gap:.15rem;cursor:pointer;font-family:inherit;border-radius:8px;font-size:.6rem;font-weight:700;text-transform:uppercase}
 .bnav .bi{font-size:1.3rem}
 .bnav.active{color:var(--accent)}
@@ -367,7 +367,7 @@ header{padding-top:calc(1rem + var(--st))}
 [data-theme="light"] .day-nav-m .cur.today .dname{color:#F26522 !important}
 </style>
 <style>
-.myclasses-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:.8rem}.myclasses-kpis{display:grid;grid-template-columns:repeat(3,minmax(110px,1fr));gap:.7rem;margin:1rem 0}.myclass-list{display:grid;gap:.7rem}.myclass-day{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:.9rem}.myclass-day-title{font-weight:800;color:var(--accent2);margin-bottom:.55rem;text-transform:capitalize}.myclass-row{display:grid;grid-template-columns:68px 1fr auto;gap:.7rem;align-items:center;padding:.7rem;border-top:1px solid var(--border)}.myclass-row:first-of-type{border-top:0}.myclass-time{font-weight:800;color:var(--accent2)}.myclass-badges{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}.myclass-empty{text-align:center;padding:2rem;color:var(--muted)}@media(max-width:620px){.myclasses-kpis{grid-template-columns:1fr}.myclass-row{grid-template-columns:56px 1fr}.myclass-badges{grid-column:1/-1;justify-content:flex-start}.myclasses-head .field{width:100%}}
+.myclasses-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:.8rem}.myclasses-tools{display:flex;gap:.6rem;flex-wrap:wrap;align-items:end}.myclasses-kpis{display:grid;grid-template-columns:repeat(4,minmax(105px,1fr));gap:.7rem;margin:1rem 0}.myclass-list{display:grid;gap:.75rem}.myclass-day{background:var(--panel);border:1px solid var(--border);border-left:5px solid var(--coach-color,var(--accent));border-radius:20px;padding:.9rem}.myclass-day.today{box-shadow:0 0 0 2px var(--accent);background:rgba(242,101,34,.08)}.myclass-day-title{display:flex;align-items:center;justify-content:space-between;gap:.6rem;font-weight:800;color:var(--accent2);margin-bottom:.45rem;text-transform:capitalize}.today-pill{font-size:.68rem;padding:.25rem .5rem;border-radius:999px;background:var(--accent);color:#fff}.myclass-row{display:grid;grid-template-columns:68px 1fr auto;gap:.7rem;align-items:center;padding:.7rem;border-top:1px solid var(--border)}.myclass-row:first-of-type{border-top:0}.myclass-time{font-weight:800;color:var(--accent2)}.myclass-badges{display:flex;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}.myclass-empty{text-align:center;padding:2rem;color:var(--muted)}.diag-grid{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:.8rem}.diag-box{padding:.9rem;border:1px solid var(--border);border-radius:16px;background:var(--panel2)}.diag-box.warn{border-color:#f59e0b}.diag-box.err{border-color:#ef4444}.diag-list{margin-top:.5rem;display:grid;gap:.35rem;font-size:.82rem}.diag-item{padding:.45rem .55rem;border-radius:10px;background:rgba(255,255,255,.04)}@media(max-width:700px){.myclasses-kpis{grid-template-columns:repeat(2,1fr)}.diag-grid{grid-template-columns:1fr}.myclass-row{grid-template-columns:56px 1fr}.myclass-badges{grid-column:1/-1;justify-content:flex-start}.myclasses-tools,.myclasses-tools .field{width:100%}}
 </style>
 </head>
 <body>
@@ -389,7 +389,6 @@ header{padding-top:calc(1rem + var(--st))}
       <button class="nav-btn" data-view="myclasses">👤 Le mie classi</button>
       <button class="nav-btn" data-view="dashboard">📊 Dashboard</button>
       <button class="nav-btn" data-view="admin">⚙️ Admin</button>
-      <button class="nav-btn" data-view="log">📝 Log</button>
       <button class="nav-btn no-print" id="btnPrint">🖨️ Stampa</button>
     </nav>
   </div>
@@ -435,14 +434,15 @@ header{padding-top:calc(1rem + var(--st))}
 
 <section id="view-myclasses" class="view">
   <div class="toolbar myclasses-head">
-    <div>
-      <div class="week-label">👤 Le mie classi</div>
-      <div id="myClassesSubtitle" style="color:var(--muted);font-size:.83rem;margin-top:.25rem"></div>
+    <div><div class="week-label">👤 Le mie classi</div><div id="myClassesSubtitle" style="color:var(--muted);font-size:.83rem;margin-top:.25rem"></div></div>
+    <div class="myclasses-tools">
+      <div class="field" style="margin:0;min-width:180px"><label>Cerca classe</label><input type="text" id="myClassesSearch" placeholder="es. CrossFit"></div>
+      <div class="field" style="margin:0;min-width:180px"><label>Periodo</label><select id="myClassesRange"><option value="14">Prossimi 14 giorni</option><option value="30" selected>Prossimi 30 giorni</option><option value="60">Prossimi 60 giorni</option><option value="90">Prossimi 90 giorni</option></select></div>
     </div>
-    <div class="field" style="margin:0;min-width:180px"><label>Periodo</label><select id="myClassesRange"><option value="14">Prossimi 14 giorni</option><option value="30" selected>Prossimi 30 giorni</option><option value="60">Prossimi 60 giorni</option><option value="90">Prossimi 90 giorni</option></select></div>
   </div>
   <div class="myclasses-kpis">
     <div class="kpi"><div class="kpi-val" id="myClassesTotal">0</div><div class="kpi-lbl">Lezioni</div></div>
+    <div class="kpi"><div class="kpi-val" id="myClassesWeek">0</div><div class="kpi-lbl">Questa settimana</div></div>
     <div class="kpi"><div class="kpi-val" id="myClassesOpen">0</div><div class="kpi-lbl">Aperture</div></div>
     <div class="kpi"><div class="kpi-val" id="myClassesClose">0</div><div class="kpi-lbl">Chiusure</div></div>
   </div>
@@ -471,11 +471,21 @@ header{padding-top:calc(1rem + var(--st))}
 </section>
 
 <section id="view-admin" class="view">
+
   <div class="card">
     <h2>👤 Preferenze personali</h2>
-    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Questa scelta viene salvata solo su questo browser/dispositivo e non modifica il planning condiviso.</p>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Salvata solo su questo browser/dispositivo. Non modifica né sincronizza il planning degli altri coach.</p>
     <div class="field"><label>Il mio coach</label><select id="preferredCoachSelect"></select></div>
     <div id="preferredCoachStatus" style="font-size:.82rem;color:var(--muted)"></div>
+  </div>
+  <div class="card">
+    <h2>🩺 Controlli planning</h2>
+    <div id="planningDiagnostics" class="diag-grid"></div>
+  </div>
+  <div class="card">
+    <h2>📝 Storico modifiche</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Consulta le operazioni registrate nell'app.</p>
+    <button class="btn btn-primary" id="btnOpenLog">Apri log</button>
   </div>
 
   <div class="card">
@@ -516,7 +526,7 @@ header{padding-top:calc(1rem + var(--st))}
 
 <section id="view-log" class="view">
   <div class="toolbar">
-    <div class="tg"><span class="week-label" id="logLabel">📝 Modifiche ultimi 30 giorni</span></div>
+    <div class="tg"><button class="btn btn-sm" id="btnBackAdmin">← Impostazioni</button><span class="week-label" id="logLabel">📝 Modifiche ultimi 30 giorni</span></div>
     <div class="tg"><button class="btn btn-danger btn-sm" id="btnClearLog">🗑️ Svuota log</button></div>
   </div>
   <div id="logList"></div>
@@ -533,7 +543,6 @@ header{padding-top:calc(1rem + var(--st))}
   <button class="bnav" data-mview="myclasses" aria-label="Le mie classi"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 20c.7-4 3-6 6.5-6s5.8 2 6.5 6"/></svg></span></button>
   <button class="bnav" data-mview="dashboard" aria-label="Dashboard"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6.5 20v-6M12 20V5.5M17.5 20v-9"/></svg></span></button>
   <button class="bnav" data-mview="admin" aria-label="Admin"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h8M17 7h3M4 17h3M12 17h8"/><circle cx="15" cy="7" r="2.4"/><circle cx="9" cy="17" r="2.4"/></svg></span></button>
-  <button class="bnav" data-mview="log" aria-label="Log"><span class="bi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5h6l4 4V18.5A2.5 2.5 0 0 1 15.5 21H8A2.5 2.5 0 0 1 5.5 18.5V6A2.5 2.5 0 0 1 8 3.5Z"/><path d="M13.5 3.5V8h4M9 12.5h6M9 16h4"/></svg></span></button>
 </nav>
 
 <div class="modal-bg" id="editModal">
@@ -648,7 +657,7 @@ function setView(name){
   const el=$('view-'+name); if(el) el.classList.add('active');
   if(name==='myclasses') renderMyClasses();
   else if(name==='dashboard') renderDashboard();
-  else if(name==='admin') renderAdmin();
+  else if(name==='admin'){renderAdmin();renderPreferredCoach();renderPlanningDiagnostics();}
   else if(name==='log') renderLog();
   else renderAll();
 }
@@ -967,8 +976,8 @@ function renderTpl(){
 }
 function onAdminClick(ev){
   const t=ev.target.closest('button, .x'); if(!t) return;
-  if(t.dataset.cd!=null){if(confirm('Rimuovere coach?')){const _rc=(DATA.coaches[parseInt(t.dataset.cd)]||{}).name||'';DATA.coaches.splice(parseInt(t.dataset.cd),1);logAction('👤 Coach rimosso: '+_rc);saveData();renderAdmin();renderPreferredCoach();renderAll();updateCoachFilter()}}
-  else if(t.dataset.ld!=null){if(confirm('Rimuovere classe?')){const _rl=DATA.classes[parseInt(t.dataset.ld)]||'';DATA.classes.splice(parseInt(t.dataset.ld),1);logAction('🏋️ Classe rimossa: '+_rl);saveData();renderAdmin();renderPreferredCoach()}}
+  if(t.dataset.cd!=null){if(confirm('Rimuovere coach?')){const _rc=(DATA.coaches[parseInt(t.dataset.cd)]||{}).name||'';DATA.coaches.splice(parseInt(t.dataset.cd),1);logAction('👤 Coach rimosso: '+_rc);saveData();renderAdmin();renderPreferredCoach();renderPlanningDiagnostics();renderAll();updateCoachFilter()}}
+  else if(t.dataset.ld!=null){if(confirm('Rimuovere classe?')){const _rl=DATA.classes[parseInt(t.dataset.ld)]||'';DATA.classes.splice(parseInt(t.dataset.ld),1);logAction('🏋️ Classe rimossa: '+_rl);saveData();renderAdmin();renderPreferredCoach();renderPlanningDiagnostics()}}
   else if(t.dataset.tpldel!=null){const[d,i]=t.dataset.tpldel.split('_').map(Number);if(confirm('Rimuovere dal template settimanale?')){const _ts=DATA.template[d][i]||{};DATA.template[d].splice(i,1);logAction('📋 Template rimosso: '+DAYS[d]+' '+(_ts.time||'')+' '+(_ts.cls||''));saveData();renderTpl();renderAll()}}
   else if(t.dataset.tpladd!=null){const d=parseInt(t.dataset.tpladd);const time=$('tplT_'+d).value;const cls=$('tplC_'+d).value;if(!time||!cls){toast('Compila',true);return}if(!DATA.template[d])DATA.template[d]=[];DATA.template[d].push({time,cls});DATA.template[d].sort((a,b)=>a.time.localeCompare(b.time));logAction('📋 Template aggiunto: '+DAYS[d]+' '+time+' '+cls);saveData();renderTpl();renderAll();toast('Aggiunto')}
 }
@@ -1189,27 +1198,23 @@ window.addEventListener('load',function(){setTimeout(function(){try{initNavBubbl
 
 const PREFERRED_COACH_KEY='cfb_preferred_coach';
 function getPreferredCoach(){try{return localStorage.getItem(PREFERRED_COACH_KEY)||''}catch(e){return ''}}
-function setPreferredCoach(name){try{if(name)localStorage.setItem(PREFERRED_COACH_KEY,name);else localStorage.removeItem(PREFERRED_COACH_KEY)}catch(e){}renderPreferredCoach();renderMyClasses()}
-function renderPreferredCoach(){
-  const sel=$('preferredCoachSelect'),st=$('preferredCoachStatus');if(!sel)return;
-  const saved=getPreferredCoach(),valid=DATA.coaches.some(c=>c.name===saved);
-  sel.innerHTML='<option value="">— Seleziona il tuo profilo —</option>'+DATA.coaches.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}</option>`).join('');
-  sel.value=valid?saved:'';
-  if(st)st.textContent=valid?'Profilo locale attivo: '+saved:'Seleziona il coach associato a questo dispositivo.';
-}
+function setPreferredCoach(name){try{if(name)localStorage.setItem(PREFERRED_COACH_KEY,name);else localStorage.removeItem(PREFERRED_COACH_KEY)}catch(e){}renderPreferredCoach();renderMyClasses();renderPlanningDiagnostics()}
+function coachColor(name){const c=DATA.coaches.find(x=>x.name===name);return c&&c.color?c.color:'var(--accent)'}
+function renderPreferredCoach(){const sel=$('preferredCoachSelect'),st=$('preferredCoachStatus');if(!sel||!DATA)return;const saved=getPreferredCoach(),valid=DATA.coaches.some(c=>c.name===saved);sel.innerHTML='<option value="">— Seleziona il tuo profilo —</option>'+DATA.coaches.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}</option>`).join('');sel.value=valid?saved:'';if(st)st.textContent=valid?'Profilo locale attivo: '+saved:'Seleziona il coach associato a questo dispositivo.'}
 function renderMyClasses(){
-  const list=$('myClassesList');if(!list||!DATA)return;
-  const coach=getPreferredCoach(),valid=DATA.coaches.some(c=>c.name===coach),days=parseInt(($('myClassesRange')||{}).value||'30',10);
-  const sub=$('myClassesSubtitle');if(sub)sub.textContent=valid?coach+' · prossimi '+days+' giorni':'Nessun coach configurato su questo dispositivo';
-  if(!valid){$('myClassesTotal').textContent='0';$('myClassesOpen').textContent='0';$('myClassesClose').textContent='0';list.innerHTML='<div class="card myclass-empty"><strong>Imposta prima “Il mio coach” in Admin → Preferenze personali.</strong><br><button class="btn btn-primary btn-sm" id="goPreferences" style="margin-top:.8rem">Apri impostazioni</button></div>';$('goPreferences').onclick=()=>setView('admin');return}
-  const rows=[];const start=new Date();start.setHours(12,0,0,0);
-  for(let i=0;i<days;i++){const d=new Date(start);d.setDate(start.getDate()+i);getSlotsForDate(d).filter(x=>x.coach===coach).forEach(x=>rows.push({d,x}))}
-  $('myClassesTotal').textContent=rows.length;$('myClassesOpen').textContent=rows.filter(r=>r.x.apertura).length;$('myClassesClose').textContent=rows.filter(r=>r.x.chiusura).length;
-  if(!rows.length){list.innerHTML='<div class="card myclass-empty">Nessuna classe assegnata nel periodo selezionato.</div>';return}
-  const groups={};rows.forEach(r=>{const k=fmtDate(r.d);(groups[k]||(groups[k]={d:r.d,rows:[]})).rows.push(r.x)});
-  list.innerHTML=Object.values(groups).map(g=>`<div class="myclass-day"><div class="myclass-day-title">${esc(g.d.toLocaleDateString('it-IT',{weekday:'long',day:'2-digit',month:'long'}))}</div>${g.rows.map(x=>`<div class="myclass-row"><div class="myclass-time">${esc(x.time)}</div><div><strong>${esc(x.cls)}</strong></div><div class="myclass-badges">${x.apertura?'<span class="fbadge ap">APERTURA</span>':''}${x.chiusura?'<span class="fbadge ch">CHIUSURA</span>':''}<button class="btn btn-sm" data-open-week="${fmtDate(g.d)}">Settimana</button></div></div>`).join('')}</div>`).join('');
+ const list=$('myClassesList');if(!list||!DATA)return;const coach=getPreferredCoach(),valid=DATA.coaches.some(c=>c.name===coach),days=parseInt(($('myClassesRange')||{}).value||'30',10),q=(($('myClassesSearch')||{}).value||'').trim().toLowerCase();const sub=$('myClassesSubtitle');if(sub)sub.textContent=valid?coach+' · prossimi '+days+' giorni':'Nessun coach configurato su questo dispositivo';
+ if(!valid){['myClassesTotal','myClassesWeek','myClassesOpen','myClassesClose'].forEach(id=>$(id).textContent='0');list.innerHTML='<div class="card myclass-empty"><strong>Imposta prima “Il mio coach” nelle Impostazioni.</strong><br><button class="btn btn-primary btn-sm" id="goPreferences" style="margin-top:.8rem">Apri impostazioni</button></div>';$('goPreferences').onclick=()=>setView('admin');return}
+ const rows=[],start=new Date();start.setHours(12,0,0,0);for(let i=0;i<days;i++){const d=new Date(start);d.setDate(start.getDate()+i);getSlotsForDate(d).filter(x=>x.coach===coach&&(!q||x.cls.toLowerCase().includes(q))).forEach(x=>rows.push({d,x}))}
+ const weekStart=mondayOf(new Date()),weekEnd=new Date(weekStart);weekEnd.setDate(weekEnd.getDate()+7);$('myClassesTotal').textContent=rows.length;$('myClassesWeek').textContent=rows.filter(r=>r.d>=weekStart&&r.d<weekEnd).length;$('myClassesOpen').textContent=rows.filter(r=>r.x.apertura).length;$('myClassesClose').textContent=rows.filter(r=>r.x.chiusura).length;
+ if(!rows.length){list.innerHTML='<div class="card myclass-empty">Nessuna classe trovata nel periodo selezionato.</div>';return}
+ const groups={};rows.forEach(r=>{const k=fmtDate(r.d);(groups[k]||(groups[k]={d:r.d,rows:[]})).rows.push(r.x)});const today=fmtDate(new Date());
+ list.innerHTML=Object.values(groups).map(g=>`<div class="myclass-day ${fmtDate(g.d)===today?'today':''}" style="--coach-color:${coachColor(coach)}"><div class="myclass-day-title"><span>${esc(g.d.toLocaleDateString('it-IT',{weekday:'long',day:'2-digit',month:'long'}))}${fmtDate(g.d)===today?' <span class="today-pill">OGGI</span>':''}</span><button class="btn btn-sm" data-open-week="${fmtDate(g.d)}">Apri settimana</button></div>${g.rows.map(x=>`<div class="myclass-row"><div class="myclass-time">${esc(x.time)}</div><div><strong>${esc(x.cls)}</strong></div><div class="myclass-badges">${x.apertura?'<span class="fbadge ap">APERTURA</span>':''}${x.chiusura?'<span class="fbadge ch">CHIUSURA</span>':''}</div></div>`).join('')}</div>`).join('')
 }
 function onMyClassesClick(e){const b=e.target.closest('[data-open-week]');if(!b)return;const d=parseDate(b.dataset.openWeek);currentWeekStart=mondayOf(d);currentDay=d;setView(window.innerWidth<=900?'today':'week')}
+function findPlanningIssues(){
+ const uncovered=[],conflicts=[],start=new Date();start.setHours(12,0,0,0);for(let i=0;i<30;i++){const d=new Date(start);d.setDate(start.getDate()+i);const slots=getSlotsForDate(d),seen={};slots.forEach(x=>{if(!x.coach)uncovered.push({d,x});if(x.coach){const k=x.time+'|'+x.coach;if(seen[k])conflicts.push({d,time:x.time,coach:x.coach,classes:[seen[k],x.cls]});else seen[k]=x.cls}})}return{uncovered,conflicts}
+}
+function renderPlanningDiagnostics(){const el=$('planningDiagnostics');if(!el||!DATA)return;const r=findPlanningIssues(),fmt=o=>`${o.d.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'})} · ${o.x.time} · ${esc(o.x.cls)}`;el.innerHTML=`<div class="diag-box ${r.uncovered.length?'warn':''}"><strong>⚠️ Lezioni scoperte: ${r.uncovered.length}</strong><div class="diag-list">${r.uncovered.length?r.uncovered.slice(0,12).map(x=>`<div class="diag-item">${fmt(x)}</div>`).join(''):'<div class="diag-item">Nessuna nei prossimi 30 giorni.</div>'}${r.uncovered.length>12?`<div class="diag-item">+ altre ${r.uncovered.length-12}</div>`:''}</div></div><div class="diag-box ${r.conflicts.length?'err':''}"><strong>❌ Conflitti coach: ${r.conflicts.length}</strong><div class="diag-list">${r.conflicts.length?r.conflicts.slice(0,12).map(x=>`<div class="diag-item">${x.d.toLocaleDateString('it-IT',{day:'2-digit',month:'2-digit'})} · ${x.time} · ${esc(x.coach)} · ${esc(x.classes.join(' / '))}</div>`).join(''):'<div class="diag-item">Nessun conflitto nei prossimi 30 giorni.</div>'}</div></div>`}
 
 function init(){
   document.addEventListener('gesturestart',e=>e.preventDefault());
@@ -1263,8 +1268,8 @@ function init(){
   $('btnImportTrigger').addEventListener('click',()=>$('importFile').click());
   $('importFile').addEventListener('change',importJSON);
 
-  $('btnAddCoach').addEventListener('click',()=>{const n=prompt('Nome:');if(!n)return;if(DATA.coaches.find(c=>c.name===n.trim())){alert('Esistente');return}const cs=['#ef4444','#4ade80','#3b82f6','#a855f7','#F26522','#fbbf24','#ec4899','#06b6d4'];DATA.coaches.push({name:n.trim(),color:cs[DATA.coaches.length%cs.length]});logAction('👤 Coach aggiunto: '+n.trim());saveData();renderAdmin();renderPreferredCoach();renderAll();updateCoachFilter()});
-  $('btnAddClass').addEventListener('click',()=>{const n=prompt('Nome:');if(!n)return;if(DATA.classes.includes(n.trim())){alert('Esistente');return}DATA.classes.push(n.trim());logAction('🏋️ Classe aggiunta: '+n.trim());saveData();renderAdmin();renderPreferredCoach()});
+  $('btnAddCoach').addEventListener('click',()=>{const n=prompt('Nome:');if(!n)return;if(DATA.coaches.find(c=>c.name===n.trim())){alert('Esistente');return}const cs=['#ef4444','#4ade80','#3b82f6','#a855f7','#F26522','#fbbf24','#ec4899','#06b6d4'];DATA.coaches.push({name:n.trim(),color:cs[DATA.coaches.length%cs.length]});logAction('👤 Coach aggiunto: '+n.trim());saveData();renderAdmin();renderPreferredCoach();renderPlanningDiagnostics();renderAll();updateCoachFilter()});
+  $('btnAddClass').addEventListener('click',()=>{const n=prompt('Nome:');if(!n)return;if(DATA.classes.includes(n.trim())){alert('Esistente');return}DATA.classes.push(n.trim());logAction('🏋️ Classe aggiunta: '+n.trim());saveData();renderAdmin();renderPreferredCoach();renderPlanningDiagnostics()});
   $('coachList').addEventListener('click',onAdminClick);
   $('coachList').addEventListener('change',onAdminChange);
   $('classList').addEventListener('click',onAdminClick);
@@ -1273,8 +1278,11 @@ function init(){
 
   $('preferredCoachSelect').addEventListener('change',e=>setPreferredCoach(e.target.value));
   $('myClassesRange').addEventListener('change',renderMyClasses);
+  $('myClassesSearch').addEventListener('input',renderMyClasses);
   $('myClassesList').addEventListener('click',onMyClassesClick);
-  renderPreferredCoach();
+  $('btnOpenLog').addEventListener('click',()=>setView('log'));
+  $('btnBackAdmin').addEventListener('click',()=>setView('admin'));
+  renderPreferredCoach();renderPlanningDiagnostics();
 
   $('btnReset').addEventListener('click',()=>{if(confirm('Cancellare TUTTI i dati?')){try{localStorage.removeItem('cfb_data')}catch(e){}MEMORY_STORE=null;location.reload()}});
   $('btnClearLog').addEventListener('click',()=>{if(confirm('Svuotare il log delle modifiche?')){DATA.changeLog=[];saveData();renderLog();toast('Log svuotato')}});
