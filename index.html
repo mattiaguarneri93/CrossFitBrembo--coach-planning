@@ -399,6 +399,27 @@ header{padding-top:calc(1rem + var(--st))}
 .mc-lesson .mini.ch{background:var(--accent);color:#fff}
 .mc-empty{color:var(--muted);font-size:.82rem;padding:.3rem 0}
 @media(max-width:900px){.mc-day{grid-template-columns:58px 1fr}.month-label{min-width:120px;font-size:.9rem}}
+/* ===== Mini calendario ===== */
+.cal-modal{max-width:360px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.8rem}
+.cal-head .cal-title{font-weight:800;font-size:1.05rem;text-transform:capitalize;color:var(--accent2)}
+[data-theme="light"] .cal-head .cal-title{color:#c2521a}
+.cal-head .btn{width:40px;height:40px;justify-content:center;padding:0}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-wd{font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;padding:.25rem 0}
+.cal-d{position:relative;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;border-radius:14px;cursor:pointer;font-weight:600;font-size:.9rem;background:rgba(255,255,255,.04);border:1px solid transparent;transition:background .15s,transform .12s}
+[data-theme="light"] .cal-d{background:rgba(0,0,0,.035)}
+.cal-d:hover{background:rgba(242,101,34,.18)}
+.cal-d:active{transform:scale(.92)}
+.cal-d.out{opacity:.3}
+.cal-d.wk{background:rgba(242,101,34,.1)}
+.cal-d.today{border-color:var(--accent);color:var(--accent)}
+.cal-d.sel{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent}
+.cal-d .dot{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--warn)}
+.cal-d.sel .dot{background:#fff}
+.cal-legend{font-size:.72rem;color:var(--muted);margin-top:.7rem;display:flex;align-items:center;gap:.4rem}
+.cal-legend .dot{width:6px;height:6px;border-radius:50%;background:var(--warn);display:inline-block}
+#mDayCur{cursor:pointer}
 </style>
 </head>
 <body>
@@ -435,7 +456,7 @@ header{padding-top:calc(1rem + var(--st))}
     <div class="cur" id="mDayCur"><div class="dname">—</div><div class="ddate">—</div></div>
     <button class="arr" id="mDayNext">›</button>
   </div>
-  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem"><div class="chips" id="mChipsToday" style="margin-bottom:0;flex:1"></div><button class="btn btn-sm" id="mBtnToday" style="flex-shrink:0">Oggi</button></div>
+  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem"><div class="chips" id="mChipsToday" style="margin-bottom:0;flex:1"></div><button class="btn btn-sm" id="mBtnCal" style="flex-shrink:0" title="Vai a data">📅</button><button class="btn btn-sm" id="mBtnToday" style="flex-shrink:0">Oggi</button></div>
   <div id="mTodayList"></div>
 </section>
 
@@ -445,6 +466,7 @@ header{padding-top:calc(1rem + var(--st))}
       <button class="btn" id="btnPrev">◀</button>
       <button class="btn" id="btnToday">Oggi</button>
       <button class="btn" id="btnNext">▶</button>
+      <button class="btn" id="btnCal" title="Vai a data">📅</button>
       <input type="date" id="datePicker">
       <span class="week-label" id="weekLabel">—</span>
     </div>
@@ -616,6 +638,21 @@ header{padding-top:calc(1rem + var(--st))}
     <div class="m-acts">
       <button class="btn" id="uCancel">Annulla</button>
       <button class="btn btn-primary" id="uSave">+ Aggiungi</button>
+    </div>
+  </div>
+</div>
+<div class="modal-bg" id="calModal">
+  <div class="modal cal-modal">
+    <div class="cal-head">
+      <button class="btn" id="calPrev">◀</button>
+      <div class="cal-title" id="calTitle">—</div>
+      <button class="btn" id="calNext">▶</button>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend"><span class="dot"></span> Giorno con lezioni scoperte</div>
+    <div class="m-acts">
+      <button class="btn" id="calToday">Oggi</button>
+      <button class="btn" id="calClose">Chiudi</button>
     </div>
   </div>
 </div>
@@ -1344,6 +1381,40 @@ function initNavBubble(){_nav=document.querySelector('.bottom-nav');_bubble=docu
 window.addEventListener('resize',function(){try{_layout(true);}catch(e){}});
 window.addEventListener('load',function(){setTimeout(function(){try{initNavBubble();}catch(e){}},60);});
 
+/* ===== Mini calendario: vai a data ===== */
+let calMonth=null;
+function calRefDate(){return document.querySelector('#view-today.active')?currentDay:currentWeekStart}
+function openCal(){const r=calRefDate();calMonth=new Date(r.getFullYear(),r.getMonth(),1);renderCal();$('calModal').classList.add('show')}
+function closeCal(){$('calModal').classList.remove('show')}
+function renderCal(){
+  const y=calMonth.getFullYear(),m=calMonth.getMonth();
+  $('calTitle').textContent=MONTHS_F[m]+' '+y;
+  const onToday=!!document.querySelector('#view-today.active');
+  const selDs=onToday?fmtDate(currentDay):null;
+  const wkS=fmtDate(currentWeekStart),wkE=fmtDate(addDays(currentWeekStart,6));
+  let h=DAYS_S.map(d=>`<div class="cal-wd">${esc(d)}</div>`).join('');
+  const start=mondayOf(new Date(y,m,1));
+  for(let i=0;i<42;i++){
+    const d=addDays(start,i);
+    if(i>=35&&d.getMonth()!==m)break;
+    const ds=fmtDate(d);
+    let cls='cal-d';
+    if(d.getMonth()!==m)cls+=' out';
+    if(isToday(d))cls+=' today';
+    if(onToday){if(ds===selDs)cls+=' sel'}else if(ds>=wkS&&ds<=wkE)cls+=' wk';
+    const hasUnc=getSlotsForDate(d).some(s=>!s.coach);
+    h+=`<div class="${cls}" data-cal="${ds}">${d.getDate()}${hasUnc?'<span class="dot"></span>':''}</div>`;
+  }
+  $('calGrid').innerHTML=h;
+}
+function calGo(ds){
+  const d=parseDate(ds);
+  currentDay=d;currentWeekStart=mondayOf(d);
+  const a=document.querySelector('.view.active');
+  if(a&&(a.id==='view-today'||a.id==='view-week'))renderAll();
+  else setView(window.innerWidth<=900?'today':'week');
+  closeCal();
+}
 function init(){
   document.addEventListener('gesturestart',e=>e.preventDefault());
   document.addEventListener('gesturechange',e=>e.preventDefault());
@@ -1388,7 +1459,15 @@ function init(){
   $('aSave').addEventListener('click',saveAdd);
   $('aCancel').addEventListener('click',closeAddModal);
   $('addModal').addEventListener('click',e=>{if(e.target.id==='addModal') closeAddModal()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditModal();closeAddModal();closeUnavModal()}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditModal();closeAddModal();closeUnavModal();closeCal()}});
+  $('btnCal').addEventListener('click',openCal);
+  $('mBtnCal').addEventListener('click',openCal);
+  $('mDayCur').addEventListener('click',openCal);
+  $('calPrev').addEventListener('click',()=>{calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()-1,1);renderCal()});
+  $('calNext').addEventListener('click',()=>{calMonth=new Date(calMonth.getFullYear(),calMonth.getMonth()+1,1);renderCal()});
+  $('calToday').addEventListener('click',()=>calGo(fmtDate(new Date())));
+  $('calClose').addEventListener('click',closeCal);
+  $('calModal').addEventListener('click',e=>{if(e.target.id==='calModal'){closeCal();return}const t=e.target.closest('[data-cal]');if(t)calGo(t.dataset.cal)});
 
   currentMonth=new Date(new Date().getFullYear(),new Date().getMonth(),1);
   $('btnMPrev').addEventListener('click',()=>navMonth(-1));
