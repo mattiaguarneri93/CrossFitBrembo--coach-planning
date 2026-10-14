@@ -11,6 +11,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CFB Planning">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>CrossFit Brembo — Planning</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
@@ -420,6 +423,9 @@ header{padding-top:calc(1rem + var(--st))}
 .cal-legend{font-size:.72rem;color:var(--muted);margin-top:.7rem;display:flex;align-items:center;gap:.4rem}
 .cal-legend .dot{width:6px;height:6px;border-radius:50%;background:var(--warn);display:inline-block}
 #mDayCur{cursor:pointer}
+#updBar{display:none;position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:3000;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:.6rem .7rem .6rem 1.1rem;align-items:center;justify-content:space-between;gap:.6rem;box-shadow:0 10px 30px rgba(0,0,0,.45);font-weight:700;font-size:.88rem;max-width:520px;margin:0 auto}
+#updBar.show{display:flex}
+#updBar button{background:#fff;color:var(--accent);border:none;border-radius:999px;padding:.45rem 1rem;font-weight:800;font-family:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -658,9 +664,40 @@ header{padding-top:calc(1rem + var(--st))}
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<div id="updBar"><span>🔄 Nuova versione disponibile</span><button id="updBtn">Aggiorna</button></div>
 
 <script>
 'use strict';
+/* ===== Auto-aggiornamento (iPhone/PWA) ===== */
+const APP_VERSION='2026-10-14.2'; // <-- aumentare ad ogni pubblicazione su GitHub
+async function clearAppCaches(){
+  try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
+  try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
+}
+function hardReload(){
+  clearAppCaches().finally(()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u.toString())});
+}
+async function checkUpdate(auto){
+  if(location.protocol==='file:')return;
+  try{
+    const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('chk',Date.now());
+    const r=await fetch(u.toString(),{cache:'no-store'});if(!r.ok)return;
+    const m=(await r.text()).match(/APP_VERSION='([^']+)'/);
+    if(!m||m[1]===APP_VERSION)return;
+    const k='cfb_upd_'+m[1];
+    let tried=false;try{tried=sessionStorage.getItem(k)==='1'}catch(e){}
+    if(auto&&!tried&&!document.querySelector('.modal-bg.show')){try{sessionStorage.setItem(k,'1')}catch(e){}hardReload();return}
+    const b=document.getElementById('updBar');if(b)b.classList.add('show');
+  }catch(e){}
+}
+clearAppCaches();
+window.addEventListener('load',()=>{
+  const bt=document.getElementById('updBtn');if(bt)bt.addEventListener('click',hardReload);
+  checkUpdate(true);
+  setInterval(()=>checkUpdate(false),10*60*1000);
+});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkUpdate(true)});
+window.addEventListener('pageshow',e=>{if(e.persisted)checkUpdate(true)});
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function $(id){return document.getElementById(id)}
 
@@ -1291,8 +1328,9 @@ function attachSwipe(el,onL,onR){
   },{passive:true});
 }
 
-let SYNC_URL='';
-try{SYNC_URL=localStorage.getItem('cfb_sync_url')||''}catch(e){}
+const DEFAULT_SYNC_URL='https://script.google.com/macros/s/AKfycbwfUzLYuOFYyUCrwWkbSPX1u9ggF8m1FUUvZL9cZdmTHHgg7oSgOHpIuFW-cvTGAXIHgQ/exec';
+let SYNC_URL=DEFAULT_SYNC_URL;
+try{SYNC_URL=localStorage.getItem('cfb_sync_url')||DEFAULT_SYNC_URL}catch(e){}
 let lastPushedRev=-1,autoSync=true,pushTimer=null,pullTimer=null;
 function setSync(msg,kind){
   const t=new Date();const hh=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
@@ -1300,7 +1338,7 @@ function setSync(msg,kind){
   const hd=$('syncStatus');if(hd){hd.textContent=full;hd.className='sync-status'+(kind==='err'?' err':(kind==='ok'?' ok':''))}
   const cs=$('syncCardStatus');if(cs){cs.textContent=full;cs.style.color=(kind==='err'?'#ef4444':(kind==='ok'?'var(--accent2)':'var(--muted)'))}
 }
-function saveSyncUrl(u){SYNC_URL=(u||'').trim();try{localStorage.setItem('cfb_sync_url',SYNC_URL)}catch(e){}}
+function saveSyncUrl(u){SYNC_URL=(u||'').trim()||DEFAULT_SYNC_URL;try{localStorage.setItem('cfb_sync_url',SYNC_URL)}catch(e){}}
 function renderActive(){
   const a=document.querySelector('.view.active');if(!a)return;
   if(a.id==='view-monthly')renderMonthly();
