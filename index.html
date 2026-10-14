@@ -11,6 +11,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="CFB Planning">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>CrossFit Brembo — Planning</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
@@ -225,6 +228,10 @@ select option,select optgroup{background:#1a1a1a;color:#f5f5f5}
 .sync-status.err{color:#ef4444;border-color:#ef4444}
 [data-theme="light"] .sync-status{border-color:rgba(0,0,0,.14)}
 @media(max-width:900px){.sync-status{display:none}}
+.sync-status.pend{color:var(--warn);border-color:var(--warn)}
+@media(max-width:900px){.sync-status.pend,.sync-status.err{display:block;margin:.45rem auto 0;max-width:92%;text-align:center}}
+#pinInput{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:var(--text);padding:.55rem .7rem;border-radius:18px;font-family:inherit;font-size:.9rem}
+[data-theme="light"] #pinInput{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.14)}
 .log-item{border-radius:16px;background:rgba(32,32,35,.5);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08)}
 /* iOS26 floating rounded tab bar */
 .bottom-nav{left:12px;right:12px;bottom:calc(10px + var(--sb));border-radius:var(--r-pill);padding:.5rem .4rem;gap:.1rem;background:rgba(28,28,31,.55);-webkit-backdrop-filter:saturate(190%) blur(34px);backdrop-filter:saturate(190%) blur(34px);border:1px solid rgba(255,255,255,.16);box-shadow:0 14px 44px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.22)}
@@ -420,6 +427,9 @@ header{padding-top:calc(1rem + var(--st))}
 .cal-legend{font-size:.72rem;color:var(--muted);margin-top:.7rem;display:flex;align-items:center;gap:.4rem}
 .cal-legend .dot{width:6px;height:6px;border-radius:50%;background:var(--warn);display:inline-block}
 #mDayCur{cursor:pointer}
+#updBar{display:none;position:fixed;left:12px;right:12px;top:calc(10px + env(safe-area-inset-top,0px));z-index:3000;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-radius:999px;padding:.6rem .7rem .6rem 1.1rem;align-items:center;justify-content:space-between;gap:.6rem;box-shadow:0 10px 30px rgba(0,0,0,.45);font-weight:700;font-size:.88rem;max-width:520px;margin:0 auto}
+#updBar.show{display:flex}
+#updBar button{background:#fff;color:var(--accent);border:none;border-radius:999px;padding:.45rem 1rem;font-weight:800;font-family:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -567,6 +577,19 @@ header{padding-top:calc(1rem + var(--st))}
     <div id="syncCardStatus" style="margin-top:.7rem;font-size:.82rem;color:var(--muted)"></div>
   </div>
 
+  <div class="card">
+    <h2>💾 Backup locali</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.6rem">Ultime 10 versioni salvate su questo dispositivo. Il ripristino viene poi sincronizzato sul cloud.</p>
+    <div id="backupList"></div>
+    <button class="btn btn-sm" id="btnBackupNow">+ Crea backup ora</button>
+  </div>
+  <div class="card">
+    <h2>🔒 PIN Admin</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.6rem">Protegge Admin, Log e Importa. Vale su tutti i dispositivi. Le lezioni restano modificabili da tutti i coach.</p>
+    <div class="field"><label>Nuovo PIN</label><input type="password" id="pinInput" inputmode="numeric" autocomplete="off" placeholder="es. 4 cifre"></div>
+    <div class="tg" style="gap:.5rem;flex-wrap:wrap"><button class="btn btn-primary btn-sm" id="btnSetPin">💾 Imposta PIN</button><button class="btn btn-sm" id="btnDelPin">Rimuovi PIN</button></div>
+    <div id="pinStatus" style="margin-top:.6rem;font-size:.82rem;color:var(--muted)"></div>
+  </div>
   <div class="card mobile-only">
     <h2>📝 Log modifiche</h2>
     <p style="color:var(--muted);font-size:.85rem;margin-bottom:.6rem">Storico delle modifiche al planning degli ultimi 30 giorni.</p>
@@ -658,9 +681,40 @@ header{padding-top:calc(1rem + var(--st))}
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<div id="updBar"><span>🔄 Nuova versione disponibile</span><button id="updBtn">Aggiorna</button></div>
 
 <script>
 'use strict';
+/* ===== Auto-aggiornamento (iPhone/PWA) ===== */
+const APP_VERSION='2026-10-14.4'; // <-- aumentare ad ogni pubblicazione su GitHub
+async function clearAppCaches(){
+  try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
+  try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
+}
+function hardReload(){
+  clearAppCaches().finally(()=>{const u=new URL(location.href);u.searchParams.set('v',Date.now());location.replace(u.toString())});
+}
+async function checkUpdate(auto){
+  if(location.protocol==='file:')return;
+  try{
+    const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('chk',Date.now());
+    const r=await fetch(u.toString(),{cache:'no-store'});if(!r.ok)return;
+    const m=(await r.text()).match(/APP_VERSION='([^']+)'/);
+    if(!m||m[1]===APP_VERSION)return;
+    const k='cfb_upd_'+m[1];
+    let tried=false;try{tried=sessionStorage.getItem(k)==='1'}catch(e){}
+    if(auto&&!tried&&!document.querySelector('.modal-bg.show')){try{sessionStorage.setItem(k,'1')}catch(e){}hardReload();return}
+    const b=document.getElementById('updBar');if(b)b.classList.add('show');
+  }catch(e){}
+}
+clearAppCaches();
+window.addEventListener('load',()=>{
+  const bt=document.getElementById('updBtn');if(bt)bt.addEventListener('click',hardReload);
+  checkUpdate(true);
+  setInterval(()=>checkUpdate(false),10*60*1000);
+});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkUpdate(true)});
+window.addEventListener('pageshow',e=>{if(e.persisted)checkUpdate(true)});
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function $(id){return document.getElementById(id)}
 
@@ -700,6 +754,8 @@ function saveLocal(){
 function saveData(){
   DATA.rev=Date.now();
   saveLocal();
+  maybeBackup();
+  setDirty(true);
   schedulePush();
 }
 function showSandboxBanner(){const b=$('sandboxBanner');if(b)b.style.display='block'}
@@ -728,7 +784,7 @@ function getSlotsForDate(date){
   const tpl=DATA.template[dow]||[];
   const slots=[];
   tpl.forEach(t=>{const k=slotKey(ds,t.time,t.cls);if(DATA.deletedSlots[k])return;slots.push(Object.assign({time:t.time,cls:t.cls,coach:DATA.assignments[k]||'',source:'template',dateStr:ds},flagsFor(ds,t.time,t.cls)))});
-  (DATA.extraSlots[ds]||[]).forEach((e,i)=>{slots.push(Object.assign({time:e.time,cls:e.cls,coach:e.coach||'',source:'extra',dateStr:ds,extraIdx:i},flagsFor(ds,e.time,e.cls)))});
+  (DATA.extraSlots[ds]||[]).forEach((e,i)=>{slots.push(Object.assign({time:e.time,cls:e.cls,coach:e.coach||'',source:'extra',dateStr:ds,extraIdx:i,extraId:e.id||''},flagsFor(ds,e.time,e.cls)))});
   slots.sort((a,b)=>a.time.localeCompare(b.time));
   return slots;
 }
@@ -736,6 +792,11 @@ function getSlotsForDate(date){
 let DATA,currentWeekStart,currentDay,editingSlot=null;
 
 function setView(name){
+  if((name==='admin'||name==='log')&&!requireAdmin()){
+    const cur=document.querySelector('.view.active');const cn=cur?cur.id.replace('view-',''):'week';
+    if(cn!==name&&cn!=='admin'&&cn!=='log'){setView(cn);setTimeout(()=>{try{moveBubbleToName(cn==='log'?'admin':cn)}catch(e){}},80)}
+    return;
+  }
   document.querySelectorAll('.nav-btn[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view===name));
   const navName=(name==='log')?'admin':name;
   document.querySelectorAll('.bnav').forEach(x=>x.classList.toggle('active',x.dataset.mview===navName));
@@ -784,7 +845,7 @@ function renderWeek(){
         cell.className='slot'+uncov+dim;
         if(cObj){cell.style.background=cObj.color+'33';cell.style.borderColor=cObj.color}
         cell.dataset.action='editslot';cell.dataset.date=slot.dateStr;cell.dataset.time=slot.time;cell.dataset.cls=slot.cls;cell.dataset.source=slot.source;
-        if(slot.extraIdx!=null) cell.dataset.idx=slot.extraIdx;
+        if(slot.extraIdx!=null){cell.dataset.idx=slot.extraIdx;cell.dataset.xid=slot.extraId}
         const badge=slot.coach?`<div class="sb" style="background:${esc(cObj.color)}">${esc(slot.coach)}</div>`:`<div class="se">⚠</div>`;
         cell.innerHTML=`<div class="st">${esc(slot.time)}</div><div class="sc">${esc(slot.cls)}</div>${badge}${flagBadgesHTML(slot)}`;
       }
@@ -840,7 +901,7 @@ function renderMobileToday(){
     if(c) card.style.borderLeftColor=c.color;
     card.innerHTML=slotCardHTML(s,c);
     card.dataset.action='editslot';card.dataset.date=s.dateStr;card.dataset.time=s.time;card.dataset.cls=s.cls;card.dataset.source=s.source;
-    if(s.extraIdx!=null) card.dataset.idx=s.extraIdx;
+    if(s.extraIdx!=null){card.dataset.idx=s.extraIdx;card.dataset.xid=s.extraId}
     list.appendChild(card);
   });
 }
@@ -870,7 +931,7 @@ function renderMobileWeek(){
       if(c) card.style.borderLeftColor=c.color;
       card.innerHTML=slotCardHTML(s,c);
       card.dataset.action='editslot';card.dataset.date=s.dateStr;card.dataset.time=s.time;card.dataset.cls=s.cls;card.dataset.source=s.source;
-      if(s.extraIdx!=null) card.dataset.idx=s.extraIdx;
+      if(s.extraIdx!=null){card.dataset.idx=s.extraIdx;card.dataset.xid=s.extraId}
       inner.appendChild(card);
     });
     const head=box.querySelector('.acc-head'),body=box.querySelector('.acc-body');
@@ -899,13 +960,14 @@ function onClickSlot(ev){
   if(!cell) return;
   const a=cell.dataset.action;
   if(a==='newslot') openEditModal('new',{dateStr:cell.dataset.date,time:cell.dataset.time,cls:''});
-  else if(a==='editslot') openEditModal(cell.dataset.source,{dateStr:cell.dataset.date,time:cell.dataset.time,cls:cell.dataset.cls,extraIdx:cell.dataset.idx!=null?parseInt(cell.dataset.idx):null});
+  else if(a==='editslot') openEditModal(cell.dataset.source,{dateStr:cell.dataset.date,time:cell.dataset.time,cls:cell.dataset.cls,extraIdx:cell.dataset.idx!=null?parseInt(cell.dataset.idx):null,extraId:cell.dataset.xid||null});
 }
 
 function popSel(id,vals,sel,withEmpty){
   const s=$(id); s.innerHTML=withEmpty?'<option value="">— Scoperto —</option>':'';
   vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;if(v===sel)o.selected=true;s.appendChild(o)});
 }
+function resolveExtra(info){const a=(DATA.extraSlots&&DATA.extraSlots[info.dateStr])||[];if(info.extraId)return a.findIndex(e=>e.id===info.extraId);return(info.extraIdx!=null&&a[info.extraIdx])?info.extraIdx:-1}
 function openEditModal(mode,info){
   editingSlot=Object.assign({mode},info);
   $('eDate').value=info.dateStr;
@@ -913,7 +975,7 @@ function openEditModal(mode,info){
   popSel('eClass',DATA.classes,info.cls||DATA.classes[0]);
   let curCoach='';
   if(mode==='template') curCoach=DATA.assignments[slotKey(info.dateStr,info.time,info.cls)]||'';
-  else if(mode==='extra') curCoach=DATA.extraSlots[info.dateStr][info.extraIdx].coach||'';
+  else if(mode==='extra'){const xi=resolveExtra(info);curCoach=xi>=0?(DATA.extraSlots[info.dateStr][xi].coach||''):''}
   popSel('eCoach',DATA.coaches.map(c=>c.name),curCoach,true);
   const _fk=slotKey(info.dateStr,info.time||'',info.cls||'');
   const _cf=(DATA.flags&&DATA.flags[_fk])||{};
@@ -934,14 +996,14 @@ function saveEdit(){
   const{mode,dateStr}=editingSlot;
   if(mode==='new'){
     if(!DATA.extraSlots[dateStr]) DATA.extraSlots[dateStr]=[];
-    DATA.extraSlots[dateStr].push({time,cls,coach});
+    DATA.extraSlots[dateStr].push({id:uid(),time,cls,coach});
     setFlag(slotKey(dateStr,time,cls),ap,ch);
   } else if(mode==='template'){
     const oldK=slotKey(dateStr,editingSlot.time,editingSlot.cls);
     if(time!==editingSlot.time||cls!==editingSlot.cls){
       DATA.deletedSlots[oldK]=true; delete DATA.assignments[oldK]; delete DATA.flags[oldK];
       if(!DATA.extraSlots[dateStr]) DATA.extraSlots[dateStr]=[];
-      DATA.extraSlots[dateStr].push({time,cls,coach});
+      DATA.extraSlots[dateStr].push({id:uid(),time,cls,coach});
       setFlag(slotKey(dateStr,time,cls),ap,ch);
     } else {
       if(coach) DATA.assignments[oldK]=coach; else delete DATA.assignments[oldK];
@@ -950,8 +1012,10 @@ function saveEdit(){
   } else {
     const oldK=slotKey(dateStr,editingSlot.time,editingSlot.cls);
     const newK=slotKey(dateStr,time,cls);
+    const xi=resolveExtra(editingSlot);
+    if(xi<0){toast('Lezione modificata da un altro coach: riaprila',true);closeEditModal();renderAll();return}
     if(oldK!==newK) delete DATA.flags[oldK];
-    DATA.extraSlots[dateStr][editingSlot.extraIdx]={time,cls,coach};
+    DATA.extraSlots[dateStr][xi]={id:DATA.extraSlots[dateStr][xi].id||uid(),time,cls,coach};
     setFlag(newK,ap,ch);
   }
   const _fl=(ap?' 🔓':'')+(ch?' 🔒':'');
@@ -971,7 +1035,7 @@ function delEdit(){
   } else if(mode==='extra'){
     if(!confirm('Eliminare slot extra?')) return;
     delete DATA.flags[slotKey(dateStr,editingSlot.time,editingSlot.cls)];
-    DATA.extraSlots[dateStr].splice(extraIdx,1);
+    {const xi=resolveExtra(editingSlot);if(xi>=0)DATA.extraSlots[dateStr].splice(xi,1)}
     if(DATA.extraSlots[dateStr].length===0) delete DATA.extraSlots[dateStr];
   } else return;
   logAction(`🗑️ Eliminata lezione ${fmtIT(parseDate(dateStr))} ${editingSlot.time} ${editingSlot.cls}`);
@@ -992,7 +1056,7 @@ function saveAdd(){
   const ds=$('aDay').value,time=$('aTime').value,cls=$('aClass').value,coach=$('aCoach').value;
   if(!ds||!time||!cls){toast('Compila i campi',true);return}
   if(!DATA.extraSlots[ds]) DATA.extraSlots[ds]=[];
-  DATA.extraSlots[ds].push({time,cls,coach});
+  DATA.extraSlots[ds].push({id:uid(),time,cls,coach});
   logAction(`➕ Slot aggiunto ${fmtIT(parseDate(ds))} ${time} ${cls}${coach?(' → '+coach):''}`);
   saveData(); closeAddModal(); renderAll(); toast('Slot aggiunto');
 }
@@ -1141,6 +1205,8 @@ function renderAdmin(){
   DATA.classes.forEach((c,i)=>{const r=document.createElement('div');r.className='row';r.innerHTML=`<input type="text" value="${esc(c)}" data-ln="${i}"><button class="btn btn-danger btn-sm" data-ld="${i}">✕</button>`;ll.appendChild(r)});
   renderTpl();
   renderUnavAdmin();
+  renderBackups();
+  renderPin();
 }
 function renderTpl(){
   const tg=$('tplGrid');tg.innerHTML='';
@@ -1291,16 +1357,62 @@ function attachSwipe(el,onL,onR){
   },{passive:true});
 }
 
-let SYNC_URL='';
-try{SYNC_URL=localStorage.getItem('cfb_sync_url')||''}catch(e){}
-let lastPushedRev=-1,autoSync=true,pushTimer=null,pullTimer=null;
+const DEFAULT_SYNC_URL='https://script.google.com/macros/s/AKfycbyDOanzbPOU2qJj0FRmIQGbd6IUU4HS6c12HhgjNdbO5bSk_uMQYjXt0JsV_C0--KJ4GA/exec';
+let SYNC_URL=DEFAULT_SYNC_URL;
+try{SYNC_URL=(function(){const v=localStorage.getItem('cfb_sync_url');return(v&&v.indexOf('AKfycbwfUzLYuOFYyUCrwWkbSPX1u9ggF8m1FUUvZL9cZdmTHHgg7oSgOHpIuFW-cvTGAXIHgQ')<0)?v:DEFAULT_SYNC_URL})()}catch(e){}
+let autoSync=true,pushTimer=null,pullTimer=null,retryTimer=null,syncing=false,syncAgain=false,retryDelay=0;
+let BASE=null,DIRTY=false;
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}
+function clone(o){return JSON.parse(JSON.stringify(o))}
+function jeq(a,b){return JSON.stringify(a)===JSON.stringify(b)}
+/* ---- normalizzazione + ID slot extra (deterministici, uguali su tutti i dispositivi) ---- */
+function hashPin(p){let h1=0xdeadbeef,h2=0x41c6ce57;const s='cfb|'+p;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return(4294967296*(2097151&h2)+(h1>>>0)).toString(36)}
+function normalize(d){
+  if(!d||typeof d!=='object')return d;
+  if(!d.flags)d.flags={};if(!Array.isArray(d.changeLog))d.changeLog=[];if(!Array.isArray(d.unavailability))d.unavailability=[];
+  if(!d.assignments)d.assignments={};if(!d.extraSlots)d.extraSlots={};if(!d.deletedSlots)d.deletedSlots={};
+  if(!Array.isArray(d.classes))d.classes=[];if(typeof d.rev!=='number')d.rev=0;delete d._baseRev;
+  Object.keys(d.extraSlots).forEach(ds=>{const a=d.extraSlots[ds];if(!Array.isArray(a)||!a.length){delete d.extraSlots[ds];return}
+    const seen={};a.forEach(e=>{if(!e.id){const k=ds+'|'+e.time+'|'+e.cls;seen[k]=(seen[k]||0)+1;e.id='x'+hashPin(k+'|'+seen[k])}})});
+  d.unavailability.forEach(u=>{if(!u.id)u.id='u'+hashPin(u.coach+'|'+u.from+'|'+u.to)});
+  return d;
+}
+/* ---- merge a 3 vie: base (ultimo stato sincronizzato) / locale / cloud ---- */
+function merge3Map(b,l,r){b=b||{};l=l||{};r=r||{};const out={};
+  new Set([...Object.keys(b),...Object.keys(l),...Object.keys(r)]).forEach(k=>{const v=jeq(l[k],b[k])?r[k]:l[k];if(v!==undefined)out[k]=v});return out}
+function byId(a){const m={};(a||[]).forEach(x=>{if(x&&x.id)m[x.id]=x});return m}
+function flatExtra(es){const m={};Object.keys(es||{}).forEach(ds=>(es[ds]||[]).forEach(e=>{if(e&&e.id)m[e.id]=Object.assign({_d:ds},e)}));return m}
+function unflatExtra(m){const out={};Object.keys(m).forEach(id=>{const e=Object.assign({},m[id]);const ds=e._d;delete e._d;(out[ds]=out[ds]||[]).push(e)});Object.keys(out).forEach(k=>out[k].sort((x,y)=>x.time.localeCompare(y.time)));return out}
+function mergeData(base,local,remote){
+  const b=base||{},out={};
+  new Set([...Object.keys(b),...Object.keys(local),...Object.keys(remote)]).forEach(k=>{
+    if(k==='rev'||k==='_baseRev')return;
+    if(k==='assignments'||k==='flags'||k==='deletedSlots'||k==='template')out[k]=merge3Map(b[k],local[k],remote[k]);
+    else if(k==='extraSlots')out[k]=unflatExtra(merge3Map(flatExtra(b[k]),flatExtra(local[k]),flatExtra(remote[k])));
+    else if(k==='unavailability')out[k]=Object.values(merge3Map(byId(b[k]),byId(local[k]),byId(remote[k])));
+    else if(k==='changeLog'){
+      const L=local[k]||[],B=b[k]||[],R=remote[k]||[];
+      if(jeq(L,B))out[k]=R;else if(!L.length&&B.length)out[k]=[];
+      else{const m={};R.concat(L).forEach(e=>{m[e.ts+'|'+e.msg]=e});const cut=Date.now()-90*86400000;out[k]=Object.values(m).filter(e=>e.ts>=cut).sort((x,y)=>x.ts-y.ts)}
+    }
+    else{const v=jeq(local[k],b[k])?remote[k]:local[k];if(v!==undefined)out[k]=v}
+  });
+  out.rev=Date.now();
+  return normalize(out);
+}
+/* ---- stato sincronizzazione ---- */
+function loadSyncState(){try{const x=lsGet('cfb_base');BASE=x?JSON.parse(x):null}catch(e){BASE=null}DIRTY=lsGet('cfb_dirty')==='1'}
+function setBase(d){BASE=clone(d);lsSet('cfb_base',JSON.stringify(BASE))}
+function setDirty(v){DIRTY=v;lsSet('cfb_dirty',v?'1':'0');updatePendingUI()}
+function updatePendingUI(){if(DIRTY&&!syncing)setSync('🟠 Modifiche da sincronizzare','pend')}
 function setSync(msg,kind){
   const t=new Date();const hh=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
   const full=msg+' \u00b7 '+hh;
-  const hd=$('syncStatus');if(hd){hd.textContent=full;hd.className='sync-status'+(kind==='err'?' err':(kind==='ok'?' ok':''))}
-  const cs=$('syncCardStatus');if(cs){cs.textContent=full;cs.style.color=(kind==='err'?'#ef4444':(kind==='ok'?'var(--accent2)':'var(--muted)'))}
+  const hd=$('syncStatus');if(hd){hd.textContent=full;hd.className='sync-status'+(kind?' '+kind:'')}
+  const cs=$('syncCardStatus');if(cs){cs.textContent=full;cs.style.color=(kind==='err'?'#ef4444':(kind==='ok'?'var(--accent2)':(kind==='pend'?'var(--warn)':'var(--muted)')))}
 }
-function saveSyncUrl(u){SYNC_URL=(u||'').trim();try{localStorage.setItem('cfb_sync_url',SYNC_URL)}catch(e){}}
+function saveSyncUrl(u){SYNC_URL=(u||'').trim()||DEFAULT_SYNC_URL;lsSet('cfb_sync_url',SYNC_URL)}
 function renderActive(){
   const a=document.querySelector('.view.active');if(!a)return;
   if(a.id==='view-monthly')renderMonthly();
@@ -1309,54 +1421,118 @@ function renderActive(){
   else if(a.id==='view-log')renderLog();
   else renderAll();
 }
-async function syncPull(silent){
-  if(!SYNC_URL)return;
-  if(!silent)setSync('\u23f3 Sincronizzo\u2026');
+function applyData(d){DATA=d;saveLocal();updateCoachFilter();if(!document.querySelector('.modal-bg.show'))renderActive()}
+/* ---- comunicazione con Apps Script ---- */
+async function fetchRemote(){
+  const sep=SYNC_URL.indexOf('?')>=0?'&':'?';
+  const r=await fetch(SYNC_URL+sep+'t='+Date.now(),{cache:'no-store'});
+  const d=JSON.parse(await r.text());
+  return(d&&d.coaches&&d.template)?normalize(d):null;
+}
+async function postRemote(data,baseRev){
+  const body=JSON.stringify(Object.assign({},data,{_baseRev:baseRev}));
   try{
-    const sep=SYNC_URL.indexOf('?')>=0?'&':'?';
-    const r=await fetch(SYNC_URL+sep+'t='+Date.now(),{method:'GET'});
-    const txt=await r.text();
-    const remote=JSON.parse(txt);
-    if(remote&&remote.coaches&&remote.template){
-      if((remote.rev||0)>(DATA.rev||0)){
-        DATA=remote;
-        if(!DATA.flags)DATA.flags={};if(!DATA.changeLog)DATA.changeLog=[];if(typeof DATA.rev!=='number')DATA.rev=0;
-        lastPushedRev=DATA.rev;
-        saveLocal();updateCoachFilter();renderActive();
-        setSync('\u2705 Aggiornato dal cloud','ok');
-      } else if(!silent) setSync('\u2705 Gi\u00e0 aggiornato','ok');
-    } else if(!silent) setSync('\u26a0\ufe0f Cloud vuoto: verr\u00e0 inizializzato');
-  }catch(e){ if(!silent) setSync('\u26a0\ufe0f Offline o URL errato','err') }
+    const r=await fetch(SYNC_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body});
+    const j=JSON.parse(await r.text());
+    if(j&&typeof j.ok==='boolean')return j;
+  }catch(e){}
+  /* risposta non leggibile: verifico rileggendo il cloud */
+  try{const rem=await fetchRemote();if(rem&&rem.rev===data.rev)return{ok:true,verified:true}}catch(e){}
+  return{ok:false,error:'verify'};
 }
-function schedulePush(){
-  if(!SYNC_URL||!autoSync)return;
-  clearTimeout(pushTimer);
-  pushTimer=setTimeout(syncPush,1500);
-}
-async function syncPush(){
+/* ---- ciclo di sincronizzazione ---- */
+async function syncNow(silent){
   if(!SYNC_URL)return;
-  if(DATA.rev===lastPushedRev)return;
-  setSync('\u23f3 Salvo sul cloud\u2026');
-  const rev=DATA.rev;
+  if(syncing){syncAgain=true;return}
+  syncing=true;clearTimeout(retryTimer);
+  let failed=null;
   try{
-    await fetch(SYNC_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(DATA)});
-    lastPushedRev=rev;
-    setSync('\u2705 Salvato sul cloud','ok');
-  }catch(e){ setSync('\u26a0\ufe0f Salvataggio cloud fallito','err') }
+    if(!silent)setSync('⏳ Sincronizzo…');
+    for(let attempt=0;attempt<4;attempt++){
+      let remote;
+      try{remote=await fetchRemote()}catch(e){failed='offline';break}
+      if(!DIRTY){
+        if(!remote){setDirty(true);continue}           /* cloud vuoto: lo inizializzo */
+        if(remote.rev!==DATA.rev){backupNow('Prima di aggiornamento dal cloud');applyData(remote);setSync('✅ Aggiornato dal cloud','ok')}
+        else if(!silent)setSync('✅ Già aggiornato','ok');
+        setBase(remote);break;
+      }
+      let toPush,baseRev;
+      if(!remote){toPush=clone(DATA);baseRev=0}
+      else if(!BASE){                                     /* primo collegamento: vince il cloud, locale in backup */
+        backupNow('Dati locali prima del collegamento',true);applyData(remote);setBase(remote);setDirty(false);
+        setSync('✅ Collegato al cloud (backup locale salvato)','ok');break;
+      }
+      else if(remote.rev===BASE.rev){toPush=clone(DATA);baseRev=remote.rev}
+      else{toPush=mergeData(BASE,DATA,remote);baseRev=remote.rev}
+      const localSnap=clone(DATA);
+      setSync('⏳ Salvo sul cloud…');
+      const res=await postRemote(toPush,baseRev);
+      if(res.ok){
+        setBase(toPush);
+        if(DATA.rev===localSnap.rev){applyData(clone(toPush));setDirty(false)}
+        else{applyData(mergeData(localSnap,DATA,toPush));syncAgain=true}   /* modifiche fatte durante il salvataggio */
+        setSync('✅ Salvato sul cloud','ok');retryDelay=0;break;
+      }
+      if(res.conflict)continue;                          /* un altro coach ha salvato: rifaccio il merge */
+      failed='save';break;
+    }
+  }catch(e){failed='save'}
+  finally{
+    syncing=false;
+    if(failed){setSync(failed==='offline'?'🟠 Offline: modifiche da sincronizzare':'⚠️ Salvataggio non confermato, ritento…','err');scheduleRetry()}
+    else updatePendingUI();
+    if(syncAgain){syncAgain=false;setTimeout(()=>syncNow(true),300)}
+  }
 }
-async function syncNow(){ await syncPull(); if(DATA.rev>lastPushedRev) await syncPush(); }
+function scheduleRetry(){if(!DIRTY)return;retryDelay=Math.min(60000,retryDelay?retryDelay*2:5000);clearTimeout(retryTimer);retryTimer=setTimeout(()=>syncNow(true),retryDelay)}
+function schedulePush(){if(!SYNC_URL||!autoSync)return;clearTimeout(pushTimer);pushTimer=setTimeout(()=>syncNow(true),1200)}
 function initSync(){
   const inp=$('syncUrlInput');if(inp)inp.value=SYNC_URL;
   const chk=$('autoSyncChk');if(chk)chk.checked=autoSync;
-  const bS=$('btnSaveSync');if(bS)bS.addEventListener('click',()=>{saveSyncUrl($('syncUrlInput').value);setSync('\u2705 URL salvato','ok');syncNow()});
-  const bN=$('btnSyncNow');if(bN)bN.addEventListener('click',syncNow);
+  const bS=$('btnSaveSync');if(bS)bS.addEventListener('click',()=>{saveSyncUrl($('syncUrlInput').value);$('syncUrlInput').value=SYNC_URL;setSync('✅ URL salvato','ok');syncNow()});
+  const bN=$('btnSyncNow');if(bN)bN.addEventListener('click',()=>syncNow());
   if(chk)chk.addEventListener('change',()=>{autoSync=chk.checked;if(autoSync)syncNow()});
-  if(SYNC_URL){ syncPull().then(()=>{ if(DATA.rev>lastPushedRev) syncPush() }); }
-  else setSync('\u2601\ufe0f Non configurato');
+  syncNow();
   clearInterval(pullTimer);
-  pullTimer=setInterval(()=>{if(SYNC_URL&&autoSync)syncPull(true)},30000);
-  window.addEventListener('focus',()=>{if(SYNC_URL&&autoSync)syncPull(true)});
+  pullTimer=setInterval(()=>{if(autoSync)syncNow(true)},30000);
+  window.addEventListener('focus',()=>{if(autoSync)syncNow(true)});
+  window.addEventListener('online',()=>syncNow(true));
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&autoSync)syncNow(true)});
 }
+/* ---- backup locali ---- */
+function getBackups(){try{return JSON.parse(lsGet('cfb_backups')||'[]')}catch(e){return[]}}
+function backupNow(label,force){
+  if(!DATA)return;const list=getBackups();const snap=JSON.stringify(DATA);
+  if(!force&&list.length&&list[0].snap===snap)return;
+  list.unshift({ts:Date.now(),label:label||'Automatico',snap});
+  while(list.length>10)list.pop();
+  while(!lsSet('cfb_backups',JSON.stringify(list))&&list.length>1)list.pop();
+}
+function maybeBackup(){const l=getBackups();if(!l.length||Date.now()-l[0].ts>10*60*1000)backupNow('Automatico')}
+function renderBackups(){
+  const el=$('backupList');if(!el)return;const list=getBackups();
+  if(!list.length){el.innerHTML='<div style="color:var(--muted);font-size:.85rem;padding:.4rem 0">Nessun backup ancora.</div>';return}
+  el.innerHTML=list.map((b,i)=>{const d=new Date(b.ts);const hh=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    return `<div class="row"><span style="flex:1;font-size:.85rem"><strong>${esc(fmtIT(d))} ${hh}</strong> · ${esc(b.label)}</span><button class="btn btn-sm" data-restore="${i}">↺ Ripristina</button></div>`}).join('');
+}
+function restoreBackup(i){
+  const list=getBackups();const b=list[i];if(!b)return;
+  if(!confirm('Ripristinare il backup del '+fmtIT(new Date(b.ts))+'? Il planning attuale verrà salvato come backup.'))return;
+  let d;try{d=normalize(JSON.parse(b.snap))}catch(e){toast('Backup non valido',true);return}
+  backupNow('Prima del ripristino',true);
+  DATA=d;logAction('↺ Ripristinato backup del '+fmtIT(new Date(b.ts)));saveData();
+  updateCoachFilter();renderActive();toast('Backup ripristinato');
+}
+/* ---- PIN Admin ---- */
+function adminUnlocked(){if(!DATA||!DATA.adminPin)return true;try{return sessionStorage.getItem('cfb_admin_ok')===DATA.adminPin}catch(e){return false}}
+function requireAdmin(){
+  if(adminUnlocked())return true;
+  const p=prompt('PIN Admin:');if(p==null)return false;
+  if(hashPin(p.trim())===DATA.adminPin){try{sessionStorage.setItem('cfb_admin_ok',DATA.adminPin)}catch(e){}return true}
+  toast('PIN errato',true);return false;
+}
+function renderPin(){const el=$('pinStatus');if(el)el.textContent=DATA.adminPin?'🔒 PIN attivo':'🔓 Nessun PIN impostato'}
 /* v24: liquid glass interactive bubble engine (spring physics from iOS26 values) */
 let _nav=null,_bubble=null,_btns=[],_BW=58,_navReady=false;
 let _bx=0,_bv=0,_bt=0,_raf=null,_K=0,_C=0,_suppressClick=false,_dragReleasing=false;
@@ -1421,7 +1597,8 @@ function init(){
   document.addEventListener('gesturechange',e=>e.preventDefault());
   let _lastTap=0;
   document.addEventListener('touchend',e=>{const now=Date.now();if(now-_lastTap<300&&e.cancelable)e.preventDefault();_lastTap=now},{passive:false});
-  DATA=loadData();
+  DATA=normalize(loadData());
+  loadSyncState();
   currentWeekStart=mondayOf(new Date());
   currentDay=new Date();
   if(!STORAGE_OK) showSandboxBanner();
@@ -1487,7 +1664,7 @@ function init(){
   $('dashYear').addEventListener('change',renderDashboard);
   $('btnExportXlsx').addEventListener('click',exportExcel);
   $('btnExportJson').addEventListener('click',exportJSON);
-  $('btnImportTrigger').addEventListener('click',()=>$('importFile').click());
+  $('btnImportTrigger').addEventListener('click',()=>{if(requireAdmin())$('importFile').click()});
   $('importFile').addEventListener('change',importJSON);
 
   $('btnAddCoach').addEventListener('click',()=>{const n=prompt('Nome:');if(!n)return;if(DATA.coaches.find(c=>c.name===n.trim())){alert('Esistente');return}const cs=['#ef4444','#4ade80','#3b82f6','#a855f7','#F26522','#fbbf24','#ec4899','#06b6d4'];DATA.coaches.push({name:n.trim(),color:cs[DATA.coaches.length%cs.length]});logAction('👤 Coach aggiunto: '+n.trim());saveData();renderAdmin();renderAll();updateCoachFilter()});
@@ -1506,6 +1683,10 @@ function init(){
 
   updateCoachFilter();
 
+  $('btnBackupNow').addEventListener('click',()=>{backupNow('Manuale',true);renderBackups();toast('Backup creato')});
+  $('backupList').addEventListener('click',e=>{const t=e.target.closest('[data-restore]');if(t)restoreBackup(parseInt(t.dataset.restore))});
+  $('btnSetPin').addEventListener('click',()=>{const v=$('pinInput').value.trim();if(v.length<4){toast('PIN di almeno 4 caratteri',true);return}DATA.adminPin=hashPin(v);try{sessionStorage.setItem('cfb_admin_ok',DATA.adminPin)}catch(e){}logAction('🔒 PIN Admin impostato');saveData();$('pinInput').value='';renderPin();toast('PIN impostato')});
+  $('btnDelPin').addEventListener('click',()=>{if(!DATA.adminPin)return;if(!confirm('Rimuovere il PIN Admin?'))return;delete DATA.adminPin;logAction('🔓 PIN Admin rimosso');saveData();renderPin();toast('PIN rimosso')});
   initSync();
 
   let rt;
