@@ -568,6 +568,31 @@ html[data-theme] .adm-grp{border-radius:24px;padding:4px 0;margin-bottom:1rem;ov
   html[data-theme] .sync-status.pend{color:var(--warn)}
   html[data-theme] .sync-status.err{color:var(--danger)}
 }
+
+/* ===== v42: settimana mobile a calendario ===== */
+.mw-grid{display:grid;grid-template-columns:34px repeat(7,minmax(0,1fr));gap:3px;padding:6px;border-radius:22px;background:var(--g-bg);border:1px solid var(--g-brd);box-shadow:inset 0 1px 0 var(--g-hi),var(--g-sh);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%)}
+.mw-h{text-align:center;padding:4px 0;border-radius:10px;font-size:.6rem;font-weight:700;color:var(--muted);line-height:1.15;display:flex;flex-direction:column}
+.mw-h b{font-size:.92rem;color:var(--text);font-weight:800}
+.mw-h.today{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.mw-h.today b{color:#fff}
+.mw-corner{background:none}
+.mw-t{font-size:.58rem;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:flex-end;padding-right:2px;font-variant-numeric:tabular-nums}
+.mw-c{position:relative;min-height:46px;border-radius:9px;padding:4px 2px 3px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;cursor:pointer;
+  background:color-mix(in srgb,var(--cc) 22%,transparent);border:1px solid color-mix(in srgb,var(--cc) 55%,transparent);transition:opacity .2s,transform .15s,box-shadow .2s}
+.mw-c:active{transform:scale(.94)}
+.mw-c.empty{background:rgba(127,127,127,.06);border:1px dashed rgba(127,127,127,.18)}
+.mw-c.unc{border-style:dashed}
+.mw-c.dim{opacity:.18;filter:saturate(.3)}
+.mw-c.hi{background:var(--cc);border-color:var(--cc);box-shadow:0 0 0 2px color-mix(in srgb,var(--cc) 35%,transparent),0 4px 12px color-mix(in srgb,var(--cc) 45%,transparent)}
+.mw-c.hi .mw-cls,.mw-c.hi .mw-co{color:#fff}
+.mw-cls{font-size:.56rem;font-weight:600;line-height:1.1;color:var(--text);word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mw-co{font-size:.58rem;font-weight:800;color:var(--cc);line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+[data-theme="light"] .mw-co{filter:brightness(.8)}
+.mw-c.unc .mw-co{color:var(--warn)}
+.mw-co svg.ic{width:12px;height:12px}
+.mw-f{position:absolute;top:3px;width:5px;height:5px;border-radius:50%}
+.mw-f.ap{left:3px;background:var(--ok)}
+.mw-f.ch{right:3px;background:var(--accent)}
 </style>
 </head>
 <body>
@@ -822,7 +847,7 @@ html[data-theme] .adm-grp{border-radius:24px;padding:4px 0;margin-bottom:1rem;ov
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-10-15.2'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-10-15.3'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -1034,6 +1059,7 @@ function renderWeek(){
     });
   });
   let tot=0,cov=0,unc=0; daySlots.forEach(a=>a.forEach(s=>{tot++;s.coach?cov++:unc++}));
+  setKpiLabels('Lezioni','Coperte','Scoperte');
   $('kTot').textContent=tot; $('kCov').textContent=cov; $('kUnc').textContent=unc;
 }
 
@@ -1089,44 +1115,40 @@ function renderMobileToday(){
   });
 }
 
+function shortCls(c){const m={'Weightlifting':'W.lifting','Stretching&Mobility':'Stretch & Mob','Mobility&Core':'Mob & Core'};return m[c]||String(c).replace(/&/g,' & ')}
+function setKpiLabels(a,b,c){const L=['kTot','kCov','kUnc'].map(id=>$(id).previousElementSibling);L[0].textContent=a;L[1].textContent=b;L[2].textContent=c}
 function renderMobileWeek(){
   const days=[...Array(7)].map((_,i)=>addDays(currentWeekStart,i));
   renderChips('mChipsWeek');
   const filter=$('coachFilter').value;
   const acc=$('mWeekAcc'); if(!acc) return;
-  acc.innerHTML='';
-  days.forEach((d,i)=>{
-    const slots=getSlotsForDate(d);
-    let dayUnc=0; slots.forEach(s=>{if(!s.coach)dayUnc++});
-    const filtered=filter?slots.filter(s=>s.coach===filter):slots;
-    const box=document.createElement('div');
-    box.className='acc-day';
-    const isT=isToday(d);
-    const oI=isT?' open':'';
-    box.innerHTML=`<div class="acc-head${isT?' today':''}${oI}"><div>${esc(DAYS[i])} <span style="color:var(--muted);font-size:.85rem;font-weight:500">${d.getDate()}/${d.getMonth()+1}</span></div><div style="display:flex;gap:.4rem;align-items:center"><span class="acc-badge${dayUnc>0?' hasunc':''}">${slots.length} lez${dayUnc>0?' · '+dayUnc+' '+ic('alert'):''}</span><span class="acc-arrow">${ic('chevD')}</span></div></div><div class="acc-body${oI}"><div class="acc-inner"></div></div>`;
-    const inner=box.querySelector('.acc-inner');
-    if(filtered.length===0) inner.innerHTML='<div style="color:var(--muted);text-align:center;padding:.7rem;font-size:.85rem">Nessuna lezione</div>';
-    else filtered.forEach(s=>{
+  const daySlots=days.map(d=>getSlotsForDate(d));
+  const allT=new Set(); daySlots.forEach(a=>a.forEach(s=>allT.add(s.time)));
+  const times=[...allT].sort();
+  let h='<div class="mw-grid"><div class="mw-h mw-corner"></div>';
+  days.forEach((d,i)=>{h+=`<div class="mw-h${isToday(d)?' today':''}"><span>${esc(DAYS_S[i])}</span><b>${d.getDate()}</b></div>`});
+  times.forEach(t=>{
+    h+=`<div class="mw-t">${esc(t)}</div>`;
+    days.forEach((d,i)=>{
+      const s=daySlots[i].find(x=>x.time===t);
+      if(!s){h+=`<div class="mw-c empty" data-action="newslot" data-date="${fmtDate(d)}" data-time="${esc(t)}"></div>`;return}
       const c=DATA.coaches.find(x=>x.name===s.coach);
-      const unc=!s.coach?' uncov':'';
-      const card=document.createElement('div');
-      card.className='slot-card'+unc;
-      if(c) card.style.borderLeftColor=c.color;
-      card.innerHTML=slotCardHTML(s,c);
-      card.dataset.action='editslot';card.dataset.date=s.dateStr;card.dataset.time=s.time;card.dataset.cls=s.cls;card.dataset.source=s.source;
-      if(s.extraIdx!=null){card.dataset.idx=s.extraIdx;card.dataset.xid=s.extraId}
-      inner.appendChild(card);
+      const mine=filter&&s.coach===filter, dim=filter&&!mine;
+      const col=c?c.color:'#ffcc00';
+      const st=`--cc:${esc(col)}`;
+      const fl=(s.apertura?'<i class="mw-f ap"></i>':'')+(s.chiusura?'<i class="mw-f ch"></i>':'');
+      h+=`<div class="mw-c${s.coach?'':' unc'}${dim?' dim':''}${mine?' hi':''}" style="${st}" data-action="editslot" data-date="${s.dateStr}" data-time="${esc(s.time)}" data-cls="${esc(s.cls)}" data-source="${s.source}"${s.extraIdx!=null?` data-idx="${s.extraIdx}" data-xid="${esc(s.extraId)}"`:''}>${fl}<div class="mw-cls">${esc(shortCls(s.cls))}</div><div class="mw-co">${s.coach?esc(s.coach):ic('alert')}</div></div>`;
     });
-    const head=box.querySelector('.acc-head'),body=box.querySelector('.acc-body');
-    head.addEventListener('click',()=>{head.classList.toggle('open');body.classList.toggle('open')});
-    acc.appendChild(box);
   });
-  let tot=0,cov=0,unc=0;
-  days.forEach(d=>getSlotsForDate(d).forEach(s=>{tot++;s.coach?cov++:unc++}));
-  $('kTot').textContent=tot;$('kCov').textContent=cov;$('kUnc').textContent=unc;
+  h+='</div>';
+  if(!times.length)h='<div class="empty-state"><div class="em">'+ic('week')+'</div>Nessuna lezione</div>';
+  acc.innerHTML=h;
+  let tot=0,cov=0,unc=0,mine=0,ap=0,ch=0;
+  daySlots.forEach(a=>a.forEach(s=>{tot++;s.coach?cov++:unc++;if(filter&&s.coach===filter){mine++;if(s.apertura)ap++;if(s.chiusura)ch++}}));
+  if(filter){setKpiLabels('Lezioni '+filter,'Aperture','Chiusure');$('kTot').textContent=mine;$('kCov').textContent=ap;$('kUnc').textContent=ch}
+  else{setKpiLabels('Lezioni','Coperte','Scoperte');$('kTot').textContent=tot;$('kCov').textContent=cov;$('kUnc').textContent=unc}
   const wl=$('weekLabel'); if(wl) wl.textContent=`${fmtIT(days[0])} → ${fmtIT(days[6])}`;
 }
-
 function renderAll(){
   const isMobile=window.innerWidth<=900;
   const active=document.querySelector('.view.active');
