@@ -607,6 +607,14 @@ html[data-theme] .toolbar,html[data-theme] .card,html[data-theme] .kpi,html[data
 html[data-theme] .btn,html[data-theme] .chip,html[data-theme] .nav-btn,html[data-theme] .theme-toggle,html[data-theme] .day-nav-m .arr,.sync-status{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 html[data-theme] header{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:color-mix(in srgb,var(--bg) 94%,transparent);box-shadow:0 6px 18px -10px rgba(0,0,0,.5)}
 [data-theme="light"] header{box-shadow:0 6px 18px -12px rgba(30,30,60,.25)}
+
+/* ===== v44: niente ombre esterne tagliate, header pulito ===== */
+:root,[data-theme="light"]{--g-sh:0 0 0 transparent}
+html[data-theme] .chip,html[data-theme] .chip.active,html[data-theme] .btn,html[data-theme] .btn-primary,html[data-theme] .nav-btn.active,html[data-theme] .kpi,html[data-theme] .card,html[data-theme] .toolbar,html[data-theme] .slot-card,html[data-theme] .acc-day,html[data-theme] .day-nav-m,html[data-theme] .mw-grid,html[data-theme] .adm-grp,html[data-theme] .log-item,html[data-theme] .mc-card,.who,.mw-c.hi{box-shadow:inset 0 1px 0 var(--g-hi)!important}
+.chips{padding:.3rem .2rem .5rem}
+html[data-theme] header{background:var(--bg)!important;box-shadow:none!important;border-bottom:1px solid var(--g-brd)}
+html[data-theme] header *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;filter:none!important}
+.ambient i:nth-child(1){top:120px!important;left:-200px!important}
 </style>
 </head>
 <body>
@@ -861,7 +869,7 @@ html[data-theme] header{-webkit-backdrop-filter:none!important;backdrop-filter:n
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-10-15.4'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-10-15.5'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
