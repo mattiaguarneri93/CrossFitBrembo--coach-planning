@@ -548,20 +548,17 @@ html[data-theme] .adm-grp{border-radius:24px;padding:4px 0;margin-bottom:1rem;ov
 #view-admin.sec-open .adm-back{display:block;margin-bottom:.8rem}
 #view-admin.sec-open .adm-sec.on{display:block;animation:viewIn .4s cubic-bezier(.22,.61,.36,1)}
 
-/* ===== v41: rifiniture mobile ===== */
+/* ===== v41 ===== */
 @media(max-width:900px){
-  /* 1. barra giorno */
   .day-nav-m{gap:.3rem;padding:.45rem}
   .day-nav-m .arr{width:40px;height:40px;flex-shrink:0}
   #mChipsToday{flex:1;min-width:0}
-  /* 2. toolbar settimana compatta */
   #datePicker,#coachFilter,#btnAddExtra{display:none!important}
   #view-week .toolbar .tg:last-child{display:none}
   #view-week .toolbar{padding:.55rem .6rem;gap:.4rem;justify-content:center}
   #view-week .toolbar .tg:first-child{width:100%;justify-content:center;gap:.4rem}
   #view-week .week-label{width:100%;min-width:0;font-size:.92rem}
-  /* 4. stato sync = icona */
-  html[data-theme] .sync-status,html[data-theme] .sync-status.pend,html[data-theme] .sync-status.err,html[data-theme] .sync-status.ok{display:flex!important;position:absolute;top:calc(.8rem + var(--st));right:calc(1rem + 52px);width:42px;height:42px;padding:0;margin:0;max-width:none;justify-content:center;align-items:center;border-radius:999px;background:var(--g-bg);border:1px solid var(--g-brd);box-shadow:inset 0 1px 0 var(--g-hi);color:var(--muted);cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+  html[data-theme] .sync-status,html[data-theme] .sync-status.pend,html[data-theme] .sync-status.err,html[data-theme] .sync-status.ok{display:flex!important;position:absolute;top:calc(.8rem + var(--st));right:calc(1rem + 52px);width:42px;height:42px;padding:0;margin:0;max-width:none;justify-content:center;align-items:center;border-radius:999px;background:var(--g-bg);border:1px solid var(--g-brd);box-shadow:inset 0 1px 0 var(--g-hi);color:var(--muted);cursor:pointer}
   .sync-status span{display:none}
   .sync-status svg.ic{width:21px!important;height:21px!important;vertical-align:0}
   html[data-theme] .sync-status.ok{color:var(--ok)}
@@ -569,30 +566,47 @@ html[data-theme] .adm-grp{border-radius:24px;padding:4px 0;margin-bottom:1rem;ov
   html[data-theme] .sync-status.err{color:var(--danger)}
 }
 
-/* ===== v42: settimana mobile a calendario ===== */
-.mw-grid{display:grid;grid-template-columns:34px repeat(7,minmax(0,1fr));gap:3px;padding:6px;border-radius:22px;background:var(--g-bg);border:1px solid var(--g-brd);box-shadow:inset 0 1px 0 var(--g-hi),var(--g-sh);-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%)}
-.mw-h{text-align:center;padding:4px 0;border-radius:10px;font-size:.6rem;font-weight:700;color:var(--muted);line-height:1.15;display:flex;flex-direction:column}
-.mw-h b{font-size:.92rem;color:var(--text);font-weight:800}
+.s-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.s-right .flag-badges{margin-top:0;justify-content:flex-end}
+
+/* ===== settimana mobile a calendario ===== */
+.mw-grid{display:grid;grid-template-columns:32px repeat(7,minmax(0,1fr));gap:3px;padding:6px;border-radius:22px;background:var(--g-bg);border:1px solid var(--g-brd);box-shadow:inset 0 1px 0 var(--g-hi)}
+.mw-h{text-align:center;padding:3px 0;border-radius:10px;font-size:.6rem;font-weight:700;color:var(--muted);line-height:1.15;display:flex;flex-direction:column}
+.mw-h b{font-size:.9rem;color:var(--text);font-weight:800}
 .mw-h.today{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
 .mw-h.today b{color:#fff}
 .mw-corner{background:none}
-.mw-t{font-size:.58rem;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:flex-end;padding-right:2px;font-variant-numeric:tabular-nums}
-.mw-c{position:relative;min-height:46px;border-radius:9px;padding:4px 2px 3px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;cursor:pointer;
-  background:color-mix(in srgb,var(--cc) 22%,transparent);border:1px solid color-mix(in srgb,var(--cc) 55%,transparent);transition:opacity .2s,transform .15s,box-shadow .2s}
+.mw-t{font-size:.56rem;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:flex-end;padding-right:2px;font-variant-numeric:tabular-nums}
+.mw-cell{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mw-c{position:relative;flex:1;min-height:32px;border-radius:8px;padding:3px 2px 2px;display:flex;flex-direction:column;justify-content:center;gap:1px;align-items:center;text-align:center;cursor:pointer;
+  background:color-mix(in srgb,var(--cc) 22%,transparent);border:1px solid color-mix(in srgb,var(--cc) 55%,transparent);transition:opacity .2s,transform .15s}
 .mw-c:active{transform:scale(.94)}
 .mw-c.empty{background:rgba(127,127,127,.06);border:1px dashed rgba(127,127,127,.18)}
 .mw-c.unc{border-style:dashed}
 .mw-c.dim{opacity:.18;filter:saturate(.3)}
-.mw-c.hi{background:var(--cc);border-color:var(--cc);box-shadow:0 0 0 2px color-mix(in srgb,var(--cc) 35%,transparent),0 4px 12px color-mix(in srgb,var(--cc) 45%,transparent)}
+.mw-c.hi{background:var(--cc);border-color:var(--cc)}
 .mw-c.hi .mw-cls,.mw-c.hi .mw-co{color:#fff}
-.mw-cls{font-size:.56rem;font-weight:600;line-height:1.1;color:var(--text);word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.mw-co{font-size:.58rem;font-weight:800;color:var(--cc);line-height:1.1;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mw-cls{font-size:.54rem;font-weight:600;line-height:1.05;color:var(--text);word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mw-co{font-size:.56rem;font-weight:800;color:var(--cc);line-height:1.05;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 [data-theme="light"] .mw-co{filter:brightness(.8)}
 .mw-c.unc .mw-co{color:var(--warn)}
-.mw-co svg.ic{width:12px;height:12px}
-.mw-f{position:absolute;top:3px;width:5px;height:5px;border-radius:50%}
-.mw-f.ap{left:3px;background:var(--ok)}
-.mw-f.ch{right:3px;background:var(--accent)}
+.mw-co svg.ic{width:11px;height:11px}
+.mw-f{position:absolute;top:2px;width:5px;height:5px;border-radius:50%}
+.mw-f.ap{left:2px;background:var(--ok)}
+.mw-f.ch{right:2px;background:var(--accent)}
+
+/* ===== v43: ombre morbide, niente artefatti, header nitido ===== */
+:root{--g-sh:0 10px 28px -12px rgba(0,0,0,.45)}
+[data-theme="light"]{--g-sh:0 10px 26px -14px rgba(30,30,60,.22)}
+.ambient i{filter:none!important}
+.ambient i:nth-child(1){background:radial-gradient(circle,rgba(242,101,34,.38),rgba(242,101,34,.12) 40%,transparent 70%)}
+.ambient i:nth-child(2){background:radial-gradient(circle,rgba(255,59,107,.2),rgba(255,59,107,.06) 40%,transparent 70%)}
+.ambient i:nth-child(3){background:radial-gradient(circle,rgba(255,179,71,.25),rgba(255,179,71,.08) 40%,transparent 70%)}
+html[data-theme] .toolbar,html[data-theme] .card,html[data-theme] .kpi,html[data-theme] .slot-card,html[data-theme] .acc-day,html[data-theme] .day-nav-m,html[data-theme] .mc-card,html[data-theme] .log-item,html[data-theme] .adm-grp,html[data-theme] .mw-grid,html[data-theme] table.data,html[data-theme] .week-grid{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;background-clip:padding-box;transform:translateZ(0)}
+html[data-theme] .btn,html[data-theme] .chip,html[data-theme] .nav-btn,html[data-theme] .theme-toggle,html[data-theme] .day-nav-m .arr,.sync-status{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-theme] header{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:color-mix(in srgb,var(--bg) 94%,transparent);box-shadow:0 6px 18px -10px rgba(0,0,0,.5)}
+[data-theme="light"] header{box-shadow:0 6px 18px -12px rgba(30,30,60,.25)}
 </style>
 </head>
 <body>
@@ -627,8 +641,8 @@ html[data-theme] .adm-grp{border-radius:24px;padding:4px 0;margin-bottom:1rem;ov
 <section id="view-today" class="view mob-only">
   <div class="day-nav-m">
     <button class="arr" id="mDayPrev"><svg class="ic" data-i="chevL"></svg></button>
-    <div class="cur" id="mDayCur"><div class="dname">—</div><div class="ddate">—</div></div>
     <button class="arr" id="mBtnToday" title="Oggi"><svg class="ic" data-i="today"></svg></button>
+    <div class="cur" id="mDayCur"><div class="dname">—</div><div class="ddate">—</div></div>
     <button class="arr" id="mBtnCal" title="Vai a data"><svg class="ic" data-i="calSearch"></svg></button>
     <button class="arr" id="mDayNext"><svg class="ic" data-i="chevR"></svg></button>
   </div>
@@ -847,7 +861,7 @@ html[data-theme] .adm-grp{border-radius:24px;padding:4px 0;margin-bottom:1rem;ov
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-10-15.3'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-10-15.4'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -1087,8 +1101,9 @@ function flagBadgesHTML(s,short){let h='';if(s.apertura)h+='<span class="fbadge 
 function slotCardHTML(s,cObj){
   const col=s.coach?(cObj?cObj.color:'#8e8e93'):'#ffcc00';
   const who=s.coach?`<div class="who" style="background:${esc(col)}"><span class="av">${esc((s.coach[0]||'').toUpperCase())}</span>${esc(s.coach)}</div>`:`<div class="who unc">${ic('alert')}Scoperto</div>`;
-  return `<div class="sbar" style="background:${esc(col)}"></div><div class="s-info"><div class="s-time">${esc(s.time)}</div><div class="s-class">${esc(s.cls)}</div>${flagBadgesHTML(s)}</div>${who}`;
+  return `<div class="sbar" style="background:${esc(col)}"></div><div class="s-info"><div class="s-time">${esc(s.time)}</div><div class="s-class">${esc(s.cls)}</div></div><div class="s-right">${who}${flagBadgesHTML(s)}</div>`;
 }
+
 
 
 function renderMobileToday(){
@@ -1130,14 +1145,17 @@ function renderMobileWeek(){
   times.forEach(t=>{
     h+=`<div class="mw-t">${esc(t)}</div>`;
     days.forEach((d,i)=>{
-      const s=daySlots[i].find(x=>x.time===t);
-      if(!s){h+=`<div class="mw-c empty" data-action="newslot" data-date="${fmtDate(d)}" data-time="${esc(t)}"></div>`;return}
-      const c=DATA.coaches.find(x=>x.name===s.coach);
-      const mine=filter&&s.coach===filter, dim=filter&&!mine;
-      const col=c?c.color:'#ffcc00';
-      const st=`--cc:${esc(col)}`;
-      const fl=(s.apertura?'<i class="mw-f ap"></i>':'')+(s.chiusura?'<i class="mw-f ch"></i>':'');
-      h+=`<div class="mw-c${s.coach?'':' unc'}${dim?' dim':''}${mine?' hi':''}" style="${st}" data-action="editslot" data-date="${s.dateStr}" data-time="${esc(s.time)}" data-cls="${esc(s.cls)}" data-source="${s.source}"${s.extraIdx!=null?` data-idx="${s.extraIdx}" data-xid="${esc(s.extraId)}"`:''}>${fl}<div class="mw-cls">${esc(shortCls(s.cls))}</div><div class="mw-co">${s.coach?esc(s.coach):ic('alert')}</div></div>`;
+      const list=daySlots[i].filter(x=>x.time===t);
+      if(!list.length){h+=`<div class="mw-cell"><div class="mw-c empty" data-action="newslot" data-date="${fmtDate(d)}" data-time="${esc(t)}"></div></div>`;return}
+      h+='<div class="mw-cell">';
+      list.forEach(s=>{
+        const c=DATA.coaches.find(x=>x.name===s.coach);
+        const mine=filter&&s.coach===filter, dim=filter&&!mine;
+        const col=c?c.color:'#ffcc00';
+        const fl=(s.apertura?'<i class="mw-f ap"></i>':'')+(s.chiusura?'<i class="mw-f ch"></i>':'');
+        h+=`<div class="mw-c${s.coach?'':' unc'}${dim?' dim':''}${mine?' hi':''}" style="--cc:${esc(col)}" data-action="editslot" data-date="${s.dateStr}" data-time="${esc(s.time)}" data-cls="${esc(s.cls)}" data-source="${s.source}"${s.extraIdx!=null?` data-idx="${s.extraIdx}" data-xid="${esc(s.extraId)}"`:''}>${fl}<div class="mw-cls">${esc(shortCls(s.cls))}</div><div class="mw-co">${s.coach?esc(s.coach):ic('alert')}</div></div>`;
+      });
+      h+='</div>';
     });
   });
   h+='</div>';
