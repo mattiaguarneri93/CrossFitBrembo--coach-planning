@@ -615,6 +615,26 @@ html[data-theme] .chip,html[data-theme] .chip.active,html[data-theme] .btn,html[
 html[data-theme] header{background:var(--bg)!important;box-shadow:none!important;border-bottom:1px solid var(--g-brd)}
 html[data-theme] header *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;filter:none!important}
 .ambient i:nth-child(1){top:120px!important;left:-200px!important}
+
+/* ===== v45: Robi via + costi ===== */
+.fbadge.rv{background:rgba(168,85,247,.2);color:#c084fc}
+[data-theme="light"] .fbadge.rv{color:#7e22ce}
+.mc-lesson .mini.rv{background:#a855f7;color:#fff}
+.mc-stat.rv{color:#c084fc}
+[data-theme="light"] .mc-stat.rv{color:#7e22ce}
+.mc-stat.eur{color:var(--ok);background:rgba(52,199,89,.14)!important;border-color:rgba(52,199,89,.35)!important}
+[data-theme="light"] .mc-stat.eur{color:#1f9d45}
+.mw-f.rv{left:50%;transform:translateX(-50%);background:#a855f7}
+.mc-cost{border-radius:16px;background:rgba(127,127,127,.08);border:1px solid var(--g-brd);padding:.5rem .75rem;margin-bottom:.7rem;font-size:.82rem}
+.mcc-r{display:grid;grid-template-columns:1fr auto 5.5rem;gap:.6rem;padding:.18rem 0;align-items:center}
+.mcc-n{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mcc-v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.mcc-tot{border-top:1px solid var(--g-brd);margin-top:.25rem;padding-top:.4rem;font-weight:800}
+.mcc-tot .mcc-v{color:var(--ok);font-size:.95rem}
+[data-theme="light"] .mcc-tot .mcc-v{color:#1f9d45}
+input[type=number]{background:rgba(255,255,255,.06);color:var(--text);border:1px solid rgba(255,255,255,.12);padding:.55rem .7rem;border-radius:18px;font-size:.9rem;font-family:inherit;width:100%}
+[data-theme="light"] input[type=number]{background:rgba(0,0,0,.04);border:1px solid rgba(0,0,0,.14)}
+input[type=number]:focus{outline:none;border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -727,7 +747,7 @@ html[data-theme] header *{-webkit-backdrop-filter:none!important;backdrop-filter
 </section>
 
 <section id="view-admin" class="view">
-<div id="admMenu"><div class="adm-title">Impostazioni</div><div class="adm-grp"><div class="adm-row" data-sec="coach"><div class="adm-sq" style="background:linear-gradient(145deg,#5ac8fa,#007aff)"><svg class="ic" data-i="users"></svg></div><div class="adm-lb">Coach</div><span class="adm-vl" id="admVCoach"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="classes"><div class="adm-sq" style="background:linear-gradient(145deg,#ff9f45,#F26522)"><svg class="ic" data-i="kettlebell"></svg></div><div class="adm-lb">Tipi di classe</div><span class="adm-vl" id="admVClass"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="template"><div class="adm-sq" style="background:linear-gradient(145deg,#bf8cff,#7d4dff)"><svg class="ic" data-i="layers"></svg></div><div class="adm-lb">Template settimanale</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="unav"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a8a,#ff2d55)"><svg class="ic" data-i="calX"></svg></div><div class="adm-lb">Indisponibilità</div><span class="adm-vl" id="admVUnav"></span><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="sync"><div class="adm-sq" style="background:linear-gradient(145deg,#63e6be,#20b486)"><svg class="ic" data-i="cloud"></svg></div><div class="adm-lb">Sincronizzazione</div><span class="adm-vl" id="admVSync"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="backup"><div class="adm-sq" style="background:linear-gradient(145deg,#8e9bb0,#5b6577)"><svg class="ic" data-i="archive"></svg></div><div class="adm-lb">Backup locali</div><span class="adm-vl" id="admVBackup"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="pin"><div class="adm-sq" style="background:linear-gradient(145deg,#ffd75e,#f5a300)"><svg class="ic" data-i="shield"></svg></div><div class="adm-lb">PIN Admin</div><span class="adm-vl" id="admVPin"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="log"><div class="adm-sq" style="background:linear-gradient(145deg,#7fb8ff,#3a6df0)"><svg class="ic" data-i="history"></svg></div><div class="adm-lb">Log modifiche</div><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="danger"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a6e,#ff3b30)"><svg class="ic" data-i="trash"></svg></div><div class="adm-lb" style="color:var(--danger)">Reset totale</div></div></div></div><div class="adm-back"><button class="btn" id="btnAdmBack"><svg class="ic" data-i="chevL"></svg>Impostazioni</button></div>
+<div id="admMenu"><div class="adm-title">Impostazioni</div><div class="adm-grp"><div class="adm-row" data-sec="coach"><div class="adm-sq" style="background:linear-gradient(145deg,#5ac8fa,#007aff)"><svg class="ic" data-i="users"></svg></div><div class="adm-lb">Coach</div><span class="adm-vl" id="admVCoach"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="classes"><div class="adm-sq" style="background:linear-gradient(145deg,#ff9f45,#F26522)"><svg class="ic" data-i="kettlebell"></svg></div><div class="adm-lb">Tipi di classe</div><span class="adm-vl" id="admVClass"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="template"><div class="adm-sq" style="background:linear-gradient(145deg,#bf8cff,#7d4dff)"><svg class="ic" data-i="layers"></svg></div><div class="adm-lb">Template settimanale</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="unav"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a8a,#ff2d55)"><svg class="ic" data-i="calX"></svg></div><div class="adm-lb">Indisponibilità</div><span class="adm-vl" id="admVUnav"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="costs"><div class="adm-sq" style="background:linear-gradient(145deg,#4cd964,#1f9d45)"><svg class="ic" data-i="euro"></svg></div><div class="adm-lb">Costi lezioni</div><span class="adm-vl" id="admVCost"></span><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="sync"><div class="adm-sq" style="background:linear-gradient(145deg,#63e6be,#20b486)"><svg class="ic" data-i="cloud"></svg></div><div class="adm-lb">Sincronizzazione</div><span class="adm-vl" id="admVSync"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="backup"><div class="adm-sq" style="background:linear-gradient(145deg,#8e9bb0,#5b6577)"><svg class="ic" data-i="archive"></svg></div><div class="adm-lb">Backup locali</div><span class="adm-vl" id="admVBackup"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="pin"><div class="adm-sq" style="background:linear-gradient(145deg,#ffd75e,#f5a300)"><svg class="ic" data-i="shield"></svg></div><div class="adm-lb">PIN Admin</div><span class="adm-vl" id="admVPin"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="log"><div class="adm-sq" style="background:linear-gradient(145deg,#7fb8ff,#3a6df0)"><svg class="ic" data-i="history"></svg></div><div class="adm-lb">Log modifiche</div><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="danger"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a6e,#ff3b30)"><svg class="ic" data-i="trash"></svg></div><div class="adm-lb" style="color:var(--danger)">Reset totale</div></div></div></div><div class="adm-back"><button class="btn" id="btnAdmBack"><svg class="ic" data-i="chevL"></svg>Impostazioni</button></div>
   <div class="card adm-sec" data-sec="coach">
     <h2><svg class="ic" data-i="users"></svg> Coach</h2>
     <div id="coachList"></div>
@@ -753,6 +773,14 @@ html[data-theme] header *{-webkit-backdrop-filter:none!important;backdrop-filter
     <button class="btn btn-primary btn-sm" id="btnAddUnav2">+ Aggiungi periodo</button>
   </div>
 
+  <div class="card adm-sec" data-sec="costs">
+    <h2><svg class="ic" data-i="euro"></svg> Costi lezioni</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Usati per calcolare il totale mensile di ogni coach nella vista Mensile. Valgono per tutti i dispositivi.</p>
+    <div class="field"><label>Lezione normale (€)</label><input type="number" id="costLesson" min="0" step="0.5" inputmode="decimal"></div>
+    <div class="field"><label>Apertura / Chiusura (€)</label><input type="number" id="costApch" min="0" step="0.5" inputmode="decimal"></div>
+    <div class="field"><label>Sostituzione Robi (€)</label><input type="number" id="costRobi" min="0" step="0.5" inputmode="decimal"></div>
+    <p style="color:var(--muted);font-size:.78rem">Totale = lezioni normali + lezioni "Robi via" + aperture + chiusure. Le lezioni "Robi via" sono pagate con la tariffa sostituzione al posto di quella normale.</p>
+  </div>
   <div class="card adm-sec" data-sec="sync">
     <h2><svg class="ic" data-i="cloud"></svg> Sincronizzazione online</h2>
     <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Incolla l'URL della Web App Google (Apps Script) per condividere il planning tra tutti i coach.</p>
@@ -812,7 +840,7 @@ html[data-theme] header *{-webkit-backdrop-filter:none!important;backdrop-filter
     <div class="field"><label>Orario</label><input type="time" id="eTime"></div>
     <div class="field"><label>Classe</label><select id="eClass"></select></div>
     <div class="field"><label>Coach</label><select id="eCoach"></select></div>
-    <div class="field" id="eFlagsField"><label>Extra turni</label><div class="check-row"><label class="check-item" id="eAperturaWrap"><input type="checkbox" id="eApertura"> <svg class="ic" data-i="lockOpen"></svg> Apertura</label><label class="check-item" id="eChiusuraWrap"><input type="checkbox" id="eChiusura"> <svg class="ic" data-i="lock"></svg> Chiusura</label></div></div>
+    <div class="field" id="eFlagsField"><label>Extra turni</label><div class="check-row"><label class="check-item" id="eAperturaWrap"><input type="checkbox" id="eApertura"> <svg class="ic" data-i="lockOpen"></svg> Apertura</label><label class="check-item" id="eChiusuraWrap"><input type="checkbox" id="eChiusura"> <svg class="ic" data-i="lock"></svg> Chiusura</label><label class="check-item" id="eRobiWrap"><input type="checkbox" id="eRobi"> <svg class="ic" data-i="swap"></svg> Robi via</label></div></div>
     <div class="m-acts">
       <button class="btn btn-danger" id="eDel" style="display:none"><svg class="ic" data-i="trash"></svg>Elimina</button>
       <button class="btn" id="eCancel">Annulla</button>
@@ -869,7 +897,7 @@ html[data-theme] header *{-webkit-backdrop-filter:none!important;backdrop-filter
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-10-15.5'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-10-15.6'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -935,6 +963,8 @@ const IC={
  ban:'<circle class="d" cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="8.6"/><path d="m6 6 12 12"/>',
  clock:'<circle class="d" cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="8.6"/><path d="M12 7.5V12l3 1.9"/>',
  chevD:'<path d="M5.5 9.5 12 16l6.5-6.5" stroke-width="2.1"/>',
+ euro:'<path d="M18 6.6A7 7 0 1 0 18 17.4"/><path d="M4.5 10.5h9M4.5 13.5h9"/>',
+ swap:'<path d="M7 4 3.5 7.5 7 11"/><path d="M3.5 7.5H17"/><path d="m17 13 3.5 3.5L17 20"/><path d="M20.5 16.5H7"/>',
  close:'<path d="M6.5 6.5l11 11M17.5 6.5l-11 11" stroke-width="2"/>',
  sparkle:'<path class="d" d="M12 3.5 13.9 9 19.5 11 13.9 13 12 18.5 10.1 13 4.5 11 10.1 9 12 3.5Z"/><path d="M12 3.5 13.9 9 19.5 11 13.9 13 12 18.5 10.1 13 4.5 11 10.1 9 12 3.5Z"/><path d="M18.5 17v3.5M16.75 18.75h3.5" stroke-width="1.5"/>',
  signal:'<path class="s" d="M4 16h2.4v4H4zM8.6 13h2.4v7H8.6zM13.2 9.5h2.4V20h-2.4zM17.8 6h2.4v14h-2.4z"/>',
@@ -996,8 +1026,8 @@ function addDays(d,n){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate())
 function isToday(d){const t=new Date();return d.getDate()===t.getDate()&&d.getMonth()===t.getMonth()&&d.getFullYear()===t.getFullYear()}
 const SEP='|||';
 function slotKey(ds,t,c){return ds+SEP+t+SEP+c}
-function flagsFor(ds,time,cls){const f=DATA.flags&&DATA.flags[slotKey(ds,time,cls)];return{apertura:!!(f&&f.apertura),chiusura:!!(f&&f.chiusura)}}
-function setFlag(k,ap,ch){if(ap||ch)DATA.flags[k]={apertura:ap,chiusura:ch};else delete DATA.flags[k]}
+function flagsFor(ds,time,cls){const f=DATA.flags&&DATA.flags[slotKey(ds,time,cls)];return{apertura:!!(f&&f.apertura),chiusura:!!(f&&f.chiusura),robivia:!!(f&&f.robivia)}}
+function setFlag(k,ap,ch,rv){if(ap||ch||rv)DATA.flags[k]={apertura:!!ap,chiusura:!!ch,robivia:!!rv};else delete DATA.flags[k]}
 function canApertura(t){return APERTURA_TIMES.includes(t)}
 function canChiusura(t){return CHIUSURA_TIMES.includes(t)}
 function logAction(msg){if(!DATA.changeLog)DATA.changeLog=[];DATA.changeLog.push({ts:Date.now(),msg});const cutoff=Date.now()-90*86400000;DATA.changeLog=DATA.changeLog.filter(e=>e.ts>=cutoff)}
@@ -1105,7 +1135,7 @@ function renderChips(elId){
   });
 }
 
-function flagBadgesHTML(s,short){let h='';if(s.apertura)h+='<span class="fbadge ap">'+ic('lockOpen')+(short?'AP':'Apertura')+'</span>';if(s.chiusura)h+='<span class="fbadge ch">'+ic('lock')+(short?'CH':'Chiusura')+'</span>';if(s.coach&&s.dateStr&&isCoachUnavail(s.coach,s.dateStr))h+='<span class="fbadge cf">'+ic('ban')+'N/D</span>';return h?`<div class="flag-badges">${h}</div>`:''}
+function flagBadgesHTML(s,short){let h='';if(s.apertura)h+='<span class="fbadge ap">'+ic('lockOpen')+(short?'AP':'Apertura')+'</span>';if(s.chiusura)h+='<span class="fbadge ch">'+ic('lock')+(short?'CH':'Chiusura')+'</span>';if(s.robivia)h+='<span class="fbadge rv">'+ic('swap')+(short?'RV':'Robi via')+'</span>';if(s.coach&&s.dateStr&&isCoachUnavail(s.coach,s.dateStr))h+='<span class="fbadge cf">'+ic('ban')+'N/D</span>';return h?`<div class="flag-badges">${h}</div>`:''}
 function slotCardHTML(s,cObj){
   const col=s.coach?(cObj?cObj.color:'#8e8e93'):'#ffcc00';
   const who=s.coach?`<div class="who" style="background:${esc(col)}"><span class="av">${esc((s.coach[0]||'').toUpperCase())}</span>${esc(s.coach)}</div>`:`<div class="who unc">${ic('alert')}Scoperto</div>`;
@@ -1160,7 +1190,7 @@ function renderMobileWeek(){
         const c=DATA.coaches.find(x=>x.name===s.coach);
         const mine=filter&&s.coach===filter, dim=filter&&!mine;
         const col=c?c.color:'#ffcc00';
-        const fl=(s.apertura?'<i class="mw-f ap"></i>':'')+(s.chiusura?'<i class="mw-f ch"></i>':'');
+        const fl=(s.apertura?'<i class="mw-f ap"></i>':'')+(s.chiusura?'<i class="mw-f ch"></i>':'')+(s.robivia?'<i class="mw-f rv"></i>':'');
         h+=`<div class="mw-c${s.coach?'':' unc'}${dim?' dim':''}${mine?' hi':''}" style="--cc:${esc(col)}" data-action="editslot" data-date="${s.dateStr}" data-time="${esc(s.time)}" data-cls="${esc(s.cls)}" data-source="${s.source}"${s.extraIdx!=null?` data-idx="${s.extraIdx}" data-xid="${esc(s.extraId)}"`:''}>${fl}<div class="mw-cls">${esc(shortCls(s.cls))}</div><div class="mw-co">${s.coach?esc(s.coach):ic('alert')}</div></div>`;
       });
       h+='</div>';
@@ -1212,33 +1242,35 @@ function openEditModal(mode,info){
   const _cf=(DATA.flags&&DATA.flags[_fk])||{};
   $('eApertura').checked=!!_cf.apertura;
   $('eChiusura').checked=!!_cf.chiusura;
+  $('eRobi').checked=!!_cf.robivia;
   updateFlagVis();
   $('eDel').style.display=(mode==='new')?'none':'inline-flex';
   $('editModal').classList.add('show');
 }
 function closeEditModal(){$('editModal').classList.remove('show');editingSlot=null}
-function updateFlagVis(){const t=$('eTime').value;const ap=canApertura(t),ch=canChiusura(t);$('eAperturaWrap').style.display=ap?'flex':'none';$('eChiusuraWrap').style.display=ch?'flex':'none';$('eFlagsField').style.display=(ap||ch)?'block':'none';if(!ap)$('eApertura').checked=false;if(!ch)$('eChiusura').checked=false}
+function updateFlagVis(){const t=$('eTime').value;const ap=canApertura(t),ch=canChiusura(t);$('eAperturaWrap').style.display=ap?'flex':'none';$('eChiusuraWrap').style.display=ch?'flex':'none';$('eFlagsField').style.display='block';if(!ap)$('eApertura').checked=false;if(!ch)$('eChiusura').checked=false}
 function saveEdit(){
   if(!editingSlot) return;
   const time=$('eTime').value,cls=$('eClass').value,coach=$('eCoach').value;
   if(!time||!cls){toast('Compila orario e classe',true);return}
   const ap=APERTURA_TIMES.includes(time)&&$('eApertura').checked;
   const ch=CHIUSURA_TIMES.includes(time)&&$('eChiusura').checked;
+  const rv=$('eRobi').checked;
   const{mode,dateStr}=editingSlot;
   if(mode==='new'){
     if(!DATA.extraSlots[dateStr]) DATA.extraSlots[dateStr]=[];
     DATA.extraSlots[dateStr].push({id:uid(),time,cls,coach});
-    setFlag(slotKey(dateStr,time,cls),ap,ch);
+    setFlag(slotKey(dateStr,time,cls),ap,ch,rv);
   } else if(mode==='template'){
     const oldK=slotKey(dateStr,editingSlot.time,editingSlot.cls);
     if(time!==editingSlot.time||cls!==editingSlot.cls){
       DATA.deletedSlots[oldK]=true; delete DATA.assignments[oldK]; delete DATA.flags[oldK];
       if(!DATA.extraSlots[dateStr]) DATA.extraSlots[dateStr]=[];
       DATA.extraSlots[dateStr].push({id:uid(),time,cls,coach});
-      setFlag(slotKey(dateStr,time,cls),ap,ch);
+      setFlag(slotKey(dateStr,time,cls),ap,ch,rv);
     } else {
       if(coach) DATA.assignments[oldK]=coach; else delete DATA.assignments[oldK];
-      setFlag(oldK,ap,ch);
+      setFlag(oldK,ap,ch,rv);
     }
   } else {
     const oldK=slotKey(dateStr,editingSlot.time,editingSlot.cls);
@@ -1247,9 +1279,9 @@ function saveEdit(){
     if(xi<0){toast('Lezione modificata da un altro coach: riaprila',true);closeEditModal();renderAll();return}
     if(oldK!==newK) delete DATA.flags[oldK];
     DATA.extraSlots[dateStr][xi]={id:DATA.extraSlots[dateStr][xi].id||uid(),time,cls,coach};
-    setFlag(newK,ap,ch);
+    setFlag(newK,ap,ch,rv);
   }
-  const _fl=(ap?' 🔓':'')+(ch?' 🔒':'');
+  const _fl=(ap?' AP':'')+(ch?' CH':'')+(rv?' RobiVia':'');
   const _c=coach?('→ '+coach):'(scoperto)';
   logAction(`${mode==='new'?'➕ Nuova':'✏️ Modifica'} lezione ${fmtIT(parseDate(dateStr))} ${time} ${cls} ${_c}${_fl}`);
   saveData(); closeEditModal(); renderAll();
@@ -1341,6 +1373,13 @@ function renderLog(){
   list.innerHTML=h;
 }
 let currentMonth;
+function getCosts(){const c=DATA.costs||{};return{lesson:+c.lesson||0,apch:+c.apch||0,robi:+c.robi||0}}
+function fmtEur(v){return (+v||0).toLocaleString('it-IT',{style:'currency',currency:'EUR'})}
+function costOf(info){const c=getCosts();const nRv=info.rv,nNorm=info.lessons.length-nRv;
+  const r={nNorm,nRv,nAp:info.ap,nCh:info.ch,vNorm:nNorm*c.lesson,vRv:nRv*c.robi,vAp:info.ap*c.apch,vCh:info.ch*c.apch};r.tot=r.vNorm+r.vRv+r.vAp+r.vCh;return r}
+function costBlock(info){const r=costOf(info),c=getCosts();
+  const row=(lab,n,u,v)=>`<div class="mcc-r"><span>${lab}</span><span class="mcc-n">${n} × ${fmtEur(u)}</span><span class="mcc-v">${fmtEur(v)}</span></div>`;
+  return `<div class="mc-cost">${row('Lezioni normali',r.nNorm,c.lesson,r.vNorm)}${row('Sostituzione Robi',r.nRv,c.robi,r.vRv)}${row('Aperture',r.nAp,c.apch,r.vAp)}${row('Chiusure',r.nCh,c.apch,r.vCh)}<div class="mcc-r mcc-tot"><span>Totale mese</span><span></span><span class="mcc-v">${fmtEur(r.tot)}</span></div></div>`}
 function navMonth(n){currentMonth=new Date(currentMonth.getFullYear(),currentMonth.getMonth()+n,1);renderMonthly()}
 function goMonthToday(){const t=new Date();currentMonth=new Date(t.getFullYear(),t.getMonth(),1);renderMonthly()}
 function renderMonthly(){
@@ -1348,14 +1387,14 @@ function renderMonthly(){
   const y=currentMonth.getFullYear(),m=currentMonth.getMonth();
   const ml=$('monthLabel'); if(ml) ml.textContent=MONTHS_F[m]+' '+y;
   const filter=$('monthCoach')?$('monthCoach').value:'';
-  const perCoach={}; DATA.coaches.forEach(c=>perCoach[c.name]={lessons:[],ap:0,ch:0});
+  const perCoach={}; DATA.coaches.forEach(c=>perCoach[c.name]={lessons:[],ap:0,ch:0,rv:0});
   const uncovered=[]; let tot=0,cov=0,unc=0;
   const days=new Date(y,m+1,0).getDate();
   for(let dd=1;dd<=days;dd++){
     const date=new Date(y,m,dd),ds=fmtDate(date);
     getSlotsForDate(date).forEach(s=>{
       tot++;
-      if(s.coach&&perCoach[s.coach]){cov++;perCoach[s.coach].lessons.push({ds,date,time:s.time,cls:s.cls,ap:s.apertura,ch:s.chiusura});if(s.apertura)perCoach[s.coach].ap++;if(s.chiusura)perCoach[s.coach].ch++;}
+      if(s.coach&&perCoach[s.coach]){cov++;perCoach[s.coach].lessons.push({ds,date,time:s.time,cls:s.cls,ap:s.apertura,ch:s.chiusura,rv:s.robivia});if(s.apertura)perCoach[s.coach].ap++;if(s.chiusura)perCoach[s.coach].ch++;if(s.robivia)perCoach[s.coach].rv++;}
       else if(!s.coach){unc++;uncovered.push({ds,date,time:s.time,cls:s.cls});}
     });
   }
@@ -1369,7 +1408,7 @@ function renderMonthly(){
       const date=parseDate(ds),lab=DAYS_S[(date.getDay()+6)%7]+' '+String(date.getDate()).padStart(2,'0');
       const conflict=coachName&&isCoachUnavail(coachName,ds);
       h+=`<div class="mc-day"><div class="mc-dlabel${isToday(date)?' today':''}">${esc(lab)}</div><div class="mc-lessons">`;
-      byDate[ds].forEach(l=>{h+=`<div class="mc-lesson${conflict?' conflict':''}"><span class="lt">${esc(l.time)}</span>${esc(l.cls)}${l.ap?'<span class="mini ap">AP</span>':''}${l.ch?'<span class="mini ch">CH</span>':''}${conflict?ic('ban'):''}</div>`});
+      byDate[ds].forEach(l=>{h+=`<div class="mc-lesson${conflict?' conflict':''}"><span class="lt">${esc(l.time)}</span>${esc(l.cls)}${l.ap?'<span class="mini ap">AP</span>':''}${l.ch?'<span class="mini ch">CH</span>':''}${l.rv?'<span class="mini rv">RV</span>':''}${conflict?ic('ban'):''}</div>`});
       h+='</div></div>';
     });
     return h+'</div>';
@@ -1378,7 +1417,8 @@ function renderMonthly(){
     const info=perCoach[c.name],unav=unavInMonth(c.name,y,m);
     if(info.lessons.length===0&&unav.length===0) return;
     const card=document.createElement('div');card.className='mc-card';card.style.borderLeftColor=c.color;
-    let h=`<div class="mc-head"><div class="mc-name"><span class="mc-dot" style="background:${esc(c.color)}"></span>${esc(c.name)}</div><div class="mc-stats"><span class="mc-stat">${info.lessons.length} lezioni</span>${info.ap?`<span class="mc-stat ap">${ic('lockOpen')}${info.ap}</span>`:''}${info.ch?`<span class="mc-stat ch">${ic('lock')}${info.ch}</span>`:''}</div></div>`;
+    let h=`<div class="mc-head"><div class="mc-name"><span class="mc-dot" style="background:${esc(c.color)}"></span>${esc(c.name)}</div><div class="mc-stats"><span class="mc-stat">${info.lessons.length} lezioni</span>${info.ap?`<span class="mc-stat ap">${ic('lockOpen')}${info.ap}</span>`:''}${info.ch?`<span class="mc-stat ch">${ic('lock')}${info.ch}</span>`:''}${info.rv?`<span class="mc-stat rv">${ic('swap')}${info.rv}</span>`:''}<span class="mc-stat eur">${fmtEur(costOf(info).tot)}</span></div></div>`;
+    if(info.lessons.length)h+=costBlock(info);
     if(unav.length){h+='<div class="unav-list">';unav.forEach(u=>{h+=`<div class="unav-pill">${ic('calX')}${esc(fmtIT(parseDate(u.from)))} → ${esc(fmtIT(parseDate(u.to)))}${u.note?' · '+esc(u.note):''}<span class="x" data-unavdel="${esc(u.id)}">${ic('close')}</span></div>`});h+='</div>'}
     h+=info.lessons.length?daysBlock(info.lessons,c.name):'<div class="mc-empty">Nessuna lezione assegnata questo mese.</div>';
     card.innerHTML=h;body.appendChild(card);
@@ -1438,6 +1478,7 @@ function renderAdmin(){
   renderUnavAdmin();
   renderBackups();
   renderPin();
+  renderCosts();
   renderAdmMenu();
 }
 function renderAdmSync(){const el=$('admVSync');if(!el)return;const k=SYNC_LAST.kind;
@@ -1447,6 +1488,7 @@ function renderAdmMenu(){
   const set=(id,v)=>{const e=$(id);if(e)e.textContent=v};
   set('admVCoach',DATA.coaches.length);set('admVClass',DATA.classes.length);
   ensureUnav();set('admVUnav',DATA.unavailability.length||'');
+  {const c=getCosts();set('admVCost',(c.lesson||c.apch||c.robi)?fmtEur(c.lesson):'—')}
   set('admVBackup',getBackups().length||'');set('admVPin',DATA.adminPin?'Attivo':'Off');renderAdmSync();
 }
 function admHome(){const v=$('view-admin');if(!v)return;v.classList.remove('sec-open');document.querySelectorAll('.adm-sec').forEach(x=>x.classList.remove('on'));renderAdmMenu()}
@@ -1456,6 +1498,11 @@ function admOpen(sec){
   document.querySelectorAll('.adm-sec').forEach(x=>x.classList.toggle('on',x.dataset.sec===sec));
   window.scrollTo({top:0,behavior:'smooth'});
 }
+function renderCosts(){const c=getCosts();$('costLesson').value=c.lesson||'';$('costApch').value=c.apch||'';$('costRobi').value=c.robi||''}
+function saveCosts(){const v=id=>Math.max(0,parseFloat(String($(id).value).replace(',','.'))||0);
+  DATA.costs={lesson:v('costLesson'),apch:v('costApch'),robi:v('costRobi')};
+  logAction('Costi aggiornati: lezione '+fmtEur(DATA.costs.lesson)+', AP/CH '+fmtEur(DATA.costs.apch)+', sost. Robi '+fmtEur(DATA.costs.robi));
+  saveData();renderAdmMenu();toast('Costi salvati')}
 function renderTpl(){
   const tg=$('tplGrid');tg.innerHTML='';
   for(let d=0;d<7;d++){
@@ -1506,13 +1553,13 @@ function exportExcel(){
   const wb=XLSX.utils.book_new();
   const counts={},apCounts={},chCounts={},unc=Array(12).fill(0);
   DATA.coaches.forEach(c=>{counts[c.name]=Array(12).fill(0);apCounts[c.name]=Array(12).fill(0);chCounts[c.name]=Array(12).fill(0)});
-  const det=[['Data','Giorno','Orario','Classe','Coach','Apertura','Chiusura']];
+  const det=[['Data','Giorno','Orario','Classe','Coach','Apertura','Chiusura','Robi via']];
   for(let d=new Date(year,0,1),e=new Date(year,11,31);d<=e;d=addDays(d,1)){
     const m=d.getMonth();
     getSlotsForDate(d).forEach(s=>{
       if(s.coach&&counts[s.coach]){counts[s.coach][m]++;if(s.apertura)apCounts[s.coach][m]++;if(s.chiusura)chCounts[s.coach][m]++;}
       else if(!s.coach)unc[m]++;
-      det.push([fmtIT(d),DAYS_S[(d.getDay()+6)%7],s.time,s.cls,s.coach||'SCOPERTO',s.apertura?'SI':'',s.chiusura?'SI':'']);
+      det.push([fmtIT(d),DAYS_S[(d.getDay()+6)%7],s.time,s.cls,s.coach||'SCOPERTO',s.apertura?'SI':'',s.chiusura?'SI':'',s.robivia?'SI':'']);
     });
   }
   function aoa(cnt){
@@ -1945,6 +1992,7 @@ function init(){
   $('btnAdmBack').addEventListener('click',admHome);
   $('btnLogBack').addEventListener('click',()=>setView('admin'));
   $('syncStatus').addEventListener('click',()=>{if(window.innerWidth>900)return;toast(SYNC_LAST.msg||'Sincronizzazione',SYNC_LAST.kind==='err');syncNow()});
+  ['costLesson','costApch','costRobi'].forEach(id=>$(id).addEventListener('change',saveCosts));
   initSync();
 
   let rt;
