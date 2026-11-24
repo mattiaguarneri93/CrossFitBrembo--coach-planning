@@ -699,6 +699,45 @@ body{overflow-x:hidden}
 .st-empty{color:var(--muted);font-size:.85rem;padding:.3rem 0}
 @media(max-width:900px){.st-row{grid-template-columns:105px 1fr 58px}#stLabel{min-width:0;flex:1;font-size:.9rem;white-space:nowrap}#view-dashboard .toolbar .tg:first-child{flex-wrap:nowrap;width:100%;gap:.35rem}#view-dashboard .toolbar .tg:first-child .btn{padding:.45rem .6rem}.seg-b{padding:.4rem .7rem}.st-grid{grid-template-columns:1fr}#view-dashboard .toolbar{justify-content:center}#view-dashboard .toolbar .tg{justify-content:center}}
 
+/* ===== v51 ===== */
+.kpis-slim{display:flex!important;gap:.4rem!important;margin-bottom:.7rem!important;flex-wrap:wrap}
+.kpis-slim .kpi{flex:1;display:flex!important;align-items:center;justify-content:space-between;gap:.4rem;padding:.4rem .75rem!important;min-height:0!important;border-radius:999px!important}
+.kpis-slim .kpi-lbl{margin:0!important;font-size:.66rem!important}
+.kpis-slim .kpi-val{font-size:1rem!important;line-height:1!important;margin:0!important}
+#view-monthly .toolbar{position:relative}
+.btn-gold{background:linear-gradient(135deg,rgba(255,200,60,.28),rgba(212,160,23,.18))!important;border:1px solid rgba(255,200,60,.55)!important;color:#ffd166!important;font-weight:800;margin-left:auto}
+.btn-gold svg.ic{color:#ffd166}
+[data-theme="light"] .btn-gold{background:linear-gradient(135deg,rgba(255,200,60,.35),rgba(212,160,23,.22))!important;color:#8a6200!important;border-color:rgba(190,140,10,.5)!important}
+[data-theme="light"] .btn-gold svg.ic{color:#8a6200}
+@media(max-width:900px){#view-monthly .toolbar .btn-gold{order:9;align-self:flex-end}}
+.e-sum{display:flex;align-items:center;justify-content:space-between;gap:.6rem;padding:.7rem .9rem;border-radius:18px;background:rgba(127,127,127,.12);margin:-.3rem 0 1rem}
+.es-d{font-weight:800;text-transform:capitalize;font-size:.9rem}
+.es-r{display:flex;gap:.5rem;align-items:baseline}
+.es-t{font-weight:900;color:var(--accent2);font-size:1.15rem;font-variant-numeric:tabular-nums}
+.es-c{font-weight:700;color:var(--muted);font-size:.9rem}
+.e-coach-field>label{margin-bottom:.5rem}
+.cpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:.5rem}
+.cp-it{position:relative;display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:.65rem .3rem .55rem;border-radius:18px;border:1.5px solid transparent;background:rgba(127,127,127,.1);color:var(--text);font-family:inherit;cursor:pointer;transition:transform .12s,background .15s,border-color .15s}
+.cp-it:active{transform:scale(.95)}
+.cp-it .cav{--s:46px}
+.cp-av{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:rgba(255,204,0,.14);border:1.5px dashed rgba(255,204,0,.7);color:var(--warn)}
+.cp-n{font-size:.78rem;font-weight:800;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cp-it.sel{background:color-mix(in srgb,var(--c,#888) 22%,transparent);border-color:var(--c,#888)}
+.cp-it.sel .cav{box-shadow:0 0 0 2px var(--panel,#111),0 0 0 4px var(--c)}
+.cp-it.sel::after{content:"✓";position:absolute;top:6px;right:8px;width:18px;height:18px;border-radius:50%;background:var(--c,#888);color:#fff;font-size:11px;font-weight:900;display:grid;place-items:center}
+.cp-it.unc.sel{--c:#e0a800;background:rgba(255,204,0,.14)}
+.cp-it.un{opacity:.55}
+.cp-x{font-size:.6rem;font-weight:800;color:var(--danger);margin-top:-.2rem}
+.cpick.big{grid-template-columns:repeat(3,1fr);gap:.6rem}
+.cpick.big .cp-it{padding:.85rem .3rem .7rem}
+.cpick.big .cp-it .cav,.cpick.big .cp-av{--s:58px;width:58px;height:58px}
+.cpick.big .cp-n{font-size:.85rem}
+.cp-modal{max-width:400px}
+.cp-modal .m-acts{justify-content:space-between}
+#editModal .modal,#cpModal .modal{max-height:86vh}
+#editModal,#cpModal{align-items:flex-end}
+@media(min-width:901px){#editModal,#cpModal{align-items:center}}
+@media(max-width:900px){#editModal .modal,#cpModal .modal{margin-bottom:calc(8px + var(--sb))}}
 /* ===== v50: bottom bar stile Instagram ===== */
 @media(max-width:900px){
   html[data-theme] .bottom-nav{left:12px!important;right:12px!important;bottom:calc(2px + var(--sb))!important;height:64px;padding:6px 16px!important;border-radius:999px;display:grid;grid-template-columns:repeat(5,1fr);gap:0!important;align-items:stretch}
@@ -810,7 +849,7 @@ body{overflow-x:hidden}
       <button class="btn btn-sm" id="btnAddExtra"><svg class="ic" data-i="plusCircle"></svg>Slot</button>
     </div>
   </div>
-  <div class="kpis">
+  <div class="kpis kpis-slim">
     <div class="kpi"><div class="kpi-lbl">Lezioni</div><div class="kpi-val" id="kTot">0</div></div>
     <div class="kpi ok"><div class="kpi-lbl">Coperte</div><div class="kpi-val" id="kCov">0</div></div>
     <div class="kpi warn"><div class="kpi-lbl">Scoperte</div><div class="kpi-val" id="kUnc">0</div></div>
@@ -828,10 +867,10 @@ body{overflow-x:hidden}
       <button class="btn" id="btnMNext"><svg class="ic" data-i="chevR"></svg></button>
       <span class="month-label" id="monthLabel">—</span>
     </div>
+    <button class="btn btn-sm no-print btn-gold" id="btnTotMonth"><svg class="ic" data-i="euro"></svg>Totale mensile</button>
     <div class="tg">
       <select id="monthCoach"><option value="">Tutti i coach</option></select>
       <button class="btn btn-sm" id="btnAddUnav"><svg class="ic" data-i="calX"></svg>Indisponibilità</button>
-      <button class="btn btn-sm no-print" id="btnTotMonth"><svg class="ic" data-i="euro"></svg>Totale mensile</button>
     </div>
   </div>
   <div class="kpis">
@@ -965,10 +1004,12 @@ body{overflow-x:hidden}
 <div class="modal-bg" id="editModal">
   <div class="modal">
     <h3>Modifica lezione</h3>
-    <div class="field"><label>Data</label><input type="text" id="eDate" readonly></div>
+    <div class="e-sum" id="eSum"></div>
+    <div class="field e-coach-field"><label>Coach</label><div class="cpick" id="eCoachGrid"></div></div>
+    <div class="field" style="display:none"><label>Data</label><input type="text" id="eDate" readonly></div>
     <div class="field"><label>Orario</label><input type="time" id="eTime"></div>
     <div class="field"><label>Classe</label><select id="eClass"></select></div>
-    <div class="field"><label>Coach</label><select id="eCoach"></select></div>
+    <select id="eCoach" style="display:none"></select>
     <div class="field" id="eFlagsField"><label>Extra turni</label><div class="check-row"><label class="check-item" id="eAperturaWrap"><input type="checkbox" id="eApertura"> <svg class="ic" data-i="lockOpen"></svg> Apertura</label><label class="check-item" id="eChiusuraWrap"><input type="checkbox" id="eChiusura"> <svg class="ic" data-i="lock"></svg> Chiusura</label><label class="check-item" id="eRobiWrap"><input type="checkbox" id="eRobi"> <svg class="ic" data-i="swap"></svg> Robi via</label></div></div>
     <div class="m-acts">
       <button class="btn btn-danger" id="eDel" style="display:none"><svg class="ic" data-i="trash"></svg>Elimina</button>
@@ -1041,13 +1082,21 @@ body{overflow-x:hidden}
   </div>
 </div>
 <input type="file" id="coachPhotoFile" accept="image/*" style="display:none">
+<div class="modal-bg" id="cpModal">
+  <div class="modal cp-modal">
+    <h3><svg class="ic" data-i="users"></svg> Scegli coach</h3>
+    <div class="e-sum" id="cpSum"></div>
+    <div class="cpick big" id="cpGrid"></div>
+    <div class="m-acts"><button class="btn" id="cpCancel">Annulla</button><button class="btn" id="cpMore"><svg class="ic" data-i="pencil"></svg>Altre opzioni</button></div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 <div id="updBar"><span><svg class="ic" data-i="sparkle"></svg> Nuova versione disponibile</span><button id="updBtn">Aggiorna</button></div>
 
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.10'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.11'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -1234,7 +1283,7 @@ function jumpDate(v){if(v){currentWeekStart=mondayOf(parseDate(v));renderAll()}}
 
 function renderWeek(){
   const days=[...Array(7)].map((_,i)=>addDays(currentWeekStart,i));
-  $('weekLabel').textContent=`${fmtIT(days[0])} → ${fmtIT(days[6])}`;
+  $('weekLabel').textContent=fmtWeekRange(days[0],days[6]);
   $('datePicker').value=fmtDate(currentWeekStart);
   const daySlots=days.map(d=>getSlotsForDate(d));
   const allT=new Set(); daySlots.forEach(a=>a.forEach(s=>allT.add(s.time)));
@@ -1314,6 +1363,12 @@ function loadCoachPhoto(file){
     img.onerror=()=>toast('Immagine non valida');img.src=rd.result};
   rd.readAsDataURL(file);
 }
+function fmtWeekRange(a,b){
+  const d1=a.getDate(),d2=b.getDate(),m1=MONTHS_F[a.getMonth()],m2=MONTHS_F[b.getMonth()],y1=a.getFullYear(),y2=b.getFullYear();
+  if(y1!==y2)return `${d1} ${m1} ${y1} – ${d2} ${m2} ${y2}`;
+  if(a.getMonth()!==b.getMonth())return `${d1} ${m1} – ${d2} ${m2} ${y2}`;
+  return `${d1}–${d2} ${m2} ${y2}`;
+}
 function slotCardHTML(s,cObj){
   const col=s.coach?(cObj?cObj.color:'#8e8e93'):'#ffcc00';
   const who=s.coach?`<div class="who" style="background:${esc(col)}"><span class="av">${esc((s.coach[0]||'').toUpperCase())}</span>${esc(s.coach)}</div>`:`<div class="who unc">${ic('alert')}Scoperto</div>`;
@@ -1383,7 +1438,7 @@ function renderMobileWeek(){
   daySlots.forEach(a=>a.forEach(s=>{tot++;s.coach?cov++:unc++;if(filter&&s.coach===filter){mine++;if(s.apertura)ap++;if(s.chiusura)ch++}}));
   if(filter){setKpiLabels('Lezioni '+filter,'Aperture','Chiusure');$('kTot').textContent=mine;$('kCov').textContent=ap;$('kUnc').textContent=ch}
   else{setKpiLabels('Lezioni','Coperte','Scoperte');$('kTot').textContent=tot;$('kCov').textContent=cov;$('kUnc').textContent=unc}
-  const wl=$('weekLabel'); if(wl) wl.textContent=`${fmtIT(days[0])} → ${fmtIT(days[6])}`;
+  const wl=$('weekLabel'); if(wl) wl.textContent=fmtWeekRange(days[0],days[6]);
 }
 function renderAll(){
   const isMobile=window.innerWidth<=900;
@@ -1401,6 +1456,7 @@ function onClickSlot(ev){
   if(!cell) return;
   const a=cell.dataset.action;
   if(a==='newslot') openEditModal('new',{dateStr:cell.dataset.date,time:cell.dataset.time,cls:''});
+  else if(a==='editslot'&&cell.closest('#mTodayList')&&ev.target.closest('.whoB,.who.unc')) openCoachPick(cell.dataset.source,{dateStr:cell.dataset.date,time:cell.dataset.time,cls:cell.dataset.cls,extraIdx:cell.dataset.idx!=null?parseInt(cell.dataset.idx):null,extraId:cell.dataset.xid||null});
   else if(a==='editslot') openEditModal(cell.dataset.source,{dateStr:cell.dataset.date,time:cell.dataset.time,cls:cell.dataset.cls,extraIdx:cell.dataset.idx!=null?parseInt(cell.dataset.idx):null,extraId:cell.dataset.xid||null});
 }
 
@@ -1409,7 +1465,34 @@ function popSel(id,vals,sel,withEmpty){
   vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;if(v===sel)o.selected=true;s.appendChild(o)});
 }
 function resolveExtra(info){const a=(DATA.extraSlots&&DATA.extraSlots[info.dateStr])||[];if(info.extraId)return a.findIndex(e=>e.id===info.extraId);return(info.extraIdx!=null&&a[info.extraIdx])?info.extraIdx:-1}
-function openEditModal(mode,info){
+function curCoachOf(mode,info){
+  if(mode==='template')return DATA.assignments[slotKey(info.dateStr,info.time,info.cls)]||'';
+  if(mode==='extra'){const xi=resolveExtra(info);return xi>=0?(DATA.extraSlots[info.dateStr][xi].coach||''):''}
+  return '';
+}
+function slotSumHTML(info){const d=parseDate(info.dateStr);
+  return `<div class="es-d">${esc(DAYS[(d.getDay()+6)%7])} ${String(d.getDate()).padStart(2,'0')} ${esc(MONTHS_F[d.getMonth()])}</div><div class="es-r"><span class="es-t">${esc(info.time||'')}</span><span class="es-c">${esc(info.cls||'')}</span></div>`}
+function coachGridHTML(cur,ds){
+  let h=`<button type="button" class="cp-it unc${cur===''?' sel':''}" data-cp=""><span class="cp-av">${ic('alert')}</span><span class="cp-n">Scoperto</span></button>`;
+  DATA.coaches.forEach(c=>{const un=ds&&isCoachUnavail(c.name,ds);
+    h+=`<button type="button" class="cp-it${cur===c.name?' sel':''}${un?' un':''}" data-cp="${esc(c.name)}" style="--c:${esc(c.color)}">${coachAv(c)}<span class="cp-n">${esc(c.name)}</span>${un?'<span class="cp-x">Non disp.</span>':''}</button>`});
+  return h;
+}
+function renderECoachGrid(){$('eCoachGrid').innerHTML=coachGridHTML($('eCoach').value,editingSlot&&editingSlot.dateStr)}
+let _cpInfo=null;
+function openCoachPick(mode,info){
+  _cpInfo={mode,info};
+  $('cpSum').innerHTML=slotSumHTML(info);
+  $('cpGrid').innerHTML=coachGridHTML(curCoachOf(mode,info),info.dateStr);
+  $('cpModal').classList.add('show');
+}
+function closeCoachPick(){$('cpModal').classList.remove('show');_cpInfo=null}
+function pickCoach(name){
+  if(!_cpInfo)return;const{mode,info}=_cpInfo;closeCoachPick();
+  if(curCoachOf(mode,info)===name)return;
+  openEditModal(mode,info,true);$('eCoach').value=name;saveEdit();
+}
+function openEditModal(mode,info,silent){
   editingSlot=Object.assign({mode},info);
   $('eDate').value=info.dateStr;
   $('eTime').value=info.time||'18:30';
@@ -1418,6 +1501,7 @@ function openEditModal(mode,info){
   if(mode==='template') curCoach=DATA.assignments[slotKey(info.dateStr,info.time,info.cls)]||'';
   else if(mode==='extra'){const xi=resolveExtra(info);curCoach=xi>=0?(DATA.extraSlots[info.dateStr][xi].coach||''):''}
   popSel('eCoach',DATA.coaches.map(c=>c.name),curCoach,true);
+  $('eSum').innerHTML=slotSumHTML(info.cls?info:Object.assign({},info,{cls:''}));renderECoachGrid();
   const _fk=slotKey(info.dateStr,info.time||'',info.cls||'');
   const _cf=(DATA.flags&&DATA.flags[_fk])||{};
   $('eApertura').checked=!!_cf.apertura;
@@ -1425,7 +1509,7 @@ function openEditModal(mode,info){
   $('eRobi').checked=!!_cf.robivia;
   updateFlagVis();
   $('eDel').style.display=(mode==='new')?'none':'inline-flex';
-  $('editModal').classList.add('show');
+  if(!silent)$('editModal').classList.add('show');
 }
 function closeEditModal(){$('editModal').classList.remove('show');editingSlot=null}
 function updateFlagVis(){const t=$('eTime').value;const ap=canApertura(t),ch=canChiusura(t);$('eAperturaWrap').style.display=ap?'flex':'none';$('eChiusuraWrap').style.display=ch?'flex':'none';$('eFlagsField').style.display='block';if(!ap)$('eApertura').checked=false;if(!ch)$('eChiusura').checked=false}
@@ -2266,8 +2350,13 @@ function init(){
   $('aSave').addEventListener('click',saveAdd);
   $('aCancel').addEventListener('click',closeAddModal);
   $('addModal').addEventListener('click',e=>{if(e.target.id==='addModal') closeAddModal()});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditModal();closeAddModal();closeUnavModal();closeCal();closePinModal();closeTotModal()}});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditModal();closeAddModal();closeUnavModal();closeCal();closePinModal();closeTotModal();closeCoachPick()}});
   $('pinOk').addEventListener('click',submitPin);
+  $('eCoachGrid').addEventListener('click',e=>{const b=e.target.closest('[data-cp]');if(!b)return;$('eCoach').value=b.dataset.cp;renderECoachGrid()});
+  $('cpGrid').addEventListener('click',e=>{const b=e.target.closest('[data-cp]');if(b)pickCoach(b.dataset.cp)});
+  $('cpCancel').addEventListener('click',closeCoachPick);
+  $('cpMore').addEventListener('click',()=>{if(!_cpInfo)return;const{mode,info}=_cpInfo;closeCoachPick();openEditModal(mode,info)});
+  $('cpModal').addEventListener('click',e=>{if(e.target.id==='cpModal')closeCoachPick()});
   $('pinCancel').addEventListener('click',closePinModal);
   $('pinAsk').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitPin()}});
   $('pinModal').addEventListener('click',e=>{if(e.target.id==='pinModal')closePinModal()});
