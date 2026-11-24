@@ -706,13 +706,13 @@ body{overflow-x:hidden}
 .chip{display:inline-flex;align-items:center}
 /* slot Oggi: foto a destra */
 .s-photo{display:none}
-#mTodayList .slot-card.has-coach{position:relative;overflow:hidden;padding-right:128px!important}
+#mTodayList .slot-card.has-coach{position:relative;overflow:hidden;padding-right:150px!important}
 #mTodayList .slot-card.has-coach .who{display:none}
-#mTodayList .slot-card.has-coach .s-photo{display:block;position:absolute;right:0;top:0;bottom:0;width:132px;pointer-events:none;background:radial-gradient(circle at 70% 40%,color-mix(in srgb,var(--c) 75%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 40%,#000));-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 50%);mask-image:linear-gradient(90deg,transparent 0,#000 50%)}
-#mTodayList .slot-card.has-coach .s-photo.img{background-size:cover;background-position:center 25%}
+#mTodayList .slot-card.has-coach .s-photo{display:block;position:absolute;right:0;top:0;bottom:0;width:175px;pointer-events:none;background:radial-gradient(circle at 70% 40%,color-mix(in srgb,var(--c) 75%,#fff),var(--c) 55%,color-mix(in srgb,var(--c) 40%,#000));-webkit-mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.6) 18%,#000 34%);mask-image:linear-gradient(90deg,transparent 0,rgba(0,0,0,.6) 18%,#000 34%)}
+#mTodayList .slot-card.has-coach .s-photo.img{background-size:cover;background-position:center 25%;image-rendering:auto;-webkit-backface-visibility:hidden}
 #mTodayList .s-photo .ini{position:absolute;right:22px;top:50%;transform:translateY(-62%);font-size:2.1rem;font-weight:900;color:rgba(255,255,255,.9)}
 #mTodayList .s-cname{display:none}
-#mTodayList .slot-card.has-coach .s-cname{display:block;position:absolute;right:8px;bottom:7px;max-width:118px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:800;color:#fff;letter-spacing:.01em;background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid color-mix(in srgb,var(--c) 70%,#fff);box-shadow:0 2px 8px rgba(0,0,0,.35)}
+#mTodayList .slot-card.has-coach .s-cname{display:block;position:absolute;right:8px;bottom:7px;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:800;color:#fff;letter-spacing:.01em;background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid color-mix(in srgb,var(--c) 70%,#fff);box-shadow:0 2px 8px rgba(0,0,0,.35)}
 #mTodayList .slot-card.has-coach .s-right{position:relative;z-index:1}
 /* mese: intestazione con foto */
 .mc-head.ph{background:linear-gradient(100deg,color-mix(in srgb,var(--c) 28%,transparent),transparent 75%);margin:-.2rem -.2rem .7rem;padding:.6rem;border-radius:18px;flex-wrap:nowrap}
@@ -1023,7 +1023,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.3'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.4'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -1280,10 +1280,10 @@ function loadCoachPhoto(file){
   const c=DATA.coaches[_phIdx];if(!c||!file)return;
   const rd=new FileReader();
   rd.onload=()=>{const img=new Image();
-    img.onload=()=>{const S=200,cv=document.createElement('canvas');cv.width=S;cv.height=S;
+    img.onload=()=>{const S=420,cv=document.createElement('canvas');cv.width=S;cv.height=S;
       const m=Math.min(img.width,img.height),sx=(img.width-m)/2,sy=Math.max(0,(img.height-m)*0.3);
       const x=cv.getContext('2d');x.drawImage(img,sx,sy,m,m,0,0,S,S);
-      c.photo=cv.toDataURL('image/jpeg',0.78);
+      x.imageSmoothingQuality='high';x.drawImage(img,sx,sy,m,m,0,0,S,S);c.photo=cv.toDataURL('image/jpeg',0.85);
       logAction('Foto aggiornata: '+c.name);saveData();renderAdmin();renderAll();toast('Foto salvata per '+c.name)};
     img.onerror=()=>toast('Immagine non valida');img.src=rd.result};
   rd.readAsDataURL(file);
