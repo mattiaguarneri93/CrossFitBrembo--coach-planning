@@ -699,6 +699,49 @@ body{overflow-x:hidden}
 .st-empty{color:var(--muted);font-size:.85rem;padding:.3rem 0}
 @media(max-width:900px){.st-row{grid-template-columns:105px 1fr 58px}#stLabel{min-width:0;flex:1;font-size:.9rem;white-space:nowrap}#view-dashboard .toolbar .tg:first-child{flex-wrap:nowrap;width:100%;gap:.35rem}#view-dashboard .toolbar .tg:first-child .btn{padding:.45rem .6rem}.seg-b{padding:.4rem .7rem}.st-grid{grid-template-columns:1fr}#view-dashboard .toolbar{justify-content:center}#view-dashboard .toolbar .tg{justify-content:center}}
 
+/* ===== v54: coerenza grafica ===== */
+.m-nav{grid-template-columns:minmax(60px,1fr) 36px minmax(0,auto) 36px minmax(60px,1fr)!important;gap:.3rem!important}
+.m-nav .btn.m-arr{width:36px!important;height:36px!important;padding:0!important;justify-content:center}
+.m-nav .m-arr{grid-row:1}
+.m-nav .m-arr:first-of-type{grid-column:2}
+.m-nav .month-label{grid-column:3;grid-row:1;white-space:normal!important;line-height:1.15;font-size:.86rem;width:auto!important;min-width:0!important;max-width:100%;text-align:center}
+.m-nav #btnNext,.m-nav #btnMNext,.m-nav #stNext{grid-column:4}
+.m-nav #btnPrev,.m-nav #btnMPrev,.m-nav #stPrev{grid-column:2}
+.btn.m-pill{height:34px;padding:0 .6rem!important;gap:.25rem;font-size:.78rem;font-weight:800;color:var(--accent)!important;justify-content:center;white-space:nowrap}
+.btn.m-pill svg.ic{width:16px;height:16px}
+.m-nav .btn.m-pill{width:auto!important;height:34px!important;min-width:0}
+.kpis.kpis-slim .kpi{min-width:0;flex:1 1 0!important}
+.kpis-slim .kpi-sub{overflow:hidden;text-overflow:ellipsis}
+.m-nav .m-l{grid-column:1;grid-row:1;justify-self:start}
+.m-nav .m-r{grid-column:5;grid-row:1;justify-self:end}
+.m-bar .m-nav{width:100%;max-width:560px;margin:0 auto}
+.st-row2{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap}
+#view-week .m-bar .desk-tools{justify-content:center}
+@media(max-width:900px){#view-week .m-bar .desk-tools{display:none!important}}
+.kpis.kpis-slim .kpi{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:.35rem;padding:.4rem .6rem .4rem .75rem!important}
+.kpis-slim .kpi-lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.02em}
+.kpis-slim .kpi-sub{grid-column:1/-1;font-size:.6rem!important;margin:.05rem 0 0!important;white-space:nowrap;line-height:1.1}
+.kpis-slim .kpi-sub:empty{display:none}
+.kpis-slim .kpi:has(.kpi-sub:not(:empty)){border-radius:16px!important}
+@media(max-width:400px){.kpis-slim .kpi-lbl{font-size:.58rem!important}.kpis-slim .kpi{padding:.4rem .5rem .4rem .6rem!important}}
+.toolbar{margin-bottom:.8rem!important}
+#mChipsWeek,#mChipsMonth{margin:0 0 .8rem!important}
+.st-name .cav{--s:24px}
+.tot-coach .mc-name .cav{margin-right:.15rem}
+.toast{top:calc(env(safe-area-inset-top,0px) + 74px)!important;bottom:auto!important;left:50%!important;right:auto!important;transform:translate(-50%,-220%)!important;max-width:calc(100vw - 32px);text-align:center;transition:transform .35s cubic-bezier(.22,.61,.36,1)!important}
+.toast{opacity:0;pointer-events:none}
+.toast.show{transform:translate(-50%,0)!important;opacity:1}
+.m-nav.two{grid-template-columns:auto 32px minmax(0,1fr) 32px auto!important}
+.m-nav.two .btn.m-arr{width:32px!important;height:32px!important}
+.m-nav.two .month-label{font-size:.84rem}
+.m-nav.two .btn.m-pill{padding:0 .5rem!important}
+.modal h3{display:flex;align-items:center;gap:.5rem}
+.cal-modal h3{margin-bottom:.6rem}
+@media(max-width:900px){
+  #calModal,#unavModal,#totModal{align-items:flex-end}
+  #calModal .modal,#unavModal .modal,#totModal .modal{margin-bottom:calc(8px + var(--sb))}
+}
+#costChips{margin:0;padding:.2rem .1rem .3rem}
 /* ===== v53 ===== */
 .dpick{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem}
 .dp-it{display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.45rem 0;border-radius:14px;border:1.5px solid transparent;background:rgba(127,127,127,.1);color:var(--text);font-family:inherit;cursor:pointer}
@@ -865,16 +908,16 @@ body{overflow-x:hidden}
 </section>
 
 <section id="view-week" class="view active">
-  <div class="toolbar">
-    <div class="tg">
-      <button class="btn" id="btnPrev"><svg class="ic" data-i="chevL"></svg></button>
-      <button class="btn" id="btnToday">Oggi</button>
-      <button class="btn" id="btnNext"><svg class="ic" data-i="chevR"></svg></button>
-      <button class="btn" id="btnCal" title="Vai a data"><svg class="ic" data-i="calSearch"></svg></button>
-      <input type="date" id="datePicker">
-      <span class="week-label" id="weekLabel">—</span>
+  <div class="toolbar m-bar">
+    <div class="m-nav two">
+      <button class="btn m-pill m-l" id="btnCal" title="Vai a data"><svg class="ic" data-i="calSearch"></svg><span>Cal</span></button>
+      <button class="btn m-arr" id="btnPrev" aria-label="Settimana precedente"><svg class="ic" data-i="chevL"></svg></button>
+      <span class="month-label week-label" id="weekLabel">—</span>
+      <button class="btn m-arr" id="btnNext" aria-label="Settimana successiva"><svg class="ic" data-i="chevR"></svg></button>
+      <button class="btn m-pill m-r" id="btnToday"><svg class="ic" data-i="today"></svg><span>Oggi</span></button>
     </div>
-    <div class="tg">
+    <div class="tg desk-tools">
+      <input type="date" id="datePicker">
       <select id="coachFilter"><option value="">Tutti i coach</option></select>
       <button class="btn btn-sm" id="btnAddExtra"><svg class="ic" data-i="plusCircle"></svg>Slot</button>
     </div>
@@ -892,41 +935,37 @@ body{overflow-x:hidden}
 <section id="view-monthly" class="view">
   <div class="toolbar m-bar">
     <div class="m-nav">
-      <button class="btn" id="btnMPrev" aria-label="Mese precedente"><svg class="ic" data-i="chevL"></svg></button>
+      <button class="btn m-arr" id="btnMPrev" aria-label="Mese precedente"><svg class="ic" data-i="chevL"></svg></button>
       <span class="month-label" id="monthLabel">—</span>
-      <button class="btn" id="btnMNext" aria-label="Mese successivo"><svg class="ic" data-i="chevR"></svg></button>
-      <button class="btn m-today" id="btnMToday">Oggi</button>
+      <button class="btn m-arr" id="btnMNext" aria-label="Mese successivo"><svg class="ic" data-i="chevR"></svg></button>
+      <button class="btn m-pill m-r" id="btnMToday"><svg class="ic" data-i="today"></svg><span>Oggi</span></button>
     </div>
     <button class="btn btn-sm no-print btn-gold" id="btnTotMonth"><svg class="ic" data-i="euro"></svg>Totale mensile</button>
     <select id="monthCoach" style="display:none"><option value="">Tutti i coach</option></select>
     <button class="btn btn-sm" id="btnAddUnav" style="display:none"><svg class="ic" data-i="calX"></svg>Indisponibilità</button>
   </div>
-  <div class="chips" id="mChipsMonth"></div>
-  <div class="kpis">
-    <div class="kpi"><div class="kpi-lbl">Lezioni mese</div><div class="kpi-val" id="mkTot">0</div></div>
-    <div class="kpi ok"><div class="kpi-lbl">Coperte</div><div class="kpi-val" id="mkCov">0</div></div>
-    <div class="kpi warn"><div class="kpi-lbl">Scoperte</div><div class="kpi-val" id="mkUnc">0</div></div>
-  </div>
+    <div class="kpis kpis-slim">
+      <div class="kpi"><div class="kpi-lbl">Lezioni</div><div class="kpi-val" id="mkTot">0</div></div>
+      <div class="kpi ok"><div class="kpi-lbl">Coperte</div><div class="kpi-val" id="mkCov">0</div></div>
+      <div class="kpi warn"><div class="kpi-lbl">Scoperte</div><div class="kpi-val" id="mkUnc">0</div></div>
+    </div>
+    <div class="chips" id="mChipsMonth"></div>
   <div id="monthlyBody"></div>
 </section>
 
 <section id="view-dashboard" class="view">
-  <div class="toolbar">
-    <div class="tg">
-      <div class="seg" id="stMode"><button class="seg-b active" data-m="month">Mese</button><button class="seg-b" data-m="year">Anno</button></div>
-      <button class="btn" id="stPrev"><svg class="ic" data-i="chevL"></svg></button>
+  <div class="toolbar m-bar">
+    <div class="m-nav">
+      <button class="btn m-arr" id="stPrev" aria-label="Precedente"><svg class="ic" data-i="chevL"></svg></button>
       <span class="month-label" id="stLabel">—</span>
-      <button class="btn" id="stNext"><svg class="ic" data-i="chevR"></svg></button>
+      <button class="btn m-arr" id="stNext" aria-label="Successivo"><svg class="ic" data-i="chevR"></svg></button>
     </div>
-    <div class="tg">
-      <button class="btn btn-sm" id="stNow" style="display:none"><svg class="ic" data-i="today"></svg>Corrente</button>
-      <button class="btn btn-sm" id="btnExportXlsx"><svg class="ic" data-i="sheet"></svg>Excel</button>
-      <button class="btn btn-sm" id="btnExportJson"><svg class="ic" data-i="download"></svg>JSON</button>
-      <button class="btn btn-sm" id="btnImportTrigger"><svg class="ic" data-i="upload"></svg>Importa</button>
-      <input type="file" id="importFile" accept=".json" style="display:none">
+    <div class="st-row2">
+      <div class="seg" id="stMode"><button class="seg-b active" data-m="month">Mese</button><button class="seg-b" data-m="year">Anno</button></div>
+      <button class="btn m-pill" id="stNow" style="display:none"><svg class="ic" data-i="today"></svg>Corrente</button>
     </div>
   </div>
-  <div class="kpis">
+  <div class="kpis kpis-slim">
     <div class="kpi"><div class="kpi-lbl">Lezioni</div><div class="kpi-val" id="stTot">0</div><div class="kpi-sub" id="stTotD"></div></div>
     <div class="kpi ok"><div class="kpi-lbl">Copertura</div><div class="kpi-val" id="stCov">0%</div><div class="kpi-sub" id="stCovD"></div></div>
     <div class="kpi warn"><div class="kpi-lbl">Scoperte</div><div class="kpi-val" id="stUncN">0</div><div class="kpi-sub" id="stUncD"></div></div>
@@ -941,7 +980,7 @@ body{overflow-x:hidden}
 </section>
 
 <section id="view-admin" class="view">
-<div id="admMenu"><div class="adm-title">Impostazioni</div><div class="adm-grp"><div class="adm-row" data-sec="coach"><div class="adm-sq" style="background:linear-gradient(145deg,#5ac8fa,#007aff)"><svg class="ic" data-i="users"></svg></div><div class="adm-lb">Coach</div><span class="adm-vl" id="admVCoach"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="classes"><div class="adm-sq" style="background:linear-gradient(145deg,#ff9f45,#F26522)"><svg class="ic" data-i="kettlebell"></svg></div><div class="adm-lb">Tipi di classe</div><span class="adm-vl" id="admVClass"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="template"><div class="adm-sq" style="background:linear-gradient(145deg,#bf8cff,#7d4dff)"><svg class="ic" data-i="layers"></svg></div><div class="adm-lb">Template settimanale</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="unav"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a8a,#ff2d55)"><svg class="ic" data-i="calX"></svg></div><div class="adm-lb">Indisponibilità</div><span class="adm-vl" id="admVUnav"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="costs"><div class="adm-sq" style="background:linear-gradient(145deg,#4cd964,#1f9d45)"><svg class="ic" data-i="euro"></svg></div><div class="adm-lb">Costi lezioni</div><span class="adm-vl" id="admVCost"></span><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="sync"><div class="adm-sq" style="background:linear-gradient(145deg,#63e6be,#20b486)"><svg class="ic" data-i="cloud"></svg></div><div class="adm-lb">Sincronizzazione</div><span class="adm-vl" id="admVSync"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="backup"><div class="adm-sq" style="background:linear-gradient(145deg,#8e9bb0,#5b6577)"><svg class="ic" data-i="archive"></svg></div><div class="adm-lb">Backup locali</div><span class="adm-vl" id="admVBackup"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="pin"><div class="adm-sq" style="background:linear-gradient(145deg,#ffd75e,#f5a300)"><svg class="ic" data-i="shield"></svg></div><div class="adm-lb">PIN Admin</div><span class="adm-vl" id="admVPin"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="log"><div class="adm-sq" style="background:linear-gradient(145deg,#7fb8ff,#3a6df0)"><svg class="ic" data-i="history"></svg></div><div class="adm-lb">Log modifiche</div><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="danger"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a6e,#ff3b30)"><svg class="ic" data-i="trash"></svg></div><div class="adm-lb" style="color:var(--danger)">Reset totale</div></div></div></div><div class="adm-back"><button class="btn" id="btnAdmBack"><svg class="ic" data-i="chevL"></svg>Impostazioni</button></div>
+<div id="admMenu"><div class="adm-title">Impostazioni</div><div class="adm-grp"><div class="adm-row" data-sec="coach"><div class="adm-sq" style="background:linear-gradient(145deg,#5ac8fa,#007aff)"><svg class="ic" data-i="users"></svg></div><div class="adm-lb">Coach</div><span class="adm-vl" id="admVCoach"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="classes"><div class="adm-sq" style="background:linear-gradient(145deg,#ff9f45,#F26522)"><svg class="ic" data-i="kettlebell"></svg></div><div class="adm-lb">Tipi di classe</div><span class="adm-vl" id="admVClass"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="template"><div class="adm-sq" style="background:linear-gradient(145deg,#bf8cff,#7d4dff)"><svg class="ic" data-i="layers"></svg></div><div class="adm-lb">Template settimanale</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="unav"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a8a,#ff2d55)"><svg class="ic" data-i="calX"></svg></div><div class="adm-lb">Indisponibilità</div><span class="adm-vl" id="admVUnav"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="costs"><div class="adm-sq" style="background:linear-gradient(145deg,#4cd964,#1f9d45)"><svg class="ic" data-i="euro"></svg></div><div class="adm-lb">Costi lezioni</div><span class="adm-vl" id="admVCost"></span><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="sync"><div class="adm-sq" style="background:linear-gradient(145deg,#63e6be,#20b486)"><svg class="ic" data-i="cloud"></svg></div><div class="adm-lb">Sincronizzazione</div><span class="adm-vl" id="admVSync"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="data"><div class="adm-sq" style="background:linear-gradient(145deg,#34d399,#0f9f6e)"><svg class="ic" data-i="sheet"></svg></div><div class="adm-lb">Dati ed export</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="backup"><div class="adm-sq" style="background:linear-gradient(145deg,#8e9bb0,#5b6577)"><svg class="ic" data-i="archive"></svg></div><div class="adm-lb">Backup locali</div><span class="adm-vl" id="admVBackup"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="pin"><div class="adm-sq" style="background:linear-gradient(145deg,#ffd75e,#f5a300)"><svg class="ic" data-i="shield"></svg></div><div class="adm-lb">PIN Admin</div><span class="adm-vl" id="admVPin"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="log"><div class="adm-sq" style="background:linear-gradient(145deg,#7fb8ff,#3a6df0)"><svg class="ic" data-i="history"></svg></div><div class="adm-lb">Log modifiche</div><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="danger"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a6e,#ff3b30)"><svg class="ic" data-i="trash"></svg></div><div class="adm-lb" style="color:var(--danger)">Reset totale</div></div></div></div><div class="adm-back"><button class="btn" id="btnAdmBack"><svg class="ic" data-i="chevL"></svg>Impostazioni</button></div>
   <div class="card adm-sec" data-sec="coach">
     <h2><svg class="ic" data-i="users"></svg> Coach</h2>
     <div id="coachList"></div>
@@ -970,7 +1009,7 @@ body{overflow-x:hidden}
   <div class="card adm-sec" data-sec="costs">
     <h2><svg class="ic" data-i="euro"></svg> Costi lezioni</h2>
     <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Usati per il Totale mensile. Imposta i costi predefiniti, poi se serve scegli un coach per assegnargli costi diversi. Valgono per tutti i dispositivi.</p>
-    <div class="field"><label>Applica a</label><select id="costCoach"></select></div>
+    <div class="field"><label>Applica a</label><div class="chips" id="costChips"></div><select id="costCoach" style="display:none"></select></div>
     <div class="cost-info" id="costInfo"></div>
     <div class="field"><label>Lezione normale (€)</label><input type="number" id="costLesson" min="0" step="0.5" inputmode="decimal"></div>
     <div class="field"><label>Apertura / Chiusura (€)</label><input type="number" id="costApch" min="0" step="0.5" inputmode="decimal"></div>
@@ -990,6 +1029,16 @@ body{overflow-x:hidden}
     <div id="syncCardStatus" style="margin-top:.7rem;font-size:.82rem;color:var(--muted)"></div>
   </div>
 
+  <div class="card adm-sec" data-sec="data">
+    <h2><svg class="ic" data-i="sheet"></svg> Dati ed export</h2>
+    <p style="color:var(--muted);font-size:.85rem;margin-bottom:.7rem">Excel esporta l'anno selezionato in Stats. JSON è un backup completo da reimportare.</p>
+    <div class="tg" style="gap:.5rem;flex-wrap:wrap">
+      <button class="btn btn-sm" id="btnExportXlsx"><svg class="ic" data-i="sheet"></svg>Excel</button>
+      <button class="btn btn-sm" id="btnExportJson"><svg class="ic" data-i="download"></svg>JSON</button>
+      <button class="btn btn-sm" id="btnImportTrigger"><svg class="ic" data-i="upload"></svg>Importa</button>
+      <input type="file" id="importFile" accept=".json" style="display:none">
+    </div>
+  </div>
   <div class="card adm-sec" data-sec="backup">
     <h2><svg class="ic" data-i="archive"></svg> Backup locali</h2>
     <p style="color:var(--muted);font-size:.85rem;margin-bottom:.6rem">Ultime 10 versioni salvate su questo dispositivo. Il ripristino viene poi sincronizzato sul cloud.</p>
@@ -1032,7 +1081,7 @@ body{overflow-x:hidden}
 
 <div class="modal-bg" id="editModal">
   <div class="modal">
-    <h3>Modifica lezione</h3>
+    <h3><svg class="ic" data-i="pencil"></svg> Modifica lezione</h3>
     <div class="e-sum" id="eSum"></div>
     <div class="field e-coach-field"><label>Coach</label><div class="cpick" id="eCoachGrid"></div></div>
     <div class="field" style="display:none"><label>Data</label><input type="text" id="eDate" readonly></div>
@@ -1050,7 +1099,7 @@ body{overflow-x:hidden}
 
 <div class="modal-bg" id="addModal">
   <div class="modal">
-    <h3>Nuova lezione</h3>
+    <h3><svg class="ic" data-i="plusCircle"></svg> Nuova lezione</h3>
     <div class="e-sum" id="aSum"></div>
     <div class="field"><label>Giorno</label><div class="dpick" id="aDayGrid"></div></div>
     <select id="aDay" style="display:none"></select>
@@ -1068,18 +1117,20 @@ body{overflow-x:hidden}
 <div class="modal-bg" id="unavModal">
   <div class="modal">
     <h3><svg class="ic" data-i="calX"></svg> Indisponibilità coach</h3>
-    <div class="field"><label>Coach</label><select id="uCoach"></select></div>
+    <div class="field e-coach-field"><label>Coach</label><div class="cpick" id="uCoachGrid"></div></div>
+    <select id="uCoach" style="display:none"></select>
     <div class="field"><label>Dal giorno</label><input type="date" id="uFrom"></div>
     <div class="field"><label>Al giorno</label><input type="date" id="uTo"></div>
     <div class="field"><label>Nota (facoltativa)</label><input type="text" id="uNote" placeholder="Ferie, infortunio, corso..."></div>
     <div class="m-acts">
       <button class="btn" id="uCancel">Annulla</button>
-      <button class="btn btn-primary" id="uSave">+ Aggiungi</button>
+      <button class="btn btn-primary" id="uSave"><svg class="ic" data-i="plus"></svg>Aggiungi</button>
     </div>
   </div>
 </div>
 <div class="modal-bg" id="calModal">
   <div class="modal cal-modal">
+    <h3><svg class="ic" data-i="calSearch"></svg> Vai a data</h3>
     <div class="cal-head">
       <button class="btn" id="calPrev"><svg class="ic" data-i="chevL"></svg></button>
       <div class="cal-title" id="calTitle">—</div>
@@ -1128,7 +1179,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.13'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.14'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -1506,8 +1557,8 @@ function curCoachOf(mode,info){
 }
 function slotSumHTML(info){const d=parseDate(info.dateStr);
   return `<div class="es-d">${esc(DAYS[(d.getDay()+6)%7])} ${String(d.getDate()).padStart(2,'0')} ${esc(MONTHS_F[d.getMonth()])}</div><div class="es-r"><span class="es-t">${esc(info.time||'')}</span><span class="es-c">${esc(info.cls||'')}</span></div>`}
-function coachGridHTML(cur,ds){
-  let h=`<button type="button" class="cp-it unc${cur===''?' sel':''}" data-cp=""><span class="cp-av">${ic('alert')}</span><span class="cp-n">Scoperto</span></button>`;
+function coachGridHTML(cur,ds,noUnc){
+  let h=noUnc?'':`<button type="button" class="cp-it unc${cur===''?' sel':''}" data-cp=""><span class="cp-av">${ic('alert')}</span><span class="cp-n">Scoperto</span></button>`;
   DATA.coaches.forEach(c=>{const un=ds&&isCoachUnavail(c.name,ds);
     h+=`<button type="button" class="cp-it${cur===c.name?' sel':''}${un?' un':''}" data-cp="${esc(c.name)}" style="--c:${esc(c.color)}">${coachAv(c)}<span class="cp-n">${esc(c.name)}</span>${un?'<span class="cp-x">Non disp.</span>':''}</button>`});
   return h;
@@ -1661,9 +1712,9 @@ function stDelta(cur,prev,lowerBetter,suffix){
   return{t:(d>0?'+':'')+d+(suffix||'')+' vs prec.',c:d===0?'':(good?'up':'down')};
 }
 function setKpiSub(id,o){const el=$(id);el.textContent=o.t;el.className='kpi-sub'+(o.c?' '+o.c:'')}
-function barRow(name,col,val,max,extra){
+function barRow(name,col,val,max,extra,av){
   const w=(max&&val)?Math.max(2,Math.round(val/max*100)):0;
-  return `<div class="st-row"><div class="st-name">${col?`<span class="mc-dot" style="background:${esc(col)}"></span>`:''}${esc(name)}</div><div class="st-track"><div class="st-fill" style="width:${w}%${col?';background:'+esc(col):''}"></div></div><div class="st-val">${val}${extra?`<small>${extra}</small>`:''}</div></div>`;
+  return `<div class="st-row"><div class="st-name">${av?av:(col?`<span class="mc-dot" style="background:${esc(col)}"></span>`:'')}${esc(name)}</div><div class="st-track"><div class="st-fill" style="width:${w}%${col?';background:'+esc(col):''}"></div></div><div class="st-val">${val}${extra?`<small>${extra}</small>`:''}</div></div>`;
 }
 function renderDashboard(){
   if(!statRef)statRef=new Date();
@@ -1691,7 +1742,7 @@ function renderDashboard(){
   const maxC=Math.max(0,...cs.map(o=>o.v.n));let ch='';
   cs.forEach(o=>{
     const share=S.cov?Math.round(o.v.n/S.cov*100):0;
-    ch+=barRow(o.c.name,o.c.color,o.v.n,maxC,share+'%');
+    ch+=barRow(o.c.name,o.c.color,o.v.n,maxC,share+'%',coachAv(o.c,24));
     const dl=o.v.n-(o.p?o.p.n:0);
     let meta='';if(o.v.ap)meta+=`<span class="fbadge ap">${ic('lockOpen')}${o.v.ap} AP</span>`;if(o.v.ch)meta+=`<span class="fbadge ch">${ic('lock')}${o.v.ch} CH</span>`;if(o.v.rv)meta+=`<span class="fbadge rv">${ic('swap')}${o.v.rv} RV</span>`;
     if(o.v.n||(o.p&&o.p.n))meta+=`<span class="st-delta${dl>0?' up':(dl<0?' down':'')}">${dl>0?'+':''}${dl} vs prec.</span>`;
@@ -1813,7 +1864,7 @@ function openTotModal(){
   coaches.forEach(co=>{
     const info=per[co.name];if(!info.lessons.length)return;
     const r=costOf(info,co.name);grand+=r.tot;gl+=info.lessons.length;
-    h+=`<div class="tot-coach"><div class="mc-head"><div class="mc-name"><span class="mc-dot" style="background:${esc(co.color)}"></span>${esc(co.name)}</div><div class="mc-stats"><span class="mc-stat">${info.lessons.length} lezioni</span><span class="mc-stat eur">${fmtEur(r.tot)}</span></div></div>${costBlock(info,co.name)}</div>`;
+    h+=`<div class="tot-coach"><div class="mc-head"><div class="mc-name">${coachAv(co,30)}${esc(co.name)}</div><div class="mc-stats"><span class="mc-stat">${info.lessons.length} lezioni</span><span class="mc-stat eur">${fmtEur(r.tot)}</span></div></div>${costBlock(info,co.name)}</div>`;
   });
   if(gl)h+=`<div class="tot-grand"><span class="tg-l">Totale mese<small>${filter?esc(filter):'Tutti i coach'} · ${gl} lezioni</small></span><strong>${fmtEur(grand)}</strong></div>`;
   else h+='<div class="empty-state" style="padding:1.5rem 1rem"><div class="em">'+ic('euro')+'</div>Nessuna lezione assegnata in questo mese</div>';
@@ -1824,10 +1875,12 @@ function closeTotModal(){$('totModal').classList.remove('show')}
 function openUnavModal(){
   const sel=$('uCoach');sel.innerHTML='';DATA.coaches.forEach(c=>{const o=document.createElement('option');o.value=c.name;o.textContent=c.name;sel.appendChild(o)});
   const pre=$('monthCoach')?$('monthCoach').value:'';if(pre)sel.value=pre;
+  renderUCoachGrid();
   const base=currentMonth||new Date();const f=fmtDate(new Date(base.getFullYear(),base.getMonth(),1));
   $('uFrom').value=f;$('uTo').value=f;$('uNote').value='';
   $('unavModal').classList.add('show');
 }
+function renderUCoachGrid(){$('uCoachGrid').innerHTML=coachGridHTML($('uCoach').value,null,true)}
 function closeUnavModal(){$('unavModal').classList.remove('show')}
 function saveUnav(){
   ensureUnav();
@@ -1893,6 +1946,7 @@ function renderCosts(){
   const sel=$('costCoach'),cur=sel.value;
   sel.innerHTML='<option value="">Tutti i coach (predefinito)</option>'+DATA.coaches.map(c=>`<option value="${esc(c.name)}">${esc(c.name)}${DATA.coachCosts&&DATA.coachCosts[c.name]?' • personalizzato':''}</option>`).join('');
   sel.value=DATA.coaches.some(c=>c.name===cur)?cur:'';
+  {const v=sel.value;$('costChips').innerHTML=`<div class="chip${v===''?' active':''}" data-cc2="">Predefinito</div>`+DATA.coaches.map(c=>{const on=v===c.name,pc=DATA.coachCosts&&DATA.coachCosts[c.name];return `<div class="chip${on?' active':''}" data-cc2="${esc(c.name)}" style="border-color:${esc(c.color)}${on?';background:'+esc(c.color)+';color:#fff':''}">${coachAv(c)}${esc(c.name)}${pc?' •':''}</div>`}).join('')}
   const coach=sel.value,d=getCosts(),ids={lesson:'costLesson',apch:'costApch',robi:'costRobi'};
   const o=coach&&DATA.coachCosts?DATA.coachCosts[coach]:null;
   Object.keys(ids).forEach(k=>{const el=$(ids[k]);
@@ -2436,6 +2490,8 @@ function init(){
   $('btnAddUnav').addEventListener('click',openUnavModal);
   $('btnAddUnav2').addEventListener('click',openUnavModal);
   $('uSave').addEventListener('click',saveUnav);
+  $('uCoachGrid').addEventListener('click',e=>{const b=e.target.closest('[data-cp]');if(!b)return;$('uCoach').value=b.dataset.cp;renderUCoachGrid()});
+  $('costChips').addEventListener('click',e=>{const b=e.target.closest('[data-cc2]');if(!b)return;$('costCoach').value=b.dataset.cc2;renderCosts()});
   $('uCancel').addEventListener('click',closeUnavModal);
   $('unavModal').addEventListener('click',e=>{if(e.target.id==='unavModal')closeUnavModal()});
   $('monthlyBody').addEventListener('click',e=>{const t=e.target.closest('[data-unavdel]');if(t)deleteUnav(t.dataset.unavdel)});
