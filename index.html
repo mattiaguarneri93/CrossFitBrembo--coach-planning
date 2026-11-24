@@ -699,6 +699,18 @@ body{overflow-x:hidden}
 .st-empty{color:var(--muted);font-size:.85rem;padding:.3rem 0}
 @media(max-width:900px){.st-row{grid-template-columns:105px 1fr 58px}#stLabel{min-width:0;flex:1;font-size:.9rem;white-space:nowrap}#view-dashboard .toolbar .tg:first-child{flex-wrap:nowrap;width:100%;gap:.35rem}#view-dashboard .toolbar .tg:first-child .btn{padding:.45rem .6rem}.seg-b{padding:.4rem .7rem}.st-grid{grid-template-columns:1fr}#view-dashboard .toolbar{justify-content:center}#view-dashboard .toolbar .tg{justify-content:center}}
 
+/* ===== v55 ===== */
+.seg.seg-sm{padding:2px}
+.seg.seg-sm .seg-b{padding:.32rem .55rem!important;font-size:.72rem}
+.m-nav.two .m-l,.m-nav.two .m-r{grid-row:1}
+.m-nav.two .m-l{grid-column:1;justify-self:start}
+.m-nav.two .m-r{grid-column:5;justify-self:end}
+.m-nav.two #btnMPrev,.m-nav.two #stPrev,.m-nav.two #btnPrev{grid-column:2}
+.m-nav.two #btnMNext,.m-nav.two #stNext,.m-nav.two #btnNext{grid-column:4}
+.m-nav.two .month-label{grid-column:3}
+#btnTotMonth.m-pill{color:#ffd166!important}
+[data-theme="light"] #btnTotMonth.m-pill{color:#8a6200!important}
+.m-bar{padding:.55rem .6rem!important}
 /* ===== v54: coerenza grafica ===== */
 .m-nav{grid-template-columns:minmax(60px,1fr) 36px minmax(0,auto) 36px minmax(60px,1fr)!important;gap:.3rem!important}
 .m-nav .btn.m-arr{width:36px!important;height:36px!important;padding:0!important;justify-content:center}
@@ -897,11 +909,11 @@ body{overflow-x:hidden}
 
 <section id="view-today" class="view mob-only">
   <div class="day-nav-m">
-    <button class="arr" id="mDayPrev"><svg class="ic" data-i="chevL"></svg></button>
-    <button class="arr arr-txt" id="mBtnToday" title="Torna a oggi"><svg class="ic" data-i="today"></svg><span>Oggi</span></button>
-    <div class="cur" id="mDayCur"><div class="dname">—</div><div class="ddate">—</div></div>
     <button class="arr arr-txt" id="mBtnCal" title="Vai a data"><svg class="ic" data-i="calSearch"></svg><span>Cal</span></button>
+    <button class="arr" id="mDayPrev"><svg class="ic" data-i="chevL"></svg></button>
+    <div class="cur" id="mDayCur"><div class="dname">—</div><div class="ddate">—</div></div>
     <button class="arr" id="mDayNext"><svg class="ic" data-i="chevR"></svg></button>
+    <button class="arr arr-txt" id="mBtnToday" title="Torna a oggi"><svg class="ic" data-i="today"></svg><span>Oggi</span></button>
   </div>
   <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem"><div class="chips" id="mChipsToday" style="margin-bottom:0;flex:1"></div></div>
   <div id="mTodayList"></div>
@@ -934,13 +946,13 @@ body{overflow-x:hidden}
 
 <section id="view-monthly" class="view">
   <div class="toolbar m-bar">
-    <div class="m-nav">
+    <div class="m-nav two">
+      <button class="btn m-pill m-l btn-gold no-print" id="btnTotMonth"><svg class="ic" data-i="euro"></svg><span>Totale</span></button>
       <button class="btn m-arr" id="btnMPrev" aria-label="Mese precedente"><svg class="ic" data-i="chevL"></svg></button>
       <span class="month-label" id="monthLabel">—</span>
       <button class="btn m-arr" id="btnMNext" aria-label="Mese successivo"><svg class="ic" data-i="chevR"></svg></button>
       <button class="btn m-pill m-r" id="btnMToday"><svg class="ic" data-i="today"></svg><span>Oggi</span></button>
     </div>
-    <button class="btn btn-sm no-print btn-gold" id="btnTotMonth"><svg class="ic" data-i="euro"></svg>Totale mensile</button>
     <select id="monthCoach" style="display:none"><option value="">Tutti i coach</option></select>
     <button class="btn btn-sm" id="btnAddUnav" style="display:none"><svg class="ic" data-i="calX"></svg>Indisponibilità</button>
   </div>
@@ -955,14 +967,12 @@ body{overflow-x:hidden}
 
 <section id="view-dashboard" class="view">
   <div class="toolbar m-bar">
-    <div class="m-nav">
+    <div class="m-nav two">
+      <div class="seg seg-sm m-l" id="stMode"><button class="seg-b active" data-m="month">Mese</button><button class="seg-b" data-m="year">Anno</button></div>
       <button class="btn m-arr" id="stPrev" aria-label="Precedente"><svg class="ic" data-i="chevL"></svg></button>
       <span class="month-label" id="stLabel">—</span>
       <button class="btn m-arr" id="stNext" aria-label="Successivo"><svg class="ic" data-i="chevR"></svg></button>
-    </div>
-    <div class="st-row2">
-      <div class="seg" id="stMode"><button class="seg-b active" data-m="month">Mese</button><button class="seg-b" data-m="year">Anno</button></div>
-      <button class="btn m-pill" id="stNow" style="display:none"><svg class="ic" data-i="today"></svg>Corrente</button>
+      <button class="btn m-pill m-r" id="stNow" style="display:none"><svg class="ic" data-i="today"></svg><span>Oggi</span></button>
     </div>
   </div>
   <div class="kpis kpis-slim">
@@ -971,11 +981,11 @@ body{overflow-x:hidden}
     <div class="kpi warn"><div class="kpi-lbl">Scoperte</div><div class="kpi-val" id="stUncN">0</div><div class="kpi-sub" id="stUncD"></div></div>
   </div>
   <div class="st-grid">
-    <div class="card"><h2><svg class="ic" data-i="alert"></svg> Prossime lezioni scoperte</h2><div id="stUnc"></div></div>
     <div class="card"><h2><svg class="ic" data-i="users"></svg> Lezioni per coach</h2><div id="stCoach"></div></div>
     <div class="card"><h2><svg class="ic" data-i="chart"></svg> <span id="stTrendT">Andamento</span></h2><div id="stTrend"></div></div>
     <div class="card"><h2><svg class="ic" data-i="kettlebell"></svg> Lezioni per classe</h2><div id="stClass"></div></div>
     <div class="card"><h2><svg class="ic" data-i="week"></svg> Carico per giorno</h2><div id="stDow"></div></div>
+    <div class="card"><h2><svg class="ic" data-i="alert"></svg> Prossime lezioni scoperte</h2><div id="stUnc"></div></div>
   </div>
 </section>
 
@@ -1179,7 +1189,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.14'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.15'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -1720,7 +1730,7 @@ function renderDashboard(){
   if(!statRef)statRef=new Date();
   document.querySelectorAll('#stMode .seg-b').forEach(b=>b.classList.toggle('active',b.dataset.m===statMode));
   const R=statRange(statMode,statRef);$('stLabel').textContent=R.label;
-  {const n=new Date(),isCur=statRef.getFullYear()===n.getFullYear()&&(statMode==='year'||statRef.getMonth()===n.getMonth());$('stNow').style.display=isCur?'none':'inline-flex';$('stNow').textContent='';$('stNow').innerHTML=ic('today')+(statMode==='year'?'Anno corrente':'Mese corrente')}
+  {const n=new Date(),isCur=statRef.getFullYear()===n.getFullYear()&&(statMode==='year'||statRef.getMonth()===n.getMonth());$('stNow').style.display=isCur?'none':'inline-flex';$('stNow').textContent='';$('stNow').innerHTML=ic('today')+'<span>Oggi</span>'}
   const S=collectStats(R.s,R.e);
   const pr=statMode==='year'?new Date(statRef.getFullYear()-1,0,1):new Date(statRef.getFullYear(),statRef.getMonth()-1,1);
   const PR=statRange(statMode,pr),P=collectStats(PR.s,PR.e);
