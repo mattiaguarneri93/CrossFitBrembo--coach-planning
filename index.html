@@ -699,18 +699,19 @@ body{overflow-x:hidden}
 .st-empty{color:var(--muted);font-size:.85rem;padding:.3rem 0}
 @media(max-width:900px){.st-row{grid-template-columns:105px 1fr 58px}#stLabel{min-width:0;flex:1;font-size:.9rem;white-space:nowrap}#view-dashboard .toolbar .tg:first-child{flex-wrap:nowrap;width:100%;gap:.35rem}#view-dashboard .toolbar .tg:first-child .btn{padding:.45rem .6rem}.seg-b{padding:.4rem .7rem}.st-grid{grid-template-columns:1fr}#view-dashboard .toolbar{justify-content:center}#view-dashboard .toolbar .tg{justify-content:center}}
 
-/* ===== v49: bottom bar stile pill largo ===== */
+/* ===== v50: bottom bar stile Instagram ===== */
 @media(max-width:900px){
-  html[data-theme] .bottom-nav{left:12px!important;right:12px!important;bottom:calc(10px + var(--sb))!important;height:72px;padding:6px!important;border-radius:999px;display:grid;grid-template-columns:repeat(5,1fr);gap:0!important;align-items:stretch}
-  .bnav{padding:0!important;justify-content:center;gap:3px;opacity:.9}
-  .bnav .bi{width:28px;height:28px}
-  .bnav svg.ic{width:27px;height:27px}
-  .bnav .bl{font-size:10.5px;font-weight:700}
-  .nav-bubble{width:calc((100vw - 36px) / 5 - 2px)!important;height:60px!important;border-radius:999px!important;background:rgba(255,255,255,.13)!important}
+  html[data-theme] .bottom-nav{left:12px!important;right:12px!important;bottom:calc(2px + var(--sb))!important;height:64px;padding:6px 16px!important;border-radius:999px;display:grid;grid-template-columns:repeat(5,1fr);gap:0!important;align-items:stretch}
+  .bnav{padding:0!important;justify-content:center;gap:2px;opacity:.9}
+  .bnav .bi{width:26px;height:26px}
+  .bnav svg.ic{width:25px;height:25px}
+  .bnav .bl{font-size:10px;font-weight:700}
+  .nav-bubble{width:calc((100vw - 56px) / 5 + 14px)!important;height:52px!important;border-radius:999px!important;background:rgba(255,255,255,.14)!important;border:none!important;box-shadow:none!important}
   [data-theme="light"] .nav-bubble{background:rgba(0,0,0,.07)!important;border:none!important;box-shadow:none!important}
-  html[data-theme] .fab{right:16px!important;bottom:calc(94px + var(--sb))!important;width:54px!important;height:54px!important}
+  html[data-theme] .fab{right:16px!important;bottom:calc(78px + var(--sb))!important;width:54px!important;height:54px!important}
   .fab svg.ic{width:26px;height:26px}
-  body{padding-bottom:calc(160px + var(--sb))!important}
+  body{padding-bottom:calc(150px + var(--sb))!important}
+  body:not([data-view="today"]):not([data-view="week"]) .fab{display:none!important}
 }
 /* ===== v48 ===== */
 #pinModal{align-items:flex-start;padding-top:calc(env(safe-area-inset-top,0px) + 9vh)}
@@ -719,7 +720,7 @@ body{overflow-x:hidden}
 .theme-toggle.auto .ic-moon,.theme-toggle.auto .ic-sun{display:none!important}
 .theme-toggle.auto .ic-auto{display:block!important}
 .th-auto-old{position:absolute;right:-2px;bottom:-2px;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;font-size:9px;font-weight:900;display:grid;place-items:center;line-height:1;box-shadow:0 0 0 2px var(--bg,#0a0a0c)}
-.day-nav-m .arr.arr-txt{width:auto;padding:0 .7rem;gap:.3rem;font-size:.85rem;font-weight:800;color:var(--accent)}
+.day-nav-m .arr.arr-txt{width:78px;flex:0 0 78px;justify-content:center;padding:0 .7rem;gap:.3rem;font-size:.85rem;font-weight:800;color:var(--accent)}
 .day-nav-m .arr.arr-txt .ic{width:18px;height:18px}
 #stNow{color:var(--accent);font-weight:800}
 /* ===== v47: foto coach ===== */
@@ -787,7 +788,7 @@ body{overflow-x:hidden}
     <button class="arr" id="mDayPrev"><svg class="ic" data-i="chevL"></svg></button>
     <button class="arr arr-txt" id="mBtnToday" title="Torna a oggi"><svg class="ic" data-i="today"></svg><span>Oggi</span></button>
     <div class="cur" id="mDayCur"><div class="dname">—</div><div class="ddate">—</div></div>
-    <button class="arr" id="mBtnCal" title="Vai a data"><svg class="ic" data-i="calSearch"></svg></button>
+    <button class="arr arr-txt" id="mBtnCal" title="Vai a data"><svg class="ic" data-i="calSearch"></svg><span>Cal</span></button>
     <button class="arr" id="mDayNext"><svg class="ic" data-i="chevR"></svg></button>
   </div>
   <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem"><div class="chips" id="mChipsToday" style="margin-bottom:0;flex:1"></div></div>
@@ -1046,7 +1047,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.8'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.10'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -1200,6 +1201,7 @@ function getSlotsForDate(date){
 let DATA,currentWeekStart,currentDay,editingSlot=null;
 
 function setView(name){
+  if(!((name==='admin'||name==='log')&&!adminUnlocked()))document.body.dataset.view=name;
   if((name==='admin'||name==='log')&&!adminUnlocked()){
     const cur=document.querySelector('.view.active');const cn=cur?cur.id.replace('view-',''):'week';
     if(cn!==name&&cn!=='admin'&&cn!=='log'){setView(cn);setTimeout(()=>{try{moveBubbleToName(cn==='log'?'admin':cn)}catch(e){}},80)}
