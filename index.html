@@ -699,6 +699,36 @@ body{overflow-x:hidden}
 .st-empty{color:var(--muted);font-size:.85rem;padding:.3rem 0}
 @media(max-width:900px){.st-row{grid-template-columns:105px 1fr 58px}#stLabel{min-width:0;flex:1;font-size:.9rem;white-space:nowrap}#view-dashboard .toolbar .tg:first-child{flex-wrap:nowrap;width:100%;gap:.35rem}#view-dashboard .toolbar .tg:first-child .btn{padding:.45rem .6rem}.seg-b{padding:.4rem .7rem}.st-grid{grid-template-columns:1fr}#view-dashboard .toolbar{justify-content:center}#view-dashboard .toolbar .tg{justify-content:center}}
 
+/* ===== v53 ===== */
+.dpick{display:grid;grid-template-columns:repeat(7,1fr);gap:.3rem}
+.dp-it{display:flex;flex-direction:column;align-items:center;gap:.1rem;padding:.45rem 0;border-radius:14px;border:1.5px solid transparent;background:rgba(127,127,127,.1);color:var(--text);font-family:inherit;cursor:pointer}
+.dp-it:active{transform:scale(.95)}
+.dp-w{font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase}
+.dp-n{font-size:1rem;font-weight:800}
+.dp-it.today .dp-n{color:var(--accent)}
+.dp-it.sel{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
+.dp-it.sel .dp-w,.dp-it.sel .dp-n{color:#fff}
+#addModal{align-items:flex-end}
+@media(min-width:901px){#addModal{align-items:center}}
+@media(max-width:900px){#addModal .modal{margin-bottom:calc(8px + var(--sb));max-height:86vh}}
+.chips{overflow-x:auto!important;-webkit-overflow-scrolling:touch;touch-action:pan-x;overscroll-behavior-x:contain;flex-wrap:nowrap!important;scroll-padding:0 12px}
+.chips .chip{flex-shrink:0}
+/* ===== v52 ===== */
+.modal{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+.modal-bg{overscroll-behavior:contain}
+.tot-modal{max-height:min(82vh,82dvh)!important;overflow-y:auto!important;display:flex;flex-direction:column}
+#totBody{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;flex:1;min-height:0;margin:0 -.3rem;padding:0 .3rem}
+.tot-modal .m-acts{flex-shrink:0}
+.m-bar{display:flex!important;flex-direction:column;align-items:stretch!important;gap:.6rem!important}
+.m-nav{display:grid;grid-template-columns:1fr 40px minmax(0,auto) 40px 1fr;align-items:center;gap:.35rem}
+.m-nav .btn{width:40px;height:40px;padding:0;justify-content:center}
+.m-nav #btnMPrev{grid-column:2;grid-row:1}
+.m-nav .month-label{grid-column:3;grid-row:1;text-align:center;margin:0!important;min-width:0!important;white-space:nowrap;padding:0 .2rem}
+.m-nav #btnMNext{grid-column:4;grid-row:1}
+.m-nav .m-today{grid-column:5;grid-row:1;justify-self:end;width:auto;padding:0 .8rem;height:36px;font-size:.82rem;font-weight:800;color:var(--accent)}
+.m-bar .btn-gold{margin:0!important;align-self:center!important;order:0!important}
+#mChipsMonth{display:flex;margin:0 0 .8rem}
+@media(max-width:380px){.m-nav .m-today{padding:0 .55rem}.m-nav .month-label{font-size:.95rem}}
 /* ===== v51 ===== */
 .kpis-slim{display:flex!important;gap:.4rem!important;margin-bottom:.7rem!important;flex-wrap:wrap}
 .kpis-slim .kpi{flex:1;display:flex!important;align-items:center;justify-content:space-between;gap:.4rem;padding:.4rem .75rem!important;min-height:0!important;border-radius:999px!important}
@@ -860,19 +890,18 @@ body{overflow-x:hidden}
 </section>
 
 <section id="view-monthly" class="view">
-  <div class="toolbar">
-    <div class="tg">
-      <button class="btn" id="btnMPrev"><svg class="ic" data-i="chevL"></svg></button>
-      <button class="btn" id="btnMToday">Oggi</button>
-      <button class="btn" id="btnMNext"><svg class="ic" data-i="chevR"></svg></button>
+  <div class="toolbar m-bar">
+    <div class="m-nav">
+      <button class="btn" id="btnMPrev" aria-label="Mese precedente"><svg class="ic" data-i="chevL"></svg></button>
       <span class="month-label" id="monthLabel">—</span>
+      <button class="btn" id="btnMNext" aria-label="Mese successivo"><svg class="ic" data-i="chevR"></svg></button>
+      <button class="btn m-today" id="btnMToday">Oggi</button>
     </div>
     <button class="btn btn-sm no-print btn-gold" id="btnTotMonth"><svg class="ic" data-i="euro"></svg>Totale mensile</button>
-    <div class="tg">
-      <select id="monthCoach"><option value="">Tutti i coach</option></select>
-      <button class="btn btn-sm" id="btnAddUnav"><svg class="ic" data-i="calX"></svg>Indisponibilità</button>
-    </div>
+    <select id="monthCoach" style="display:none"><option value="">Tutti i coach</option></select>
+    <button class="btn btn-sm" id="btnAddUnav" style="display:none"><svg class="ic" data-i="calX"></svg>Indisponibilità</button>
   </div>
+  <div class="chips" id="mChipsMonth"></div>
   <div class="kpis">
     <div class="kpi"><div class="kpi-lbl">Lezioni mese</div><div class="kpi-val" id="mkTot">0</div></div>
     <div class="kpi ok"><div class="kpi-lbl">Coperte</div><div class="kpi-val" id="mkCov">0</div></div>
@@ -1021,14 +1050,17 @@ body{overflow-x:hidden}
 
 <div class="modal-bg" id="addModal">
   <div class="modal">
-    <h3>+ Aggiungi slot extra</h3>
-    <div class="field"><label>Giorno</label><select id="aDay"></select></div>
+    <h3>Nuova lezione</h3>
+    <div class="e-sum" id="aSum"></div>
+    <div class="field"><label>Giorno</label><div class="dpick" id="aDayGrid"></div></div>
+    <select id="aDay" style="display:none"></select>
+    <div class="field e-coach-field"><label>Coach</label><div class="cpick" id="aCoachGrid"></div></div>
+    <select id="aCoach" style="display:none"></select>
     <div class="field"><label>Orario</label><input type="time" id="aTime" value="18:30"></div>
     <div class="field"><label>Classe</label><select id="aClass"></select></div>
-    <div class="field"><label>Coach</label><select id="aCoach"></select></div>
     <div class="m-acts">
       <button class="btn" id="aCancel">Annulla</button>
-      <button class="btn btn-primary" id="aSave">+ Aggiungi</button>
+      <button class="btn btn-primary" id="aSave"><svg class="ic" data-i="plus"></svg>Aggiungi</button>
     </div>
   </div>
 </div>
@@ -1096,7 +1128,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.11'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.13'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -1321,22 +1353,24 @@ function renderChips(elId){
   const el=$(elId); if(!el) return;
   const cur=$('coachFilter').value;
   el.innerHTML='';
-  const all=document.createElement('div');
-  all.className='chip'+(cur===''?' active':'');
-  all.textContent='Tutti';
-  all.addEventListener('click',()=>{$('coachFilter').value='';renderAll()});
-  el.appendChild(all);
   DATA.coaches.forEach(c=>{
     const ch=document.createElement('div');
     ch.className='chip'+(cur===c.name?' active':'');
     ch.innerHTML=coachAv(c)+esc(c.name);
     ch.style.borderColor=c.color;
     if(cur===c.name){ch.style.background=c.color;ch.style.color='#fff'}
-    ch.addEventListener('click',()=>{$('coachFilter').value=c.name;renderAll()});
+    ch.addEventListener('click',()=>{$('coachFilter').value=(cur===c.name?'':c.name);renderAll()});
     el.appendChild(ch);
   });
 }
 
+function renderMonthChips(){
+  const el=$('mChipsMonth');if(!el)return;const cur=$('monthCoach').value;el.innerHTML='';
+  const mk=(name,html,c)=>{const ch=document.createElement('div');ch.className='chip'+(cur===name?' active':'');ch.innerHTML=html;
+    if(c){ch.style.borderColor=c.color;if(cur===name){ch.style.background=c.color;ch.style.color='#fff'}}
+    ch.addEventListener('click',()=>{$('monthCoach').value=(cur===name?'':name);renderMonthly()});el.appendChild(ch)};
+  DATA.coaches.forEach(c=>mk(c.name,coachAv(c)+esc(c.name),c));
+}
 function flagBadgesHTML(s,short){let h='';if(s.apertura)h+='<span class="fbadge ap">'+ic('lockOpen')+(short?'AP':'Apertura')+'</span>';if(s.chiusura)h+='<span class="fbadge ch">'+ic('lock')+(short?'CH':'Chiusura')+'</span>';if(s.robivia)h+='<span class="fbadge rv">'+ic('swap')+(short?'RV':'Robi via')+'</span>';if(s.coach&&s.dateStr&&isCoachUnavail(s.coach,s.dateStr))h+='<span class="fbadge cf">'+ic('ban')+'N/D</span>';return h?`<div class="flag-badges">${h}</div>`:''}
 function coachByName(n){return DATA.coaches.find(c=>c.name===n)}
 function coachAv(c,size){const col=c?c.color:'#888',p=c&&c.photo;
@@ -1576,7 +1610,16 @@ function openAddModal(){
   for(let i=0;i<7;i++){const d=addDays(start,i);const o=document.createElement('option');o.value=fmtDate(d);o.textContent=`${DAYS[i]} ${fmtIT(d)}`;if(isToday(d))o.selected=true;sel.appendChild(o)}
   popSel('aClass',DATA.classes,'CrossFit');
   popSel('aCoach',DATA.coaches.map(c=>c.name),'',true);
+  renderAddModal();
   $('addModal').classList.add('show');
+}
+function renderAddModal(){
+  const ds=$('aDay').value;
+  let h='';[...$('aDay').options].forEach(o=>{const d=parseDate(o.value);
+    h+=`<button type="button" class="dp-it${o.value===ds?' sel':''}${isToday(d)?' today':''}" data-dp="${o.value}"><span class="dp-w">${esc(DAYS_S[(d.getDay()+6)%7])}</span><span class="dp-n">${d.getDate()}</span></button>`});
+  $('aDayGrid').innerHTML=h;
+  $('aCoachGrid').innerHTML=coachGridHTML($('aCoach').value,ds);
+  $('aSum').innerHTML=slotSumHTML({dateStr:ds,time:$('aTime').value,cls:$('aClass').value});
 }
 function closeAddModal(){$('addModal').classList.remove('show')}
 function saveAdd(){
@@ -1709,6 +1752,7 @@ function renderMonthly(){
   const y=currentMonth.getFullYear(),m=currentMonth.getMonth();
   const ml=$('monthLabel'); if(ml) ml.textContent=MONTHS_F[m]+' '+y;
   const filter=$('monthCoach')?$('monthCoach').value:'';
+  renderMonthChips();
   const perCoach={}; DATA.coaches.forEach(c=>perCoach[c.name]={lessons:[],ap:0,ch:0,rv:0});
   const uncovered=[]; let tot=0,cov=0,unc=0;
   const days=new Date(y,m+1,0).getDate();
@@ -1987,13 +2031,21 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 window.addEventListener('pageshow',resetViewOffset);
 window.addEventListener('focus',resetViewOffset);
 window.addEventListener('orientationchange',()=>setTimeout(resetViewOffset,250));
+(function(){
+  let y=0,locked=false;
+  const sync=()=>{const open=!!document.querySelector('.modal-bg.show');
+    if(open&&!locked){y=window.scrollY;document.body.style.position='fixed';document.body.style.top=(-y)+'px';document.body.style.left='0';document.body.style.right='0';document.body.classList.add('modal-open');locked=true}
+    else if(!open&&locked){document.body.style.position='';document.body.style.top='';document.body.style.left='';document.body.style.right='';document.body.classList.remove('modal-open');window.scrollTo(0,y);locked=false}};
+  const start=()=>{new MutationObserver(sync).observe(document.body,{subtree:true,attributes:true,attributeFilter:['class']})};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
+})();
 function attachSwipe(el,onL,onR){
   if(!el) return;
   const V_THRESH=34,H_MIN=45;
   let sx=0,sy=0,st=0,lock=null,multi=false,fits=false,view=null,lastX=0,lastT=0,vel=0;
   el.addEventListener('touchstart',e=>{
     if(e.touches.length>1){multi=true;return}
-    if(e.target&&e.target.closest&&e.target.closest('.bottom-nav,.fab')){multi=true;return}
+    if(e.target&&e.target.closest&&e.target.closest('.bottom-nav,.fab,.modal-bg,.chips')){multi=true;return}
     multi=false;lock=null;vel=0;fits=pageFits();view=activeMobileView();
     const t=e.touches[0];sx=lastX=t.clientX;sy=t.clientY;st=lastT=Date.now();
     if(view)view.style.transition='none';
@@ -2352,6 +2404,9 @@ function init(){
   $('addModal').addEventListener('click',e=>{if(e.target.id==='addModal') closeAddModal()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEditModal();closeAddModal();closeUnavModal();closeCal();closePinModal();closeTotModal();closeCoachPick()}});
   $('pinOk').addEventListener('click',submitPin);
+  $('aDayGrid').addEventListener('click',e=>{const b=e.target.closest('[data-dp]');if(!b)return;$('aDay').value=b.dataset.dp;renderAddModal()});
+  $('aCoachGrid').addEventListener('click',e=>{const b=e.target.closest('[data-cp]');if(!b)return;$('aCoach').value=b.dataset.cp;renderAddModal()});
+  ['aTime','aClass'].forEach(id=>{$(id).addEventListener('input',renderAddModal);$(id).addEventListener('change',renderAddModal)});
   $('eCoachGrid').addEventListener('click',e=>{const b=e.target.closest('[data-cp]');if(!b)return;$('eCoach').value=b.dataset.cp;renderECoachGrid()});
   $('cpGrid').addEventListener('click',e=>{const b=e.target.closest('[data-cp]');if(b)pickCoach(b.dataset.cp)});
   $('cpCancel').addEventListener('click',closeCoachPick);
