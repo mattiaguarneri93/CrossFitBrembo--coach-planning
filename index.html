@@ -923,6 +923,33 @@ body{overflow-x:hidden}
   [data-theme="light"]{--nav-cut:#fff}
   [data-theme="dark"]{--nav-cut:#242428}
 }
+
+/* ===== v60: precision navigation icons ===== */
+@media(max-width:900px){
+  .bottom-nav .bnav{opacity:1!important}
+  .bottom-nav .bnav .bi{width:33px!important;height:33px!important;display:grid!important;place-items:center!important}
+  .bottom-nav .apple-navicon{width:28px!important;height:28px!important;display:block!important;overflow:visible!important;shape-rendering:geometricPrecision}
+  .bottom-nav .apple-navicon .ni-o{display:block;fill:none;stroke:#000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+  [data-theme="dark"] .bottom-nav .apple-navicon .ni-o{stroke:#fff}
+  .bottom-nav .apple-navicon .ni-f{display:none;fill:var(--accent);stroke:var(--accent);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+  .bottom-nav .bnav.active .apple-navicon .ni-o{display:none}
+  .bottom-nav .bnav.active .apple-navicon .ni-f{display:block}
+  .bottom-nav .apple-navicon .ni-cut{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+  [data-theme="dark"] .bottom-nav .apple-navicon .ni-cut{stroke:#222226}
+  .bottom-nav .apple-navicon .date-num{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:19px;font-weight:700;letter-spacing:-1px;text-anchor:middle;fill:#000;stroke:none}
+  [data-theme="dark"] .bottom-nav .apple-navicon .date-num{fill:#fff}
+  .bottom-nav .apple-navicon .active-num{fill:#fff!important}
+  [data-theme="dark"] .bottom-nav .apple-navicon .active-num{fill:#222226!important}
+  .bottom-nav .apple-navicon .month-dots{fill:#000;stroke:none}
+  [data-theme="dark"] .bottom-nav .apple-navicon .month-dots{fill:#fff}
+  .bottom-nav .apple-navicon .active-dots{fill:#fff!important}
+  [data-theme="dark"] .bottom-nav .apple-navicon .active-dots{fill:#222226!important}
+  .bottom-nav .apple-navicon .admin-hole{fill:#fff;stroke:none}
+  [data-theme="dark"] .bottom-nav .apple-navicon .admin-hole{fill:#222226}
+  .bottom-nav .apple-navicon .gear-teeth{fill:none;stroke:var(--accent);stroke-width:5}
+  .bottom-nav .bnav:not(.active){color:#000!important}
+  [data-theme="dark"] .bottom-nav .bnav:not(.active){color:#fff!important}
+}
 </style>
 </head>
 <body>
@@ -1128,11 +1155,11 @@ body{overflow-x:hidden}
 
 <nav class="bottom-nav">
   <div class="nav-bubble" id="navBubble"></div>
-  <button class="bnav active" data-mview="today" aria-label="Oggi"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10"/><path class="ni-digit" d="M22 35c1-3 4-5 7-5 4 0 7 2 7 5 0 5-7 6-14 13h14M49 30H39v8c2-2 4-3 6-3 4 0 7 3 7 7s-3 7-8 7c-3 0-5-1-7-3"/></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11"/><path class="ni-digit" style="stroke:var(--nav-cut,#fff);fill:none" d="M22 35c1-3 4-5 7-5 4 0 7 2 7 5 0 5-7 6-14 13h14M49 30H39v8c2-2 4-3 6-3 4 0 7 3 7 7s-3 7-8 7c-3 0-5-1-7-3"/></g></svg></span></button>
-  <button class="bnav" data-mview="week" aria-label="Settimana"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10M20 34h7M33 34h9M20 43h10M36 43h6"/></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11M19 34h8M33 34h10M19 44h11M36 44h7"/></g></svg></span></button>
-  <button class="bnav" data-mview="monthly" aria-label="Mese"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10"/><g class="ni-dots"><circle cx="21" cy="33" r="2"/><circle cx="32" cy="33" r="2"/><circle cx="43" cy="33" r="2"/><circle cx="21" cy="42" r="2"/><circle cx="32" cy="42" r="2"/><circle cx="43" cy="42" r="2"/><circle cx="21" cy="50" r="2"/><circle cx="32" cy="50" r="2"/><circle cx="43" cy="50" r="2"/></g></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11"/><g class="ni-cutfill"><circle cx="21" cy="33" r="2.2"/><circle cx="32" cy="33" r="2.2"/><circle cx="43" cy="33" r="2.2"/><circle cx="21" cy="42" r="2.2"/><circle cx="32" cy="42" r="2.2"/><circle cx="43" cy="42" r="2.2"/><circle cx="21" cy="50" r="2.2"/><circle cx="32" cy="50" r="2.2"/><circle cx="43" cy="50" r="2.2"/></g></g></svg></span></button>
-  <button class="bnav" data-mview="dashboard" aria-label="Statistiche"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="9" y="39" width="10" height="16" rx="3"/><rect x="27" y="30" width="10" height="25" rx="3"/><rect x="45" y="21" width="10" height="34" rx="3"/><path d="M9 29l13-13 9 8L51 7M43 7h8v8"/></g><g class="ni-f"><rect x="7" y="37" width="13" height="19" rx="4"/><rect x="25" y="28" width="13" height="28" rx="4"/><rect x="43" y="19" width="13" height="37" rx="4"/><path d="M8 29l14-14 9 8L52 6"/><path d="M43 6h9v9"/></g></svg></span></button>
-  <button class="bnav" data-mview="admin" aria-label="Admin"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><circle cx="27" cy="19" r="11"/><path d="M8 53c3-16 12-23 23-23 7 0 13 3 17 9"/><circle cx="49" cy="45" r="8"/><path d="M49 32v5M49 53v5M36 45h5M57 45h5M40 36l4 4M54 50l4 4M58 36l-4 4M44 50l-4 4"/></g><g class="ni-f"><circle cx="27" cy="18" r="12"/><path d="M6 55c2-17 12-26 25-26 8 0 14 3 19 9-7 0-13 6-13 13 0 2 0 3 1 5Z"/><circle cx="50" cy="46" r="10"/><circle class="ni-cutfill" cx="50" cy="46" r="3"/><path d="M50 32v5M50 55v5M36 46h5M59 46h5M40 36l4 4M56 52l4 4M60 36l-4 4M44 52l-4 4"/></g></svg></span></button>
+  <button class="bnav active" data-mview="today" aria-label="Oggi"><span class="bi"><svg class="navic apple-navicon" viewBox="0 0 96 96" aria-hidden="true"><g class="ni-o"><rect x="23" y="24" width="50" height="52" rx="11"/><path d="M23 41h50M36 17v14M60 17v14"/><text class="date-num" x="48" y="65">25</text></g><g class="ni-f"><rect x="20" y="21" width="56" height="58" rx="13"/><path class="ni-cut" d="M21 41h54M36 16v16M60 16v16"/><text class="date-num active-num" x="48" y="66">25</text></g></svg></span></button>
+  <button class="bnav" data-mview="week" aria-label="Settimana"><span class="bi"><svg class="navic apple-navicon" viewBox="0 0 96 96" aria-hidden="true"><g class="ni-o"><rect x="23" y="24" width="50" height="52" rx="11"/><path d="M23 41h50M36 17v14M60 17v14M33 52h12M52 52h11M33 63h15M55 63h8"/></g><g class="ni-f"><rect x="20" y="21" width="56" height="58" rx="13"/><path class="ni-cut" d="M21 41h54M36 16v16M60 16v16M31 52h14M52 52h13M31 64h17M55 64h10"/></g></svg></span></button>
+  <button class="bnav" data-mview="monthly" aria-label="Mese"><span class="bi"><svg class="navic apple-navicon" viewBox="0 0 96 96" aria-hidden="true"><g class="ni-o"><rect x="23" y="24" width="50" height="52" rx="11"/><path d="M23 41h50M36 17v14M60 17v14"/><g class="month-dots"><circle cx="37" cy="50" r="2.8"/><circle cx="48" cy="50" r="2.8"/><circle cx="59" cy="50" r="2.8"/><circle cx="37" cy="60" r="2.8"/><circle cx="48" cy="60" r="2.8"/><circle cx="59" cy="60" r="2.8"/><circle cx="37" cy="70" r="2.8"/><circle cx="48" cy="70" r="2.8"/><circle cx="59" cy="70" r="2.8"/></g></g><g class="ni-f"><rect x="20" y="21" width="56" height="58" rx="13"/><path class="ni-cut" d="M21 41h54M36 16v16M60 16v16"/><g class="month-dots active-dots"><circle cx="37" cy="50" r="3"/><circle cx="48" cy="50" r="3"/><circle cx="59" cy="50" r="3"/><circle cx="37" cy="60" r="3"/><circle cx="48" cy="60" r="3"/><circle cx="59" cy="60" r="3"/><circle cx="37" cy="70" r="3"/><circle cx="48" cy="70" r="3"/><circle cx="59" cy="70" r="3"/></g></g></svg></span></button>
+  <button class="bnav" data-mview="dashboard" aria-label="Statistiche"><span class="bi"><svg class="navic apple-navicon" viewBox="0 0 96 96" aria-hidden="true"><g class="ni-o"><rect x="14" y="58" width="15" height="25" rx="4"/><rect x="40" y="44" width="15" height="39" rx="4"/><rect x="66" y="30" width="15" height="53" rx="4"/><path d="M14 43 34 23l14 12L78 8M66 8h12v12"/></g><g class="ni-f"><rect x="11" y="55" width="20" height="30" rx="5"/><rect x="37" y="41" width="20" height="44" rx="5"/><rect x="63" y="27" width="20" height="58" rx="5"/><path d="M12 43 34 21l14 12L81 6M67 6h14v14"/></g></svg></span></button>
+  <button class="bnav" data-mview="admin" aria-label="Admin"><span class="bi"><svg class="navic apple-navicon" viewBox="0 0 96 96" aria-hidden="true"><g class="ni-o"><circle cx="39" cy="28" r="15"/><path d="M14 76c4-21 16-31 31-31 9 0 17 3 23 9"/><circle cx="73" cy="67" r="10"/><path d="M73 51v6M73 77v6M57 67h6M83 67h6M62 56l5 5M79 73l5 5M84 56l-5 5M67 73l-5 5"/></g><g class="ni-f"><circle cx="39" cy="27" r="17"/><path d="M11 80c3-24 17-36 35-36 9 0 17 3 23 9-8 2-14 9-14 18 0 4 1 7 3 10Z"/><circle cx="74" cy="68" r="14"/><circle class="admin-hole" cx="74" cy="68" r="4"/><path class="gear-teeth" d="M74 49v6M74 81v6M55 68h6M87 68h6M61 55l5 5M82 76l5 5M87 55l-5 5M66 76l-5 5"/></g></svg></span></button>
 </nav>
 
 <div class="modal-bg" id="editModal">
@@ -1235,7 +1262,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.19'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.20'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -2476,6 +2503,7 @@ function init(){
   document.querySelectorAll('.nav-btn[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
   document.querySelectorAll('.bnav').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.mview)));
   document.querySelectorAll('.ni-day').forEach(t=>t.textContent=String(new Date().getDate()));
+  document.querySelectorAll('.date-num').forEach(t=>t.textContent=String(new Date().getDate()));
   $('btnPrint').addEventListener('click',()=>window.print());
   const _mq=window.matchMedia?matchMedia('(prefers-color-scheme: light)'):null;
   let _themeMode='auto';try{_themeMode=localStorage.getItem('cfb_theme_mode')||'auto'}catch(e){}
