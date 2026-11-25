@@ -902,6 +902,27 @@ body{overflow-x:hidden}
 .cph-btn .cam{position:absolute;right:-3px;bottom:-3px;width:19px;height:19px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:900;line-height:1;box-shadow:0 0 0 2px var(--panel,#111)}
 #coachList .row{gap:.5rem}#coachList .row input[type=text]{min-width:0;flex:1 1 auto;width:auto}#coachList .row input[type=color]{flex:0 0 36px;width:36px;min-width:0}#coachList .row .btn{flex-shrink:0}
 .cph-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ===== v57: icone bottom navigation ===== */
+@media(max-width:900px){
+  .bottom-nav .bnav .bl{display:none!important}
+  .bottom-nav .bnav{gap:0!important;padding:0!important}
+  .bottom-nav .bnav .bi{width:38px!important;height:38px!important}
+  .bottom-nav .navic{width:34px!important;height:34px!important;overflow:visible;display:block}
+  .bottom-nav .navic .ni-o{display:block;fill:none;stroke:currentColor;stroke-width:4.2;stroke-linecap:round;stroke-linejoin:round}
+  .bottom-nav .navic .ni-f{display:none;fill:var(--accent);stroke:var(--accent);stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
+  .bottom-nav .navic .ni-cut{fill:none;stroke:var(--nav-cut,#fff);stroke-width:3.3}
+  .bottom-nav .navic .ni-cutfill{fill:var(--nav-cut,#fff);stroke:none}
+  .bottom-nav .navic .ni-day{font:800 19px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-anchor:middle;dominant-baseline:middle;fill:currentColor;stroke:none}
+  .bottom-nav .navic .ni-day.ni-cutfill{fill:var(--nav-cut,#fff)!important}
+  .bottom-nav .navic .ni-dots{fill:currentColor;stroke:none}
+  .bottom-nav .navic .ni-digit{fill:none;stroke-width:3.4}
+  .bottom-nav .bnav.active .navic .ni-o{display:none}
+  .bottom-nav .bnav.active .navic .ni-f{display:block}
+  .bottom-nav .bnav.active{color:var(--accent)!important}
+  [data-theme="light"]{--nav-cut:#fff}
+  [data-theme="dark"]{--nav-cut:#242428}
+}
 </style>
 </head>
 <body>
@@ -1107,11 +1128,11 @@ body{overflow-x:hidden}
 
 <nav class="bottom-nav">
   <div class="nav-bubble" id="navBubble"></div>
-  <button class="bnav active" data-mview="today" aria-label="Oggi"><span class="bi"><svg class="ic" data-i="today"></svg></span><span class="bl">Oggi</span></button>
-  <button class="bnav" data-mview="week" aria-label="Settimana"><span class="bi"><svg class="ic" data-i="week"></svg></span><span class="bl">Settim.</span></button>
-  <button class="bnav" data-mview="monthly" aria-label="Mensile"><span class="bi"><svg class="ic" data-i="month"></svg></span><span class="bl">Mese</span></button>
-  <button class="bnav" data-mview="dashboard" aria-label="Dashboard"><span class="bi"><svg class="ic" data-i="chart"></svg></span><span class="bl">Stats</span></button>
-  <button class="bnav" data-mview="admin" aria-label="Admin"><span class="bi"><svg class="ic" data-i="sliders"></svg></span><span class="bl">Admin</span></button>
+  <button class="bnav active" data-mview="today" aria-label="Oggi"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10"/><path class="ni-digit" d="M22 35c1-3 4-5 7-5 4 0 7 2 7 5 0 5-7 6-14 13h14M49 30H39v8c2-2 4-3 6-3 4 0 7 3 7 7s-3 7-8 7c-3 0-5-1-7-3"/></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11"/><path class="ni-digit" style="stroke:var(--nav-cut,#fff);fill:none" d="M22 35c1-3 4-5 7-5 4 0 7 2 7 5 0 5-7 6-14 13h14M49 30H39v8c2-2 4-3 6-3 4 0 7 3 7 7s-3 7-8 7c-3 0-5-1-7-3"/></g></svg></span></button>
+  <button class="bnav" data-mview="week" aria-label="Settimana"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10M20 34h7M33 34h9M20 43h10M36 43h6"/></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11M19 34h8M33 34h10M19 44h11M36 44h7"/></g></svg></span></button>
+  <button class="bnav" data-mview="monthly" aria-label="Mese"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10"/><g class="ni-dots"><circle cx="21" cy="33" r="2"/><circle cx="32" cy="33" r="2"/><circle cx="43" cy="33" r="2"/><circle cx="21" cy="42" r="2"/><circle cx="32" cy="42" r="2"/><circle cx="43" cy="42" r="2"/><circle cx="21" cy="50" r="2"/><circle cx="32" cy="50" r="2"/><circle cx="43" cy="50" r="2"/></g></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11"/><g class="ni-cutfill"><circle cx="21" cy="33" r="2.2"/><circle cx="32" cy="33" r="2.2"/><circle cx="43" cy="33" r="2.2"/><circle cx="21" cy="42" r="2.2"/><circle cx="32" cy="42" r="2.2"/><circle cx="43" cy="42" r="2.2"/><circle cx="21" cy="50" r="2.2"/><circle cx="32" cy="50" r="2.2"/><circle cx="43" cy="50" r="2.2"/></g></g></svg></span></button>
+  <button class="bnav" data-mview="dashboard" aria-label="Statistiche"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="9" y="39" width="10" height="16" rx="3"/><rect x="27" y="30" width="10" height="25" rx="3"/><rect x="45" y="21" width="10" height="34" rx="3"/><path d="M9 29l13-13 9 8L51 7M43 7h8v8"/></g><g class="ni-f"><rect x="7" y="37" width="13" height="19" rx="4"/><rect x="25" y="28" width="13" height="28" rx="4"/><rect x="43" y="19" width="13" height="37" rx="4"/><path d="M8 29l14-14 9 8L52 6"/><path d="M43 6h9v9"/></g></svg></span></button>
+  <button class="bnav" data-mview="admin" aria-label="Admin"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><circle cx="27" cy="19" r="11"/><path d="M8 53c3-16 12-23 23-23 7 0 13 3 17 9"/><circle cx="49" cy="45" r="8"/><path d="M49 32v5M49 53v5M36 45h5M57 45h5M40 36l4 4M54 50l4 4M58 36l-4 4M44 50l-4 4"/></g><g class="ni-f"><circle cx="27" cy="18" r="12"/><path d="M6 55c2-17 12-26 25-26 8 0 14 3 19 9-7 0-13 6-13 13 0 2 0 3 1 5Z"/><circle cx="50" cy="46" r="10"/><circle class="ni-cutfill" cx="50" cy="46" r="3"/><path d="M50 32v5M50 55v5M36 46h5M59 46h5M40 36l4 4M56 52l4 4M60 36l-4 4M44 52l-4 4"/></g></svg></span></button>
 </nav>
 
 <div class="modal-bg" id="editModal">
@@ -1214,7 +1235,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.16'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.17'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -2454,6 +2475,7 @@ function init(){
 
   document.querySelectorAll('.nav-btn[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
   document.querySelectorAll('.bnav').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.mview)));
+  document.querySelectorAll('.ni-day').forEach(t=>t.textContent=String(new Date().getDate()));
   $('btnPrint').addEventListener('click',()=>window.print());
   const _mq=window.matchMedia?matchMedia('(prefers-color-scheme: light)'):null;
   let _themeMode='auto';try{_themeMode=localStorage.getItem('cfb_theme_mode')||'auto'}catch(e){}
