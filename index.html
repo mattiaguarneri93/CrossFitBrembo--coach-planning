@@ -950,6 +950,12 @@ body{overflow-x:hidden}
   .bottom-nav .bnav:not(.active){color:#000!important}
   [data-theme="dark"] .bottom-nav .bnav:not(.active){color:#fff!important}
 }
+
+/* ===== v61: nav icon size refinement ===== */
+@media(max-width:900px){
+  .bottom-nav .bnav .bi{width:38px!important;height:38px!important}
+  .bottom-nav .apple-navicon{width:33px!important;height:33px!important}
+}
 </style>
 </head>
 <body>
@@ -1262,7 +1268,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.20'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.21'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
