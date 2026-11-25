@@ -923,6 +923,37 @@ body{overflow-x:hidden}
   [data-theme="light"]{--nav-cut:#fff}
   [data-theme="dark"]{--nav-cut:#242428}
 }
+
+/* ===== v58: crisp nav icons + deeper iOS glass dock ===== */
+@media(max-width:900px){
+  html[data-theme] .bottom-nav{
+    background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.045) 48%,rgba(255,255,255,.025))!important;
+    -webkit-backdrop-filter:blur(28px) saturate(190%) contrast(105%)!important;
+    backdrop-filter:blur(28px) saturate(190%) contrast(105%)!important;
+    border:1px solid rgba(255,255,255,.22)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(255,255,255,.06),0 12px 32px rgba(0,0,0,.30)!important;
+  }
+  html[data-theme="light"] .bottom-nav{
+    background:linear-gradient(145deg,rgba(255,255,255,.62),rgba(255,255,255,.32) 52%,rgba(255,255,255,.20))!important;
+    border-color:rgba(255,255,255,.72)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.28),0 10px 28px rgba(20,30,50,.12)!important;
+  }
+  .bottom-nav .bnav .bi{width:34px!important;height:34px!important}
+  .bottom-nav .navic{width:29px!important;height:29px!important;shape-rendering:geometricPrecision;overflow:visible;display:block}
+  .bottom-nav .navic .ni-o{display:block;fill:none;stroke:currentColor;stroke-width:4.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+  html[data-theme="light"] .bottom-nav .bnav:not(.active){color:#000!important;opacity:1!important}
+  html[data-theme="dark"] .bottom-nav .bnav:not(.active){color:#fff!important;opacity:1!important}
+  .bottom-nav .navic .ni-f{stroke-width:4.2}
+  .bottom-nav .navic .ni-digit{stroke-width:3.2!important}
+  .nav-bubble{
+    background:rgba(255,255,255,.10)!important;
+    -webkit-backdrop-filter:blur(16px) saturate(170%)!important;
+    backdrop-filter:blur(16px) saturate(170%)!important;
+    border:1px solid rgba(255,255,255,.14)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.24)!important;
+  }
+  html[data-theme="light"] .nav-bubble{background:rgba(255,255,255,.28)!important;border-color:rgba(255,255,255,.55)!important}
+}
 </style>
 </head>
 <body>
@@ -1128,7 +1159,7 @@ body{overflow-x:hidden}
 
 <nav class="bottom-nav">
   <div class="nav-bubble" id="navBubble"></div>
-  <button class="bnav active" data-mview="today" aria-label="Oggi"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10"/><path class="ni-digit" d="M22 35c1-3 4-5 7-5 4 0 7 2 7 5 0 5-7 6-14 13h14M49 30H39v8c2-2 4-3 6-3 4 0 7 3 7 7s-3 7-8 7c-3 0-5-1-7-3"/></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11"/><path class="ni-digit" style="stroke:var(--nav-cut,#fff);fill:none" d="M22 35c1-3 4-5 7-5 4 0 7 2 7 5 0 5-7 6-14 13h14M49 30H39v8c2-2 4-3 6-3 4 0 7 3 7 7s-3 7-8 7c-3 0-5-1-7-3"/></g></svg></span></button>
+  <button class="bnav active" data-mview="today" aria-label="Oggi"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10"/><path class="ni-digit" d="M24 36c1-2 3-4 6-4 3 0 5 2 5 4 0 3-5 5-11 10h11M46 32H38v7c2-2 4-2 5-2 4 0 6 2 6 6s-3 6-7 6c-3 0-5-1-6-3"/></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11"/><path class="ni-digit" style="stroke:var(--nav-cut,#fff);fill:none" d="M24 36c1-2 3-4 6-4 3 0 5 2 5 4 0 3-5 5-11 10h11M46 32H38v7c2-2 4-2 5-2 4 0 6 2 6 6s-3 6-7 6c-3 0-5-1-6-3"/></g></svg></span></button>
   <button class="bnav" data-mview="week" aria-label="Settimana"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10M20 34h7M33 34h9M20 43h10M36 43h6"/></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11M19 34h8M33 34h10M19 44h11M36 44h7"/></g></svg></span></button>
   <button class="bnav" data-mview="monthly" aria-label="Mese"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="13" y="14" width="38" height="39" rx="9"/><path d="M13 25h38M23 9v10M41 9v10"/><g class="ni-dots"><circle cx="21" cy="33" r="2"/><circle cx="32" cy="33" r="2"/><circle cx="43" cy="33" r="2"/><circle cx="21" cy="42" r="2"/><circle cx="32" cy="42" r="2"/><circle cx="43" cy="42" r="2"/><circle cx="21" cy="50" r="2"/><circle cx="32" cy="50" r="2"/><circle cx="43" cy="50" r="2"/></g></g><g class="ni-f"><rect x="11" y="12" width="42" height="43" rx="10"/><path class="ni-cut" d="M12 25h40M23 9v11M41 9v11"/><g class="ni-cutfill"><circle cx="21" cy="33" r="2.2"/><circle cx="32" cy="33" r="2.2"/><circle cx="43" cy="33" r="2.2"/><circle cx="21" cy="42" r="2.2"/><circle cx="32" cy="42" r="2.2"/><circle cx="43" cy="42" r="2.2"/><circle cx="21" cy="50" r="2.2"/><circle cx="32" cy="50" r="2.2"/><circle cx="43" cy="50" r="2.2"/></g></g></svg></span></button>
   <button class="bnav" data-mview="dashboard" aria-label="Statistiche"><span class="bi"><svg class="navic" viewBox="0 0 64 64" aria-hidden="true"><g class="ni-o"><rect x="9" y="39" width="10" height="16" rx="3"/><rect x="27" y="30" width="10" height="25" rx="3"/><rect x="45" y="21" width="10" height="34" rx="3"/><path d="M9 29l13-13 9 8L51 7M43 7h8v8"/></g><g class="ni-f"><rect x="7" y="37" width="13" height="19" rx="4"/><rect x="25" y="28" width="13" height="28" rx="4"/><rect x="43" y="19" width="13" height="37" rx="4"/><path d="M8 29l14-14 9 8L52 6"/><path d="M43 6h9v9"/></g></svg></span></button>
@@ -1235,7 +1266,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-24.17'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-24.18'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
