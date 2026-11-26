@@ -1021,6 +1021,31 @@ body{overflow-x:hidden}
   .kpis-slim{gap:.42rem!important}
   .kpis-slim .kpi{padding:.42rem .65rem!important}
 }
+
+/* ===== v64 · Editorial Glass controls + covers ===== */
+.cover-help{color:var(--muted);font-size:.86rem;line-height:1.45;margin-bottom:1rem}
+.cover-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.cover-box{min-width:0}.cover-preview{height:150px;border-radius:22px;background-size:cover;background-position:center;border:1px solid rgba(255,255,255,.25);box-shadow:inset 0 1px rgba(255,255,255,.35),0 8px 24px rgba(0,0,0,.14);display:flex;align-items:flex-end;padding:.75rem;overflow:hidden}
+.cover-preview.light{background-image:var(--custom-light,var(--ed-light))}.cover-preview.dark{background-image:var(--custom-dark,var(--ed-dark))}
+.cover-preview span{background:rgba(20,18,16,.55);color:#fff;padding:.35rem .65rem;border-radius:999px;font-size:.75rem;font-weight:800;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.cover-actions{display:flex;gap:.45rem;margin-top:.55rem;flex-wrap:wrap}
+@media(max-width:600px){.cover-grid{grid-template-columns:1fr}.cover-preview{height:130px}}
+@media(max-width:900px){
+  header{min-height:148px!important;background-image:none!important;isolation:isolate}
+  header::before{content:"";position:absolute;inset:0;z-index:-2;background-image:var(--cover-current,var(--ed-light));background-size:cover;background-position:center;filter:saturate(.88) contrast(1.02)}
+  header::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(248,243,235,.06) 0%,rgba(239,231,219,.28) 55%,rgba(237,229,218,.58) 100%)}
+  [data-theme="dark"] header::before{background-image:var(--cover-current,var(--ed-dark));filter:saturate(.82) brightness(.78) contrast(1.05)}
+  [data-theme="dark"] header::after{background:linear-gradient(180deg,rgba(7,7,7,.04),rgba(12,11,10,.23) 55%,rgba(13,12,11,.58))}
+  header .h-inner{min-height:115px!important;display:flex!important;align-items:flex-end!important;padding-bottom:.1rem!important}
+  header .logo{max-width:210px!important}
+  #btnTheme,html[data-theme] #syncStatus{position:absolute!important;top:calc(.75rem + var(--st))!important;width:44px!important;height:44px!important;margin:0!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;transform:none!important}
+  #btnTheme{right:.85rem!important;left:auto!important}
+  html[data-theme] #syncStatus{right:4.15rem!important;left:auto!important}
+  #btnTheme svg.ic,#syncStatus svg.ic{width:21px!important;height:21px!important;margin:0!important}
+  [data-theme="dark"] html[data-theme] .bottom-nav{background:linear-gradient(145deg,rgba(38,36,34,.76),rgba(12,12,12,.64))!important;border-color:rgba(255,255,255,.13)!important;box-shadow:inset 0 1px rgba(255,255,255,.13),0 16px 38px rgba(0,0,0,.46)!important}
+  [data-theme="dark"] .bottom-nav .bnav:not(.active){color:#fff!important;opacity:1!important}
+  [data-theme="dark"] .nav-bubble{background:rgba(255,255,255,.09)!important;border-color:rgba(255,255,255,.14)!important;box-shadow:inset 0 1px rgba(255,255,255,.13)!important}
+}
 </style>
 </head>
 <body>
@@ -1134,7 +1159,16 @@ body{overflow-x:hidden}
 </section>
 
 <section id="view-admin" class="view">
-<div id="admMenu"><div class="adm-title">Impostazioni</div><div class="adm-grp"><div class="adm-row" data-sec="coach"><div class="adm-sq" style="background:linear-gradient(145deg,#5ac8fa,#007aff)"><svg class="ic" data-i="users"></svg></div><div class="adm-lb">Coach</div><span class="adm-vl" id="admVCoach"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="classes"><div class="adm-sq" style="background:linear-gradient(145deg,#ff9f45,#F26522)"><svg class="ic" data-i="kettlebell"></svg></div><div class="adm-lb">Tipi di classe</div><span class="adm-vl" id="admVClass"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="template"><div class="adm-sq" style="background:linear-gradient(145deg,#bf8cff,#7d4dff)"><svg class="ic" data-i="layers"></svg></div><div class="adm-lb">Template settimanale</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="unav"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a8a,#ff2d55)"><svg class="ic" data-i="calX"></svg></div><div class="adm-lb">Indisponibilità</div><span class="adm-vl" id="admVUnav"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="costs"><div class="adm-sq" style="background:linear-gradient(145deg,#4cd964,#1f9d45)"><svg class="ic" data-i="euro"></svg></div><div class="adm-lb">Costi lezioni</div><span class="adm-vl" id="admVCost"></span><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="sync"><div class="adm-sq" style="background:linear-gradient(145deg,#63e6be,#20b486)"><svg class="ic" data-i="cloud"></svg></div><div class="adm-lb">Sincronizzazione</div><span class="adm-vl" id="admVSync"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="data"><div class="adm-sq" style="background:linear-gradient(145deg,#34d399,#0f9f6e)"><svg class="ic" data-i="sheet"></svg></div><div class="adm-lb">Dati ed export</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="backup"><div class="adm-sq" style="background:linear-gradient(145deg,#8e9bb0,#5b6577)"><svg class="ic" data-i="archive"></svg></div><div class="adm-lb">Backup locali</div><span class="adm-vl" id="admVBackup"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="pin"><div class="adm-sq" style="background:linear-gradient(145deg,#ffd75e,#f5a300)"><svg class="ic" data-i="shield"></svg></div><div class="adm-lb">PIN Admin</div><span class="adm-vl" id="admVPin"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="log"><div class="adm-sq" style="background:linear-gradient(145deg,#7fb8ff,#3a6df0)"><svg class="ic" data-i="history"></svg></div><div class="adm-lb">Log modifiche</div><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="danger"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a6e,#ff3b30)"><svg class="ic" data-i="trash"></svg></div><div class="adm-lb" style="color:var(--danger)">Reset totale</div></div></div></div><div class="adm-back"><button class="btn" id="btnAdmBack"><svg class="ic" data-i="chevL"></svg>Impostazioni</button></div>
+<div id="admMenu"><div class="adm-title">Impostazioni</div><div class="adm-grp"><div class="adm-row" data-sec="cover"><div class="adm-sq" style="background:linear-gradient(145deg,#d8b48a,#8a6546)"><svg class="ic" data-i="month"></svg></div><div class="adm-lb">Immagini di copertina</div><span class="adm-vl" id="admVCover"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="coach"><div class="adm-sq" style="background:linear-gradient(145deg,#5ac8fa,#007aff)"><svg class="ic" data-i="users"></svg></div><div class="adm-lb">Coach</div><span class="adm-vl" id="admVCoach"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="classes"><div class="adm-sq" style="background:linear-gradient(145deg,#ff9f45,#F26522)"><svg class="ic" data-i="kettlebell"></svg></div><div class="adm-lb">Tipi di classe</div><span class="adm-vl" id="admVClass"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="template"><div class="adm-sq" style="background:linear-gradient(145deg,#bf8cff,#7d4dff)"><svg class="ic" data-i="layers"></svg></div><div class="adm-lb">Template settimanale</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="unav"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a8a,#ff2d55)"><svg class="ic" data-i="calX"></svg></div><div class="adm-lb">Indisponibilità</div><span class="adm-vl" id="admVUnav"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="costs"><div class="adm-sq" style="background:linear-gradient(145deg,#4cd964,#1f9d45)"><svg class="ic" data-i="euro"></svg></div><div class="adm-lb">Costi lezioni</div><span class="adm-vl" id="admVCost"></span><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="sync"><div class="adm-sq" style="background:linear-gradient(145deg,#63e6be,#20b486)"><svg class="ic" data-i="cloud"></svg></div><div class="adm-lb">Sincronizzazione</div><span class="adm-vl" id="admVSync"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="data"><div class="adm-sq" style="background:linear-gradient(145deg,#34d399,#0f9f6e)"><svg class="ic" data-i="sheet"></svg></div><div class="adm-lb">Dati ed export</div><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="backup"><div class="adm-sq" style="background:linear-gradient(145deg,#8e9bb0,#5b6577)"><svg class="ic" data-i="archive"></svg></div><div class="adm-lb">Backup locali</div><span class="adm-vl" id="admVBackup"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="pin"><div class="adm-sq" style="background:linear-gradient(145deg,#ffd75e,#f5a300)"><svg class="ic" data-i="shield"></svg></div><div class="adm-lb">PIN Admin</div><span class="adm-vl" id="admVPin"></span><svg class="ic adm-chev" data-i="chevR"></svg></div><div class="adm-row" data-sec="log"><div class="adm-sq" style="background:linear-gradient(145deg,#7fb8ff,#3a6df0)"><svg class="ic" data-i="history"></svg></div><div class="adm-lb">Log modifiche</div><svg class="ic adm-chev" data-i="chevR"></svg></div></div><div class="adm-grp"><div class="adm-row" data-sec="danger"><div class="adm-sq" style="background:linear-gradient(145deg,#ff7a6e,#ff3b30)"><svg class="ic" data-i="trash"></svg></div><div class="adm-lb" style="color:var(--danger)">Reset totale</div></div></div></div><div class="adm-back"><button class="btn" id="btnAdmBack"><svg class="ic" data-i="chevL"></svg>Impostazioni</button></div>
+  <div class="card adm-sec cover-sec" data-sec="cover">
+    <h2><svg class="ic" data-i="month"></svg> Immagini di copertina</h2>
+    <p class="cover-help">Scegli una foto per il tema chiaro e una per il tema scuro. Le immagini vengono ritagliate automaticamente in formato panoramico e salvate su questo dispositivo.</p>
+    <div class="cover-grid">
+      <div class="cover-box"><div class="cover-preview light" id="coverPrevLight"><span>Tema chiaro</span></div><div class="cover-actions"><button class="btn btn-sm" id="coverPickLight">Scegli foto</button><button class="btn btn-sm" id="coverResetLight">Predefinita</button></div><input type="file" id="coverFileLight" accept="image/*" hidden></div>
+      <div class="cover-box"><div class="cover-preview dark" id="coverPrevDark"><span>Tema scuro</span></div><div class="cover-actions"><button class="btn btn-sm" id="coverPickDark">Scegli foto</button><button class="btn btn-sm" id="coverResetDark">Predefinita</button></div><input type="file" id="coverFileDark" accept="image/*" hidden></div>
+    </div>
+  </div>
+
   <div class="card adm-sec" data-sec="coach">
     <h2><svg class="ic" data-i="users"></svg> Coach</h2>
     <div id="coachList"></div>
@@ -1333,7 +1367,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-25.23'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.24'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -2702,6 +2736,31 @@ function init(){
 
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
 else init();
+
+// Editorial Glass cover images (local per device to avoid cloud payload inflation)
+const COVER_KEYS={light:'cfb_cover_light',dark:'cfb_cover_dark'};
+function getCover(kind){try{return localStorage.getItem(COVER_KEYS[kind])||''}catch(e){return ''}}
+function applyEditorialCovers(){
+  const l=getCover('light'),d=getCover('dark'),root=document.documentElement;
+  if(l)root.style.setProperty('--custom-light',`url("${l}")`);else root.style.removeProperty('--custom-light');
+  if(d)root.style.setProperty('--custom-dark',`url("${d}")`);else root.style.removeProperty('--custom-dark');
+  const theme=root.getAttribute('data-theme')||'dark',cur=theme==='light'?(l?'var(--custom-light)':'var(--ed-light)'):(d?'var(--custom-dark)':'var(--ed-dark)');
+  root.style.setProperty('--cover-current',cur);
+  const pl=$('coverPrevLight'),pd=$('coverPrevDark');if(pl)pl.style.backgroundImage=l?`url("${l}")`:'';if(pd)pd.style.backgroundImage=d?`url("${d}")`:'';
+  const v=$('admVCover');if(v)v.textContent=(l?1:0)+(d?1:0)+'/2';
+}
+function coverDataUrl(file,cb){
+  if(!file||!file.type.startsWith('image/'))return toast('Seleziona un’immagine valida',true);
+  const img=new Image(),u=URL.createObjectURL(file);img.onload=()=>{try{const W=1200,H=440,c=document.createElement('canvas'),x=c.getContext('2d');c.width=W;c.height=H;const r=Math.max(W/img.width,H/img.height),sw=W/r,sh=H/r,sx=(img.width-sw)/2,sy=(img.height-sh)/2;x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(img,sx,sy,sw,sh,0,0,W,H);cb(c.toDataURL('image/jpeg',.78))}finally{URL.revokeObjectURL(u)}};img.onerror=()=>{URL.revokeObjectURL(u);toast('Immagine non leggibile',true)};img.src=u;
+}
+function saveCover(kind,data){try{localStorage.setItem(COVER_KEYS[kind],data);applyEditorialCovers();toast('Copertina salvata')}catch(e){toast('Immagine troppo grande per il dispositivo',true)}}
+function resetCover(kind){try{localStorage.removeItem(COVER_KEYS[kind]);applyEditorialCovers();toast('Copertina predefinita ripristinata')}catch(e){}}
+function initEditorialCovers(){
+  applyEditorialCovers();
+  const bind=(kind)=>{const cap=kind[0].toUpperCase()+kind.slice(1),pick=$('coverPick'+cap),inp=$('coverFile'+cap),reset=$('coverReset'+cap);if(pick)pick.addEventListener('click',()=>inp.click());if(inp)inp.addEventListener('change',()=>{if(inp.files[0])coverDataUrl(inp.files[0],d=>saveCover(kind,d));inp.value=''});if(reset)reset.addEventListener('click',()=>resetCover(kind))};bind('light');bind('dark');
+  const mo=new MutationObserver(()=>applyEditorialCovers());mo.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initEditorialCovers);else initEditorialCovers();
 </script>
 </body>
 </html>
