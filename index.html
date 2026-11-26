@@ -1389,6 +1389,20 @@ body{overflow-x:hidden}
 
 /* ===== v82 · mobile swipe owns the transform, no entrance animation conflict ===== */
 @media(max-width:900px){main>.view.active{animation:none}}
+
+/* ===== v83 · correct fixed header/date stack + swipe content only ===== */
+@media(max-width:900px){
+  :root{--fixed-cover:178px;--fixed-gap:9px;--fixed-nav:82px;--content-top:269px}
+  header{position:fixed!important;top:0!important;left:8px!important;right:8px!important;height:var(--fixed-cover)!important;min-height:var(--fixed-cover)!important;margin:0!important;z-index:90!important}
+  main{padding-top:var(--content-top)!important;overflow:visible!important}
+  main>.view.active{animation:none!important;transform:none!important;overflow:visible!important;padding-top:0!important}
+  #view-today.active>.day-nav-m,#view-week.active>.toolbar,#view-monthly.active>.toolbar,#view-dashboard.active>.toolbar{
+    position:fixed!important;top:calc(var(--fixed-cover) + var(--fixed-gap))!important;left:8px!important;right:8px!important;width:auto!important;height:var(--fixed-nav)!important;min-height:var(--fixed-nav)!important;margin:0!important;z-index:85!important;transform:none!important
+  }
+  #mChipsToday{margin-top:.8rem!important}
+  html[data-theme] .bottom-nav{bottom:25px!important}
+  html[data-theme] .fab{bottom:87px!important}
+}
 </style>
 </head>
 <body>
@@ -1711,7 +1725,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.43'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.44'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -2604,13 +2618,7 @@ function pageFits(){
   const ch=window.innerHeight||d.clientHeight;
   return sh<=ch+2;
 }
-function activeMobileView(){
-  const t=document.querySelector('#view-today.active');
-  if(t)return t;
-  const w=document.querySelector('#view-week.active');
-  if(w&&window.innerWidth<=900)return w;
-  return null;
-}
+function activeMobileView(){const v=document.querySelector('.view.active');if(!v)return null;return v.querySelector('.mobile-swipe-content')||v}
 function resetViewOffset(){
   document.querySelectorAll('.view').forEach(v=>{v.style.transition='';v.style.transform='';v.style.opacity=''});
   ['weekGrid','mTodayList','mWeekAcc'].forEach(id=>{const el=$(id);if(el)el.style.animation=''});
@@ -3110,6 +3118,15 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
 function syncEditorialTitle(){const v=document.querySelector('.view.active');if(!v)return;const m={"view-today":'Oggi',"view-week":'Settimana',"view-monthly":'Mese',"view-dashboard":'Stats',"view-admin":'Impostazioni',"view-log":'Log attività'};const e=$('editorialPageTitle');if(e){const sp=e.querySelector('span');if(sp)sp.textContent=m[v.id]||''}}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(syncEditorialTitle,0));else setTimeout(syncEditorialTitle,0);
+
+function ensureMobileSwipeContent(){
+  ['view-today','view-week'].forEach(id=>{const v=$(id);if(!v||v.querySelector('.mobile-swipe-content'))return;
+    const fixed=id==='view-today'?v.querySelector('.day-nav-m'):v.querySelector(':scope > .toolbar');if(!fixed)return;
+    const wrap=document.createElement('div');wrap.className='mobile-swipe-content';
+    let n=fixed.nextSibling;while(n){const nx=n.nextSibling;wrap.appendChild(n);n=nx}v.appendChild(wrap);
+  });
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensureMobileSwipeContent);else ensureMobileSwipeContent();
 </script>
 </body>
 </html>
