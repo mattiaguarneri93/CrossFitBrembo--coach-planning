@@ -1005,6 +1005,31 @@ body{overflow-x:hidden}
 
 /* v24 · dock width midpoint */
 @media(max-width:900px){html[data-theme] .bottom-nav{left:6%!important;right:6%!important}}
+
+/* ===== v25 · reliable sticky period bar + seamless modals ===== */
+@media(max-width:900px){
+  /* Entrance animation creates an iOS transformed containing block and breaks sticky. Swipe JS remains untouched. */
+  main>.view.active{animation:none}
+  .day-nav-m,#view-week>.toolbar,#view-monthly>.toolbar,#view-dashboard>.toolbar{
+    position:-webkit-sticky!important;position:sticky!important;top:108px!important;z-index:88!important;
+    margin-left:0!important;margin-right:0!important;
+  }
+  /* modal overlay covers the full visual viewport, including iOS bottom area */
+  .modal-bg{position:fixed!important;inset:-2px!important;width:auto!important;height:auto!important;min-height:calc(100vh + 4px)!important;background:rgba(20,20,22,.58)!important;overscroll-behavior:none!important}
+  [data-theme="light"] .modal-bg{background:rgba(44,44,48,.46)!important}
+  .modal-bg .modal{max-height:calc(100dvh - 28px)!important;margin-bottom:0!important}
+  body.modal-open,html:has(body.modal-open){background-color:#161618!important}
+  [data-theme="light"] body.modal-open,[data-theme="light"]:has(body.modal-open){background-color:#69696d!important}
+}
+
+/* ===== v26 · iOS modal canvas uniformity ===== */
+@media(max-width:900px){
+  html:has(body.modal-open){background:#161618!important;background-image:none!important}
+  html[data-theme="light"]:has(body.modal-open){background:#69696d!important;background-image:none!important}
+  body.modal-open{background:#161618!important;background-image:none!important}
+  html[data-theme="light"] body.modal-open{background:#69696d!important;background-image:none!important}
+  .modal-bg.show{inset:0!important;height:100lvh!important;min-height:100lvh!important;max-height:none!important;margin:0!important;border-radius:0!important}
+}
 </style>
 </head>
 <body>
@@ -1318,7 +1343,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.24'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.26'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
