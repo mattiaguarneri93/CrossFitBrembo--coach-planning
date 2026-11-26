@@ -1290,6 +1290,19 @@ body{overflow-x:hidden}
   main>.view{padding-bottom:68px!important}
   html[data-theme] .fab{bottom:68px!important}
 }
+
+/* ===== v76 · restore document scroll model (fixes iOS web-app bottom strip) ===== */
+@media(max-width:900px){
+  html,body{height:auto!important;min-height:100%!important;max-height:none!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior-y:auto!important}
+  body{display:block!important;position:static!important;padding:0 0 70px!important}
+  header{position:relative!important;flex:none!important}
+  main{display:block!important;height:auto!important;min-height:calc(100vh - 178px)!important;overflow:visible!important;padding:0!important}
+  main>.view{height:auto!important;min-height:calc(100vh - 178px)!important;overflow:visible!important;-webkit-overflow-scrolling:auto!important;padding-bottom:72px!important}
+  .day-nav-m,#view-week>.toolbar,#view-monthly>.toolbar,#view-dashboard>.toolbar{position:sticky!important;top:0!important}
+  html[data-theme] .bottom-nav{position:fixed!important;left:36px!important;right:36px!important;bottom:6px!important;height:56px!important;min-height:56px!important;border-radius:28px!important}
+  html[data-theme] .fab{bottom:68px!important}
+  body::before,body::after,main::before,main::after{display:none!important;content:none!important}
+}
 </style>
 </head>
 <body>
@@ -1612,7 +1625,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.35'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.36'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
