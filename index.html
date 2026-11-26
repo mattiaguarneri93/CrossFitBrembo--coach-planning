@@ -1081,6 +1081,31 @@ body{overflow-x:hidden}
     background:linear-gradient(to top,var(--panel) 76%,transparent)!important;
   }
 }
+
+/* ===== v29 · period bar permanently fixed below mobile header ===== */
+@media(max-width:900px){
+  :root{--stable-header-bottom:108px;--stable-period-h:76px}
+  /* The header already occupies 108px in this stable branch. */
+  #view-today.active>.day-nav-m,
+  #view-week.active>.toolbar,
+  #view-monthly.active>.toolbar,
+  #view-dashboard.active>.toolbar{
+    position:fixed!important;
+    top:var(--stable-header-bottom)!important;
+    left:8px!important;
+    right:8px!important;
+    width:auto!important;
+    min-height:var(--stable-period-h)!important;
+    margin:0!important;
+    z-index:98!important;
+    transform:none!important;
+  }
+  /* Reserve exactly the physical space occupied by the fixed bar. */
+  #view-today.active,
+  #view-week.active,
+  #view-monthly.active,
+  #view-dashboard.active{padding-top:calc(var(--stable-period-h) + 10px)!important}
+}
 </style>
 </head>
 <body>
@@ -1394,7 +1419,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.28'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.29'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
