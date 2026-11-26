@@ -1185,6 +1185,31 @@ body{overflow-x:hidden}
   }
   html[data-theme="dark"] .bottom-nav .bnav:not(.active){color:#fff!important;opacity:.96!important}
 }
+
+/* ===== v72 · definitive iOS dock / safe-area geometry ===== */
+@media(max-width:900px){
+  /* The dock must sit above the iOS home-indicator safe area, never behind it. */
+  html[data-theme] .bottom-nav{
+    position:fixed!important;
+    left:14px!important;
+    right:14px!important;
+    bottom:calc(env(safe-area-inset-bottom,0px) + 8px)!important;
+    height:60px!important;
+    min-height:60px!important;
+    padding:5px 14px!important;
+    border-radius:999px!important;
+    margin:0!important;
+    transform:none!important;
+  }
+  .nav-bubble{height:50px!important;border-radius:999px!important}
+  main>.view{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))!important}
+  html[data-theme] .fab{bottom:calc(76px + env(safe-area-inset-bottom,0px))!important}
+  /* Paint the iOS safe-area with the app background, not a separate opaque strip. */
+  body{background-attachment:fixed!important}
+  body::before{content:"";position:fixed;z-index:-2;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 84px);background:linear-gradient(165deg,#eeeae4,#e5ded5);pointer-events:none}
+  [data-theme="dark"] body::before{background:linear-gradient(165deg,#171411,#0e0d0c)}
+  body::after{display:none!important;content:none!important}
+}
 </style>
 </head>
 <body>
@@ -1507,7 +1532,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.31'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.32'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
