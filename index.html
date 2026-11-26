@@ -1303,6 +1303,74 @@ body{overflow-x:hidden}
   html[data-theme] .fab{bottom:68px!important}
   body::before,body::after,main::before,main::after{display:none!important;content:none!important}
 }
+
+/* ===== v77 · Instagram dock + fixed upper area + extended background ===== */
+@media(max-width:900px){
+  :root{--ed-header-h:178px;--ed-head-gap:9px;--ed-date-h:82px}
+  html{
+    min-height:100%!important;
+    background-repeat:no-repeat!important;
+    background-size:100% max(1400px,180vh)!important;
+    background-attachment:fixed!important;
+  }
+  body{
+    min-height:calc(100vh + 260px)!important;
+    padding-bottom:220px!important;
+    background:transparent!important;
+  }
+  /* The photographic header is fixed; document scrolling remains native on iOS. */
+  header{
+    position:fixed!important;
+    top:0!important;left:8px!important;right:8px!important;
+    width:auto!important;
+    height:var(--ed-header-h)!important;min-height:var(--ed-header-h)!important;
+    margin:0!important;z-index:72!important;
+  }
+  main{
+    padding-top:calc(var(--ed-header-h) + var(--ed-head-gap))!important;
+    min-height:calc(100vh + 260px)!important;
+  }
+  main>.view{min-height:calc(100vh + 180px)!important;padding-bottom:170px!important}
+  /* Date/month/period navigator remains fixed directly below the cover. */
+  .day-nav-m,#view-week>.toolbar,#view-monthly>.toolbar,#view-dashboard>.toolbar{
+    position:sticky!important;
+    top:calc(var(--ed-header-h) + var(--ed-head-gap))!important;
+    z-index:68!important;
+    min-height:var(--ed-date-h)!important;
+    margin-top:0!important;
+  }
+  /* Instagram-like proportions, slightly lifted from the screen edge. */
+  html[data-theme] .bottom-nav{
+    left:36px!important;right:36px!important;
+    bottom:14px!important;
+    width:auto!important;height:56px!important;min-height:56px!important;
+    padding:4px 12px!important;border-radius:28px!important;
+  }
+  .nav-bubble{height:48px!important;border-radius:24px!important}
+  html[data-theme] .fab{bottom:76px!important}
+  /* Continuous background during iOS rubber-band scrolling. */
+  body::before{display:block!important;content:""!important;position:fixed!important;z-index:-10!important;inset:-300px 0!important;background:linear-gradient(165deg,#eeeae4 0%,#f8f5ef 42%,#e5ded5 100%)!important;pointer-events:none!important}
+  [data-theme="dark"] body::before{background:linear-gradient(165deg,#171411 0%,#0e0d0c 55%,#1b1713 100%)!important}
+  body::after,main::before,main::after{display:none!important;content:none!important}
+}
+
+/* ===== v78 · truly fixed upper navigator ===== */
+@media(max-width:900px){
+  #view-today.active>.day-nav-m,#view-week.active>.toolbar,#view-monthly.active>.toolbar,#view-dashboard.active>.toolbar{
+    position:fixed!important;
+    top:187px!important;
+    left:8px!important;
+    right:8px!important;
+    width:auto!important;
+    z-index:68!important;
+    margin:0!important;
+  }
+  #view-today.active,#view-week.active,#view-monthly.active,#view-dashboard.active{padding-top:90px!important}
+  #view-admin.active,#view-log.active{padding-top:0!important}
+}
+
+/* v79: fixed children must not inherit animated containing block */
+@media(max-width:900px){main>.view.active{animation:none!important;transform:none!important;filter:none!important;perspective:none!important}}
 </style>
 </head>
 <body>
@@ -1625,7 +1693,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.36'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.39'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
