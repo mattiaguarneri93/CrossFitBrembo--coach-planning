@@ -1030,6 +1030,57 @@ body{overflow-x:hidden}
   html[data-theme="light"] body.modal-open{background:#69696d!important;background-image:none!important}
   .modal-bg.show{inset:0!important;height:100lvh!important;min-height:100lvh!important;max-height:none!important;margin:0!important;border-radius:0!important}
 }
+
+/* ===== v27 · fixed period navigation + fully scrollable iOS sheets ===== */
+@media(max-width:900px){
+  :root{--mobile-header-h:108px;--mobile-period-h:76px}
+  /* Fixed means fixed: it never moves during vertical document scrolling. */
+  main>.view.active{animation:none!important}
+  #view-today.active>.day-nav-m,#view-week.active>.toolbar,#view-monthly.active>.toolbar,#view-dashboard.active>.toolbar{
+    position:fixed!important;
+    left:8px!important;right:8px!important;top:var(--mobile-header-h)!important;
+    width:auto!important;min-height:var(--mobile-period-h)!important;
+    margin:0!important;z-index:880!important;transform:none!important;
+  }
+  #view-today.active,#view-week.active,#view-monthly.active,#view-dashboard.active{padding-top:calc(var(--mobile-period-h) + 10px)!important}
+  /* Modal overlay itself scrolls. The sheet is never height-clipped. */
+  .modal-bg,.modal-bg.show{
+    position:fixed!important;inset:0!important;width:100%!important;
+    height:100dvh!important;min-height:0!important;max-height:100dvh!important;
+    padding:calc(10px + env(safe-area-inset-top,0px)) 10px 10px!important;
+    align-items:flex-start!important;justify-content:center!important;
+    overflow-x:hidden!important;overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important;
+    box-sizing:border-box!important;border-radius:0!important;
+  }
+  .modal-bg .modal{
+    flex:0 0 auto!important;width:min(100%,460px)!important;
+    max-height:none!important;height:auto!important;min-height:0!important;
+    margin:0 auto!important;overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+  /* action row remains part of sheet, never off-canvas */
+  .modal-bg .m-acts{position:static!important;margin-top:1rem!important;padding-bottom:2px!important}
+  /* no lvh canvas: it exceeds the visible iOS viewport and caused the cut-off */
+  .modal-bg.show{height:100dvh!important;min-height:100dvh!important}
+}
+
+/* ===== v28 · modal always fully contained in visible viewport ===== */
+@media(max-width:900px){
+  .modal-bg,.modal-bg.show{overflow:hidden!important;padding:10px!important;align-items:center!important}
+  .modal-bg .modal{
+    max-height:calc(100dvh - 20px)!important;
+    height:auto!important;overflow-x:hidden!important;overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important;
+    margin:auto!important;
+  }
+  .modal-bg .m-acts{
+    position:sticky!important;bottom:-1.4rem!important;z-index:5!important;
+    margin-left:-1.4rem!important;margin-right:-1.4rem!important;
+    padding:.75rem 1.4rem calc(.75rem + env(safe-area-inset-bottom,0px))!important;
+    background:linear-gradient(to top,var(--panel) 76%,transparent)!important;
+  }
+}
 </style>
 </head>
 <body>
@@ -1343,7 +1394,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.26'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.28'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
