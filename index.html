@@ -1145,6 +1145,46 @@ body{overflow-x:hidden}
 
 /* v69 · page title without duplicate logo */
 @media(max-width:900px){.editorial-page-title{gap:0!important;left:.75rem!important}.editorial-title-logo{display:none!important}}
+
+/* ===== v70 · stable viewport and compact low dock ===== */
+@media(max-width:900px){
+  /* svh is intentionally stable while Safari chrome settles; avoids startup jump from dvh */
+  html,body{height:100svh!important;min-height:100svh!important;max-height:100svh!important;overflow:hidden!important}
+  body{position:relative!important;inset:auto!important;margin:0!important;padding:0!important}
+  header{flex-shrink:0!important}
+  main{flex:1 1 0!important;height:auto!important;min-height:0!important;padding-bottom:0!important}
+  main>.view{padding-bottom:72px!important}
+  /* narrower and flush to the visual bottom */
+  html[data-theme] .bottom-nav{left:16px!important;right:16px!important;bottom:0!important;height:60px!important;padding:5px 15px!important;margin:0!important;border-radius:999px 999px 0 0!important;transform:none!important}
+  .nav-bubble{height:50px!important}
+  body::after{display:none!important;content:none!important}
+  html[data-theme] .fab{bottom:68px!important}
+  /* the dock exists at final geometry before JS bubble initialization */
+  .bottom-nav{visibility:visible!important;contain:layout paint style}
+}
+@supports(height:100dvh){
+  @media(max-width:900px){
+    /* In installed standalone mode dvh is stable and includes the full app canvas. */
+    @media(display-mode:standalone){html,body{height:100dvh!important;min-height:100dvh!important;max-height:100dvh!important}}
+  }
+}
+
+/* ===== v71 · darker black glass dock ===== */
+@media(max-width:900px){
+  html[data-theme="dark"] .bottom-nav{
+    background:linear-gradient(145deg,rgba(13,13,14,.94) 0%,rgba(3,3,4,.88) 58%,rgba(0,0,0,.84) 100%)!important;
+    border:1px solid rgba(255,255,255,.105)!important;
+    -webkit-backdrop-filter:blur(28px) saturate(145%)!important;
+    backdrop-filter:blur(28px) saturate(145%)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.11),inset 0 -1px 0 rgba(255,255,255,.025),0 12px 30px rgba(0,0,0,.52)!important;
+  }
+  html[data-theme="dark"] .nav-bubble{
+    background:linear-gradient(145deg,rgba(48,48,50,.54),rgba(24,24,26,.46))!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    box-shadow:inset 0 1px rgba(255,255,255,.13),0 3px 12px rgba(0,0,0,.32)!important;
+  }
+  html[data-theme="dark"] .bottom-nav .bnav:not(.active){color:#fff!important;opacity:.96!important}
+}
 </style>
 </head>
 <body>
@@ -1467,7 +1507,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.29'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.31'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
@@ -2659,7 +2699,7 @@ function initNavBubble(){_nav=document.querySelector('.bottom-nav');_bubble=docu
   _nav.addEventListener('click',function(e){if(_suppressClick){e.stopPropagation();e.preventDefault();}},true);
 }
 window.addEventListener('resize',function(){try{_layout(true);}catch(e){}});
-window.addEventListener('load',function(){setTimeout(function(){try{initNavBubble();}catch(e){}},60);});
+function _initNavStable(){requestAnimationFrame(function(){try{initNavBubble();}catch(e){}})}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',_initNavStable,{once:true});else _initNavStable();
 
 /* ===== Mini calendario: vai a data ===== */
 let calMonth=null;
