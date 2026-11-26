@@ -1084,6 +1084,49 @@ body{overflow-x:hidden}
  #pinModal .pin-modal{margin:0 auto!important;max-height:calc(100dvh - env(safe-area-inset-top,0px) - 42px)!important;transform:none!important}
  #pinModal.show .pin-modal{animation:none!important}
 }
+
+/* ===== unified modal footer fix · no other UI changes ===== */
+@media(max-width:900px){
+  #calModal .m-acts,
+  #pinModal .m-acts,
+  #totModal .m-acts,
+  #unavModal .m-acts,
+  #addModal .m-acts,
+  #editModal .m-acts,
+  #cpModal .m-acts{
+    position:static!important;
+    inset:auto!important;
+    margin:1rem 0 0!important;
+    padding:0!important;
+    min-height:0!important;
+    background:transparent!important;
+    background-image:none!important;
+    border:0!important;
+    box-shadow:none!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+  }
+  #calModal .modal,
+  #pinModal .modal,
+  #totModal .modal,
+  #unavModal .modal,
+  #addModal .modal,
+  #editModal .modal,
+  #cpModal .modal{
+    padding-bottom:1.05rem!important;
+    background-clip:padding-box!important;
+  }
+  #calModal .modal::after,
+  #pinModal .modal::after,
+  #totModal .modal::after,
+  #unavModal .modal::after,
+  #addModal .modal::after,
+  #editModal .modal::after,
+  #cpModal .modal::after{
+    display:none!important;
+    content:none!important;
+  }
+}
 </style>
 </head>
 <body>
