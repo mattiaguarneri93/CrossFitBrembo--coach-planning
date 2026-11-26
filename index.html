@@ -1077,6 +1077,32 @@ body{overflow-x:hidden}
   [data-theme="light"] #addModal .modal,[data-theme="light"] #editModal .modal,[data-theme="light"] #cpModal .modal{background:rgba(239,239,239,.94)!important}
   [data-theme="dark"] #addModal .modal,[data-theme="dark"] #editModal .modal,[data-theme="dark"] #cpModal .modal{background:rgba(28,28,30,.96)!important}
 }
+
+/* ===== v32 · unified modal action area (calendar + PIN + all sheets) ===== */
+@media(max-width:900px){
+  /* kill the old global sticky action footer responsible for the white rectangles */
+  .modal-bg .m-acts,
+  #calModal .m-acts,#pinModal .m-acts,#totModal .m-acts,#unavModal .m-acts,
+  #addModal .m-acts,#editModal .m-acts,#cpModal .m-acts{
+    position:static!important;bottom:auto!important;z-index:auto!important;
+    margin:1rem 0 0!important;padding:0!important;min-height:0!important;
+    background:transparent!important;background-image:none!important;
+    box-shadow:none!important;border:0!important;
+  }
+  /* one continuous sheet surface to the rounded lower edge */
+  .modal-bg .modal{
+    padding-bottom:1.05rem!important;
+    background-clip:padding-box!important;
+  }
+  #calModal .modal,#pinModal .modal{
+    overflow:hidden!important;
+  }
+  #calModal .modal::after,#pinModal .modal::after{display:none!important;content:none!important}
+  [data-theme="light"] #calModal .modal,[data-theme="light"] #pinModal .modal{background:rgba(239,239,239,.94)!important}
+  [data-theme="dark"] #calModal .modal,[data-theme="dark"] #pinModal .modal{background:rgba(28,28,30,.96)!important}
+  /* compact action rows: sheet ends just below buttons */
+  #calModal .m-acts,#pinModal .m-acts{padding-bottom:.05rem!important}
+}
 </style>
 </head>
 <body>
@@ -1390,7 +1416,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.31'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.32'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
