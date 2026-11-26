@@ -1048,6 +1048,35 @@ body{overflow-x:hidden}
   }
 }
 
+
+/* ===== v31 · compact sheets, no white footer halo ===== */
+@media(max-width:900px){
+  .modal-bg,.modal-bg.show{padding:10px!important;overflow:hidden!important;align-items:center!important}
+  #addModal .modal,#editModal .modal,#cpModal .modal{
+    width:min(100%,440px)!important;
+    max-height:calc(100dvh - 20px)!important;
+    height:auto!important;
+    margin:auto!important;
+    padding:1.25rem 1.25rem 1.05rem!important;
+    overflow-x:hidden!important;overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  #addModal .modal,#editModal .modal{border-radius:28px!important}
+  #addModal .m-acts,#editModal .m-acts,#cpModal .m-acts{
+    position:static!important;
+    margin:1rem 0 0!important;
+    padding:0!important;
+    min-height:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+  /* neutralize old sticky/footer overrides */
+  .modal-bg .m-acts{bottom:auto!important;margin-left:0!important;margin-right:0!important}
+  #addModal .modal::after,#editModal .modal::after,#cpModal .modal::after{display:none!important;content:none!important}
+  /* modal surface is one continuous color right through action buttons */
+  [data-theme="light"] #addModal .modal,[data-theme="light"] #editModal .modal,[data-theme="light"] #cpModal .modal{background:rgba(239,239,239,.94)!important}
+  [data-theme="dark"] #addModal .modal,[data-theme="dark"] #editModal .modal,[data-theme="dark"] #cpModal .modal{background:rgba(28,28,30,.96)!important}
+}
 </style>
 </head>
 <body>
@@ -1361,7 +1390,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.30'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.31'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
