@@ -1230,6 +1230,34 @@ body{overflow-x:hidden}
   html[data-theme] .fab{bottom:70px!important}
   body::before,body::after{display:none!important;content:none!important}
 }
+
+/* ===== v74 · Instagram-like low glass dock, no safe-area bands ===== */
+@media(max-width:900px){
+  /* never paint separate bottom/safe-area layers */
+  body::before,body::after,main::before,main::after{display:none!important;content:none!important;background:none!important}
+  html,body{background-color:transparent!important}
+  /* compact Instagram-like capsule: wide, slim, almost touching bottom */
+  html[data-theme] .bottom-nav{
+    position:fixed!important;
+    left:36px!important;
+    right:36px!important;
+    bottom:-2px!important;
+    height:56px!important;
+    min-height:56px!important;
+    padding:4px 12px!important;
+    margin:0!important;
+    border-radius:28px!important;
+    transform:none!important;
+    overflow:hidden!important;
+  }
+  .nav-bubble{height:48px!important;border-radius:24px!important}
+  .bottom-nav .bnav .bi{width:35px!important;height:35px!important}
+  .bottom-nav .main-icon,.bottom-nav .apple-navicon{width:31px!important;height:31px!important}
+  main>.view{padding-bottom:58px!important}
+  html[data-theme] .fab{bottom:60px!important}
+  /* content background continues seamlessly all the way behind/under dock */
+  main{background:transparent!important}
+}
 </style>
 </head>
 <body>
@@ -1552,7 +1580,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.33'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.34'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
