@@ -1210,6 +1210,26 @@ body{overflow-x:hidden}
   [data-theme="dark"] body::before{background:linear-gradient(165deg,#171411,#0e0d0c)}
   body::after{display:none!important;content:none!important}
 }
+
+/* ===== v73 · iOS web-app dock anchored to actual viewport bottom ===== */
+@media(max-width:900px){
+  /* Do not add safe-area here: in iOS web-app mode it is already included by viewport-fit=cover. */
+  html[data-theme] .bottom-nav{
+    position:fixed!important;
+    left:14px!important;
+    right:14px!important;
+    bottom:4px!important;
+    height:60px!important;
+    min-height:60px!important;
+    margin:0!important;
+    padding:5px 14px!important;
+    border-radius:999px!important;
+    transform:none!important;
+  }
+  main>.view{padding-bottom:72px!important}
+  html[data-theme] .fab{bottom:70px!important}
+  body::before,body::after{display:none!important;content:none!important}
+}
 </style>
 </head>
 <body>
@@ -1532,7 +1552,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.32'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.33'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
