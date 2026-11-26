@@ -1369,8 +1369,26 @@ body{overflow-x:hidden}
   #view-admin.active,#view-log.active{padding-top:0!important}
 }
 
-/* v79: fixed children must not inherit animated containing block */
-@media(max-width:900px){main>.view.active{animation:none!important;transform:none!important;filter:none!important;perspective:none!important}}
+/* ===== v80 · content-bounded document scroll + raised dock ===== */
+@media(max-width:900px){
+  html{min-height:100%!important;background-size:100% 100%!important;background-repeat:no-repeat!important}
+  body{min-height:100%!important;height:auto!important;padding-bottom:0!important}
+  main{min-height:0!important;height:auto!important;padding-bottom:0!important}
+  main>.view{min-height:0!important;height:auto!important;padding-bottom:104px!important}
+  /* no artificial scroll tail: document ends after the actual view content + dock clearance */
+  #view-today.active,#view-week.active,#view-monthly.active,#view-dashboard.active{min-height:0!important}
+  /* Settings keeps its own natural content height too */
+  #view-admin.active,#view-log.active{min-height:0!important;padding-bottom:104px!important}
+  html[data-theme] .bottom-nav{bottom:25px!important}
+  html[data-theme] .fab{bottom:87px!important}
+  /* only extend paint, never layout/scroll height */
+  body::before{display:block!important;content:""!important;position:fixed!important;z-index:-10!important;inset:0!important;background:linear-gradient(165deg,#eeeae4 0%,#f8f5ef 42%,#e5ded5 100%)!important;pointer-events:none!important}
+  [data-theme="dark"] body::before{background:linear-gradient(165deg,#171411 0%,#0e0d0c 55%,#1b1713 100%)!important}
+}
+
+
+/* ===== v82 · mobile swipe owns the transform, no entrance animation conflict ===== */
+@media(max-width:900px){main>.view.active{animation:none}}
 </style>
 </head>
 <body>
@@ -1693,7 +1711,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.39'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.43'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
