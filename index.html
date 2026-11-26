@@ -1104,6 +1104,34 @@ body{overflow-x:hidden}
 
 /* v66.1 exact header control alignment */
 @media(max-width:900px){header .h-inner{position:static!important}#btnTheme,html[data-theme] #syncStatus{top:calc(.72rem + var(--st))!important}}
+
+/* ===== v67 · header brand hierarchy + dock geometry fix ===== */
+@media(max-width:900px){
+  /* Planning Lezioni: higher, larger badge, logo visible */
+  header .logo{top:calc(.38rem + var(--st))!important;left:.62rem!important;height:50px!important;padding:.34rem .62rem .34rem .38rem!important;background:rgba(248,245,240,.64)!important;border:1px solid rgba(255,255,255,.78)!important;border-radius:17px!important;box-shadow:inset 0 1px rgba(255,255,255,.86),0 4px 14px rgba(48,36,23,.10)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  [data-theme="dark"] header .logo{background:rgba(24,22,21,.70)!important;border-color:rgba(255,255,255,.17)!important;box-shadow:inset 0 1px rgba(255,255,255,.11),0 5px 16px rgba(0,0,0,.27)!important}
+  header .logo-icon{display:block!important;width:42px!important;height:42px!important;flex:0 0 42px!important;margin-right:.35rem!important}
+  header .logo-icon img{width:42px!important;height:42px!important;object-fit:contain!important}
+  header .logo-txt .l2{font-size:.79rem!important;letter-spacing:.10em!important;text-shadow:none!important;white-space:nowrap}
+  #btnTheme,html[data-theme] #syncStatus{top:calc(.42rem + var(--st))!important}
+  /* Page title keeps logo but larger */
+  .editorial-title-logo{width:42px!important;height:42px!important;flex-basis:42px!important}
+  .editorial-page-title{bottom:.62rem!important;font-size:1.95rem!important}
+  /* Dock sits at the true bottom edge; no exposed color strip and no lifted interface */
+  body{padding-bottom:0!important}
+  main{padding-bottom:0!important}
+  main>.view{padding-bottom:82px!important}
+  html[data-theme] .bottom-nav{bottom:calc(4px + var(--sb))!important;left:8px!important;right:8px!important;margin:0!important}
+  body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:calc(76px + var(--sb));z-index:55;pointer-events:none;background:linear-gradient(to top,rgba(232,226,217,.98) 0%,rgba(232,226,217,.84) 38%,rgba(232,226,217,0) 100%)}
+  [data-theme="dark"] body::after{background:linear-gradient(to top,rgba(16,15,14,.99) 0%,rgba(16,15,14,.90) 38%,rgba(16,15,14,0) 100%)}
+  .bottom-nav{z-index:60!important}.fab{z-index:65!important}
+}
+@media(min-width:901px){
+  /* Desktop/web: restore the original compact brand only; no large duplicated page/logo overlay */
+  .editorial-page-title{display:none!important}
+  header .logo-icon{display:block!important}
+  header .logo{background:transparent!important;border:0!important;box-shadow:none!important}
+}
 </style>
 </head>
 <body>
@@ -1426,7 +1454,7 @@ body{overflow-x:hidden}
 <script>
 'use strict';
 /* ===== Auto-aggiornamento (iPhone/PWA) ===== */
-const APP_VERSION='2026-11-26.26'; // <-- aumentare ad ogni pubblicazione su GitHub
+const APP_VERSION='2026-11-26.27'; // <-- aumentare ad ogni pubblicazione su GitHub
 async function clearAppCaches(){
   try{if('serviceWorker' in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}}catch(e){}
   try{if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
